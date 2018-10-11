@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Liesel ControllerTest", group="Pushbot")
 //@Disabled
 
 
-public class AnaControllerTest extends LinearOpMode {
+public class LieselControllerTest extends LinearOpMode {
 
     // Set all status flags to false
     public boolean dpadup = false;
