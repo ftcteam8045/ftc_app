@@ -28,6 +28,8 @@ public class AnaControllerTest extends LinearOpMode {
     public boolean rightsticky = false;
     public boolean leftstickx = false;
     public boolean leftsticky = false;
+    public boolean rightstickbutton = false;
+    public boolean leftstickbutton = false;
 
 
 
@@ -71,6 +73,9 @@ public class AnaControllerTest extends LinearOpMode {
             telemetry.addLine().addData("", leftstickx ).addData(" Left Stick X  ", gamepad1.left_stick_x);
             telemetry.addLine().addData("", leftsticky ).addData(" Left Stick Y  ", gamepad1.left_stick_y);
 
+            telemetry.addLine().addData("", leftstickbutton ).addData(" Left Stick Button  ", gamepad1.left_stick_button);
+            telemetry.addLine().addData("", rightstickbutton ).addData(" Right Stick Button  ", gamepad1.right_stick_button);
+
 
 
 
@@ -93,7 +98,8 @@ public class AnaControllerTest extends LinearOpMode {
             if (gamepad1.right_stick_y > 0.5) rightsticky = true;
             if (gamepad1.left_stick_x > 0.5) leftstickx = true;
             if (gamepad1.left_stick_y > 0.5) leftsticky = true;
-
+            if (gamepad1.left_stick_button) leftstickbutton = true;
+            if (gamepad1.right_stick_button) rightstickbutton = true;
 
 
 /**    controller buttons I can think of
@@ -133,7 +139,9 @@ public class AnaControllerTest extends LinearOpMode {
                     (rightstickx) &&
                     (rightsticky) &&
                     (leftstickx) &&
-                    (leftsticky)
+                    (leftsticky) &&
+                    (leftstickbutton) &&
+                    (rightstickbutton)
                     )
             {
 
