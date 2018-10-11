@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="AnaOnBot ControllerTest", group="Pushbot")
+@TeleOp(name="Liesel ControllerTest", group="Pushbot")
+//@Disabled
+
 
 public class AnaControllerTest extends LinearOpMode {
 
@@ -19,7 +21,7 @@ public class AnaControllerTest extends LinearOpMode {
     public boolean button_x = false;
     public boolean button_y = false;
     public boolean start = false;
-    public boolean back = false;
+    public boolean backbutton = false;
     public boolean righttrigger = false;
     public boolean lefttrigger = false;
     public boolean rightbumper = false;
@@ -63,7 +65,7 @@ public class AnaControllerTest extends LinearOpMode {
             telemetry.addLine().addData("", button_x).addData("Button X  ", gamepad1.x);
             telemetry.addLine().addData("", button_y).addData("Button Y  ", gamepad1.y);
             telemetry.addLine().addData("", start).addData("Start  ", gamepad1.start);
-            telemetry.addLine().addData("", back ).addData("Back  ", gamepad1.back);
+            telemetry.addLine().addData("", backbutton ).addData("Back  ", gamepad1.back);
             telemetry.addLine().addData("", righttrigger ).addData(" Right Trigger  ", gamepad1.right_trigger);
             telemetry.addLine().addData("", lefttrigger ).addData(" Left Trigger  ", gamepad1.left_trigger);
             telemetry.addLine().addData("", rightbumper ).addData(" Right Bumper  ", gamepad1.right_bumper);
@@ -89,7 +91,7 @@ public class AnaControllerTest extends LinearOpMode {
             if (gamepad1.x) button_x = true;
             if (gamepad1.y) button_y = true;
             if (gamepad1.start) start = true;
-            if (gamepad1.back) back = true;
+            if (gamepad1.back) backbutton = true;
             if (gamepad1.right_trigger > 0.5 ) righttrigger = true;
             if (gamepad1.left_trigger > 0.5) lefttrigger = true;
             if (gamepad1.right_bumper) rightbumper = true;
@@ -131,7 +133,7 @@ public class AnaControllerTest extends LinearOpMode {
                     (button_x) &&
                     (button_y) &&
                     (start) &&
-                    (back) &&
+                    (backbutton) &&
                     (righttrigger) &&
                     (lefttrigger) &&
                     (rightbumper) &&
