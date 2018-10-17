@@ -134,7 +134,10 @@ public class Tele extends OpMode{
         double rotate;
         double power =0.3;
 
-        // Run wheels in tank mode (note: The joystick goes negat when pushed forwards, so negate it)
+        //------------------------------------------//------------------------------------------//
+        //                    M E C H I N U M   D R I V E   T R A I N
+        //------------------------------------------//------------------------------------------//
+
         forward = -gamepad1.right_stick_y;
         strafe = -gamepad1.right_stick_x;
         rotate = gamepad1.left_stick_x;
@@ -145,8 +148,35 @@ public class Tele extends OpMode{
         gromit.right_front.setPower( forward/1.0 + strafe/1.0 - rotate/1.0 );
         gromit.right_back.setPower ( forward/1.0 - strafe/1.0 - rotate/1.0 );
 
+        //------------------------------------------//------------------------------------------//
+        //                       B U T T O N   C L I C K   D E T E C T I O N
+        //------------------------------------------//------------------------------------------//
 
-// glyph clamp
+        //gamepad.left_stick_x
+        //gamepad.left_stick_y
+        //gamepad.left_stick_button
+        //gamepad.right_stick_x
+        //gamepad.right_stick_y
+        //gamepad.right_stick_button
+        //gamepad.dpad_left
+        //gamepad.dpad_right
+        //gamepad.dpad_up
+        //gamepad.dpad_down
+        //gamepad.x
+        //gamepad.y
+        //gamepad.b
+        //gamepad.a
+        //gamepad.left_bumper
+        //gamepad.right_bumper
+        //gamepad.left_trigger
+        //gamepad.right_trigger
+
+        if (gamepad1.dpad_left) {
+            gromit.leftlower.setPosition(0.6);
+            gromit.rightlower.setPosition(0.4);
+        }
+
+        // glyph clamp
         if (gamepad1.dpad_left) {
             gromit.leftlower.setPosition(0.6);
             gromit.rightlower.setPosition(0.4); //glyph open
