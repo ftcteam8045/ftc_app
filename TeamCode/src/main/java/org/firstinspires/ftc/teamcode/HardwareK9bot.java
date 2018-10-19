@@ -88,6 +88,12 @@ public class HardwareK9bot
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftRear  = hwMap.get(DcMotor.class, "left_rear");
         rightRear = hwMap.get(DcMotor.class, "right_rear");
+ /**       leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftRear.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
+*/
+//this is for Neverest
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
