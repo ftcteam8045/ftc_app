@@ -31,10 +31,10 @@ public class elijahCode extends LinearOpMode {
     public boolean rightstickbutton = false;
     public boolean leftstickbutton = false;
 
-    public int numTest = 0;
     public int currentEdit = 0;
-    public int driveDis = 10;
-    public int driveAgain = 15;
+    public int driveDis1 = 10;
+    public int driveDis2 = 10;
+    public int driveDis3 = 10;
     public boolean dpadPressedUp = false;
     public boolean dpadPressedDown = false;
     public boolean dpadPressedLeft = false;
@@ -87,8 +87,8 @@ public class elijahCode extends LinearOpMode {
 
             // --- Eli Test Code -- \\
             telemetry.addLine("VVV Eli's Test VVV");
-            telemetry.addLine().addData("", driveDis).addData("", driveAgain).addData("Drive Distance || Drive Again", ' ');
-            telemetry.addLine().addData("", currentEdit).addData("Left / Right", ' ');
+            telemetry.addLine().addData("", driveDis1).addData("Drive Distance One", ' ').addData;
+            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
             // -------------------- \\
 
 
@@ -115,12 +115,39 @@ public class elijahCode extends LinearOpMode {
             if (gamepad1.right_stick_button) rightstickbutton = true;
 
 
+            if (gamepad1.dpad_down) {
+                dpadPressedDown = true;
+            }
+            else if (gamepad1.dpad_down == false && dpadPressedDown) {
+                dpadPressedDown = false;
+                currentEdit -= 1;
+            }
+
+            if (gamepad1.dpad_up) {
+                dpadPressedUp = true;
+            }
+            else if (gamepad1.dpad_up == false && dpadPressedUp) {
+                dpadPressedUp = false;
+                currentEdit += 1;
+            }
+
+
+
+
             if (gamepad1.dpad_left) {
                 dpadPressedLeft = true;
             }
-            else if (gamepad1.dpad_left == false && dpadPressedLeft) {
-                dpadPressedLeft = false;
-                currentEdit -= 1;
+            else if (gamepad1.dpad_left == false && dpadPressedLeft && currentEdit == 0) {
+                dpadPressedDown = false;
+                if (currentEdit == 0) {
+                    driveDis1 -= 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis2 -= 1
+                }
+                if (currentEdit == 2) {
+                driveDis3 -= 1
+            }
             }
 
             if (gamepad1.dpad_right) {
@@ -128,34 +155,14 @@ public class elijahCode extends LinearOpMode {
             }
             else if (gamepad1.dpad_right == false && dpadPressedRight) {
                 dpadPressedRight = false;
-                currentEdit += 1;
-            }
-
-
-
-
-            if (gamepad1.dpad_down) {
-                dpadPressedDown = true;
-            }
-            else if (gamepad1.dpad_down == false && dpadPressedDown && currentEdit == 0) {
-                dpadPressedDown = false;
-                driveDis -= 1;
-            }
-            else if (gamepad1.dpad_down == false && dpadPressedDown && currentEdit == 1) {
-                dpadPressedDown = false;
-                driveAgain -= 1;
-            }
-
-            if (gamepad1.dpad_up) {
-                dpadPressedUp = true;
-            }
-            else if (gamepad1.dpad_up == false && dpadPressedUp && currentEdit == 0) {
-                dpadPressedUp = false;
-                driveDis += 1;
-            }
-            else if (gamepad1.dpad_up == false && dpadPressedUp && currentEdit == 1) {
-                dpadPressedUp = false;
-                driveAgain += 1;
+                if (currentEdit == 0) {
+                    driveDis1 += 1;
+                if (currentEdit == 1) {
+                    driveDis2 += 1
+                }
+                if (currentEdit == 2) {
+                    driveDis3 += 1
+                }
             }
 
 /**    controller buttons I can think of
