@@ -33,12 +33,15 @@ public class elijahCode extends LinearOpMode {
 
     public int currentEdit = 0;
     public int driveDis1 = 10;
-    public int driveDis2 = 10;
-    public int driveDis3 = 10;
+    public int driveDis2 = 15;
+    public int driveDis3 = 20;
     public boolean dpadPressedUp = false;
     public boolean dpadPressedDown = false;
     public boolean dpadPressedLeft = false;
     public boolean dpadPressedRight = false;
+    public String arrow1 = " ";
+    public String arrow2 = " ";
+    public String arrow3 = " ";
 
 
     @Override
@@ -87,7 +90,9 @@ public class elijahCode extends LinearOpMode {
 
             // --- Eli Test Code -- \\
             telemetry.addLine("VVV Eli's Test VVV");
-            telemetry.addLine().addData("", driveDis1).addData("Drive Distance One", ' ').addData;
+            telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", ' ');
+            telemetry.addLine().addData("    ", driveDis2).addData("Drive Distance One", ' ');
+            telemetry.addLine().addData("    ", driveDis3).addData("Drive Distance One", ' ');
             telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
             // -------------------- \\
 
@@ -115,12 +120,16 @@ public class elijahCode extends LinearOpMode {
             if (gamepad1.right_stick_button) rightstickbutton = true;
 
 
+
             if (gamepad1.dpad_down) {
                 dpadPressedDown = true;
             }
             else if (gamepad1.dpad_down == false && dpadPressedDown) {
                 dpadPressedDown = false;
-                currentEdit -= 1;
+                currentEdit += 1;
+                if (currentEdit > 2) {
+                    currentEdit = 2;
+                }
             }
 
             if (gamepad1.dpad_up) {
@@ -128,26 +137,35 @@ public class elijahCode extends LinearOpMode {
             }
             else if (gamepad1.dpad_up == false && dpadPressedUp) {
                 dpadPressedUp = false;
-                currentEdit += 1;
+                currentEdit -= 1;
+                if (currentEdit < 0) {
+                    currentEdit = 0;
+                }
             }
 
 
+            if (currentEdit == 0) {
+                arrow1 = ">>";
+            }
+            else {
+                arrow1 = "    ";
+            }
 
 
             if (gamepad1.dpad_left) {
                 dpadPressedLeft = true;
             }
-            else if (gamepad1.dpad_left == false && dpadPressedLeft && currentEdit == 0) {
-                dpadPressedDown = false;
+            else if (gamepad1.dpad_left == false && dpadPressedLeft) {
+                dpadPressedLeft = false;
                 if (currentEdit == 0) {
                     driveDis1 -= 1;
                 }
                 if (currentEdit == 1) {
-                    driveDis2 -= 1
+                    driveDis2 -= 1;
                 }
                 if (currentEdit == 2) {
-                driveDis3 -= 1
-            }
+                driveDis3 -= 1;
+                }
             }
 
             if (gamepad1.dpad_right) {
@@ -157,11 +175,12 @@ public class elijahCode extends LinearOpMode {
                 dpadPressedRight = false;
                 if (currentEdit == 0) {
                     driveDis1 += 1;
+                }
                 if (currentEdit == 1) {
-                    driveDis2 += 1
+                    driveDis2 += 1;
                 }
                 if (currentEdit == 2) {
-                    driveDis3 += 1
+                    driveDis3 += 1;
                 }
             }
 
