@@ -78,7 +78,6 @@ public class LieselControllerTest extends LinearOpMode {
 
 
 
-
             // set status flag true if pressed
             if (gamepad1.dpad_up) dpadup = true;
             if (gamepad1.dpad_down) dpaddown = true;
