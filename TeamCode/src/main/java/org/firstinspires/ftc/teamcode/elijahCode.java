@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Liesel ControllerTest", group="Pushbot")
+@TeleOp(name="Eli Test Bot", group="Pushbot")
 //@Disabled
 
 
-public class LieselControllerTest extends LinearOpMode {
+public class elijahCode extends LinearOpMode {
 
     // Set all status flags to false
     public boolean dpadup = false;
@@ -30,11 +30,18 @@ public class LieselControllerTest extends LinearOpMode {
     public boolean leftsticky = false;
     public boolean rightstickbutton = false;
     public boolean leftstickbutton = false;
-    // --- Eli Test Code -- \\
-    public int numTest = 0;
+
+    public int currentEdit = 0;
+    public int driveDis1 = 10;
+    public int driveDis2 = 15;
+    public int driveDis3 = 20;
     public boolean dpadPressedUp = false;
     public boolean dpadPressedDown = false;
-    // -------------------- \\
+    public boolean dpadPressedLeft = false;
+    public boolean dpadPressedRight = false;
+    public String arrow1 = " ";
+    public String arrow2 = " ";
+    public String arrow3 = " ";
 
 
     @Override
@@ -59,32 +66,36 @@ public class LieselControllerTest extends LinearOpMode {
             telemetry.addLine("*** Controller Test ****");
 
             // show status flag and current value
-            telemetry.addLine().addData("", dpadup).addData("Dpad Up    ", gamepad1.dpad_up);
-            telemetry.addLine().addData("", dpaddown).addData("Dpad Down  ", gamepad1.dpad_down);
-            telemetry.addLine().addData("", dpadleft).addData("Dpad Left  ", gamepad1.dpad_left);
-            telemetry.addLine().addData("", dpadright).addData("Dpad Right  ", gamepad1.dpad_right);
-            telemetry.addLine().addData("", button_a).addData("Button A  ", gamepad1.a);
-            telemetry.addLine().addData("", button_b).addData("Button B  ", gamepad1.b);
-            telemetry.addLine().addData("", button_x).addData("Button X  ", gamepad1.x);
-            telemetry.addLine().addData("", button_y).addData("Button Y  ", gamepad1.y);
-            telemetry.addLine().addData("", start).addData("Start  ", gamepad1.start);
-            telemetry.addLine().addData("", backbutton ).addData("Back  ", gamepad1.back);
-            telemetry.addLine().addData("", righttrigger ).addData(" Right Trigger  ", gamepad1.right_trigger);
-            telemetry.addLine().addData("", lefttrigger ).addData(" Left Trigger  ", gamepad1.left_trigger);
-            telemetry.addLine().addData("", rightbumper ).addData(" Right Bumper  ", gamepad1.right_bumper);
-            telemetry.addLine().addData("", leftbumper ).addData(" Left Bumper  ", gamepad1.left_bumper);
-            telemetry.addLine().addData("", rightstickx ).addData(" Right Stick X  ", gamepad1.right_stick_x);
-            telemetry.addLine().addData("", rightsticky ).addData(" Right Stick Y  ", gamepad1.right_stick_y);
-            telemetry.addLine().addData("", leftstickx ).addData(" Left Stick X  ", gamepad1.left_stick_x);
-            telemetry.addLine().addData("", leftsticky ).addData(" Left Stick Y  ", gamepad1.left_stick_y);
+//            telemetry.addLine().addData("", dpadup).addData("Dpad Up    ", gamepad1.dpad_up);
+//            telemetry.addLine().addData("", dpaddown).addData("Dpad Down  ", gamepad1.dpad_down);
+//            telemetry.addLine().addData("", dpadleft).addData("Dpad Left  ", gamepad1.dpad_left);
+//            telemetry.addLine().addData("", dpadright).addData("Dpad Right  ", gamepad1.dpad_right);
+//            telemetry.addLine().addData("", button_a).addData("Button A  ", gamepad1.a);
+//            telemetry.addLine().addData("", button_b).addData("Button B  ", gamepad1.b);
+//            telemetry.addLine().addData("", button_x).addData("Button X  ", gamepad1.x);
+//            telemetry.addLine().addData("", button_y).addData("Button Y  ", gamepad1.y);
+//            telemetry.addLine().addData("", start).addData("Start  ", gamepad1.start);
+//            telemetry.addLine().addData("", backbutton ).addData("Back  ", gamepad1.back);
+//            telemetry.addLine().addData("", righttrigger ).addData(" Right Trigger  ", gamepad1.right_trigger);
+//            telemetry.addLine().addData("", lefttrigger ).addData(" Left Trigger  ", gamepad1.left_trigger);
+//            telemetry.addLine().addData("", rightbumper ).addData(" Right Bumper  ", gamepad1.right_bumper);
+//            telemetry.addLine().addData("", leftbumper ).addData(" Left Bumper  ", gamepad1.left_bumper);
+//            telemetry.addLine().addData("", rightstickx ).addData(" Right Stick X  ", gamepad1.right_stick_x);
+//            telemetry.addLine().addData("", rightsticky ).addData(" Right Stick Y  ", gamepad1.right_stick_y);
+//            telemetry.addLine().addData("", leftstickx ).addData(" Left Stick X  ", gamepad1.left_stick_x);
+//            telemetry.addLine().addData("", leftsticky ).addData(" Left Stick Y  ", gamepad1.left_stick_y);
 
-            telemetry.addLine().addData("", leftstickbutton ).addData(" Left Stick Button  ", gamepad1.left_stick_button);
-            telemetry.addLine().addData("", rightstickbutton ).addData(" Right Stick Button  ", gamepad1.right_stick_button);
+//            telemetry.addLine().addData("", leftstickbutton ).addData(" Left Stick Button  ", gamepad1.left_stick_button);
+//            telemetry.addLine().addData("", rightstickbutton ).addData(" Right Stick Button  ", gamepad1.right_stick_button);
 
             // --- Eli Test Code -- \\
             telemetry.addLine("VVV Eli's Test VVV");
-            telemetry.addLine().addData("", numTest).addData("Number Up / Down", dpadPressedDown);
+            telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", ' ');
+            telemetry.addLine().addData("    ", driveDis2).addData("Drive Distance One", ' ');
+            telemetry.addLine().addData("    ", driveDis3).addData("Drive Distance One", ' ');
+            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
             // -------------------- \\
+
 
             // set status flag true if pressed
             if (gamepad1.dpad_up) dpadup = true;
@@ -109,22 +120,69 @@ public class LieselControllerTest extends LinearOpMode {
             if (gamepad1.right_stick_button) rightstickbutton = true;
 
 
-            // --- Eli Test Code -- \\
-            if (gamepad1.dpad_up) {
-                dpadPressedUp = true;
-            }
-            else if (gamepad1.dpad_up == false && dpadPressedUp) {
-                dpadPressedUp = false;
-                numTest += 1;
-            }
+
             if (gamepad1.dpad_down) {
                 dpadPressedDown = true;
             }
             else if (gamepad1.dpad_down == false && dpadPressedDown) {
                 dpadPressedDown = false;
-                numTest -= 1;
+                currentEdit += 1;
+                if (currentEdit > 2) {
+                    currentEdit = 2;
+                }
             }
-            // -------------------- \\
+
+            if (gamepad1.dpad_up) {
+                dpadPressedUp = true;
+            }
+            else if (gamepad1.dpad_up == false && dpadPressedUp) {
+                dpadPressedUp = false;
+                currentEdit -= 1;
+                if (currentEdit < 0) {
+                    currentEdit = 0;
+                }
+            }
+
+
+            if (currentEdit == 0) {
+                arrow1 = ">>";
+            }
+            else {
+                arrow1 = "    ";
+            }
+
+
+            if (gamepad1.dpad_left) {
+                dpadPressedLeft = true;
+            }
+            else if (gamepad1.dpad_left == false && dpadPressedLeft) {
+                dpadPressedLeft = false;
+                if (currentEdit == 0) {
+                    driveDis1 -= 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis2 -= 1;
+                }
+                if (currentEdit == 2) {
+                driveDis3 -= 1;
+                }
+            }
+
+            if (gamepad1.dpad_right) {
+                dpadPressedRight = true;
+            }
+            else if (gamepad1.dpad_right == false && dpadPressedRight) {
+                dpadPressedRight = false;
+                if (currentEdit == 0) {
+                    driveDis1 += 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis2 += 1;
+                }
+                if (currentEdit == 2) {
+                    driveDis3 += 1;
+                }
+            }
 
 /**    controller buttons I can think of
  *      gamepad1.dpad_left
