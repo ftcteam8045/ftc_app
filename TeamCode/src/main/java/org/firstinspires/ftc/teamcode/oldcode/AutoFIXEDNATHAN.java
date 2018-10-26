@@ -31,8 +31,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.teamcode.Qualifier.DriveTrain.drive_COEF;
-import static org.firstinspires.ftc.teamcode.Qualifier.DriveTrain.drive_THRESHOLD;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 
 @Autonomous(name = "TheAutoFIXEDV2", group = "8045")  // @Autonomous(...) is the other common choice

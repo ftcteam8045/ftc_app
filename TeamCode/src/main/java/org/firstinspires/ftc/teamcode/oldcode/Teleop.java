@@ -16,14 +16,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import RicksCode.Bill_Adapted.ConfigFileHandler;
+//import RicksCode.Bill_Adapted.ConfigFileHandler;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.teamcode.Qualifier.DriveTrain.SpeedSetting.FAST;
-import static org.firstinspires.ftc.teamcode.Qualifier.DriveTrain.SpeedSetting.MID;
-import static org.firstinspires.ftc.teamcode.Qualifier.DriveTrain.SpeedSetting.SLOW;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.SpeedSetting.FAST;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.SpeedSetting.MID;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.SpeedSetting.SLOW;
 import static java.lang.Math.atan;
 
 

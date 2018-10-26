@@ -31,12 +31,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-import org.firstinspires.ftc.teamcode.Qualifier.AutoTransitioner;
+import org.firstinspires.ftc.teamcode.oldcode.AutoTransitioner;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.teamcode.Qualifier.DriveTrain.drive_COEF;
-import static org.firstinspires.ftc.teamcode.Qualifier.DriveTrain.drive_THRESHOLD;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 
 @Autonomous(name = "TheAuto", group = "8045")  // @Autonomous(...) is the other common choice
