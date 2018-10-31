@@ -90,9 +90,9 @@ public class elijahCode extends LinearOpMode {
 
             // --- Eli Test Code -- \\
             telemetry.addLine("VVV Eli's Test VVV");
-            telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", ' ');
-            telemetry.addLine().addData("    ", driveDis2).addData("Drive Distance One", ' ');
-            telemetry.addLine().addData("    ", driveDis3).addData("Drive Distance One", ' ');
+            telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", arrow1);
+            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
+            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
             telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
             // -------------------- \\
 
@@ -145,10 +145,22 @@ public class elijahCode extends LinearOpMode {
 
 
             if (currentEdit == 0) {
-                arrow1 = ">>";
+                arrow1 = "<>";
             }
             else {
                 arrow1 = "    ";
+            }
+            if (currentEdit == 1) {
+                arrow2 = "<>";
+            }
+            else {
+                arrow2 = "    ";
+            }
+            if (currentEdit == 2) {
+                arrow3 = "<>";
+            }
+            else {
+                arrow3 = "    ";
             }
 
 
