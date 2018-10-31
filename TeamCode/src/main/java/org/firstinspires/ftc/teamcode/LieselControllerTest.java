@@ -30,11 +30,6 @@ public class LieselControllerTest extends LinearOpMode {
     public boolean leftsticky = false;
     public boolean rightstickbutton = false;
     public boolean leftstickbutton = false;
-    // --- Eli Test Code -- \\
-    public int numTest = 0;
-    public boolean dpadPressedUp = false;
-    public boolean dpadPressedDown = false;
-    // -------------------- \\
 
 
     @Override
@@ -81,10 +76,6 @@ public class LieselControllerTest extends LinearOpMode {
             telemetry.addLine().addData("", leftstickbutton ).addData(" Left Stick Button  ", gamepad1.left_stick_button);
             telemetry.addLine().addData("", rightstickbutton ).addData(" Right Stick Button  ", gamepad1.right_stick_button);
 
-            // --- Eli Test Code -- \\
-            telemetry.addLine("VVV Eli's Test VVV");
-            telemetry.addLine().addData("", numTest).addData("Number Up / Down", dpadPressedDown);
-            // -------------------- \\
 
             // set status flag true if pressed
             if (gamepad1.dpad_up) dpadup = true;
@@ -109,22 +100,6 @@ public class LieselControllerTest extends LinearOpMode {
             if (gamepad1.right_stick_button) rightstickbutton = true;
 
 
-            // --- Eli Test Code -- \\
-            if (gamepad1.dpad_up) {
-                dpadPressedUp = true;
-            }
-            else if (gamepad1.dpad_up == false && dpadPressedUp) {
-                dpadPressedUp = false;
-                numTest += 1;
-            }
-            if (gamepad1.dpad_down) {
-                dpadPressedDown = true;
-            }
-            else if (gamepad1.dpad_down == false && dpadPressedDown) {
-                dpadPressedDown = false;
-                numTest -= 1;
-            }
-            // -------------------- \\
 
 /**    controller buttons I can think of
  *      gamepad1.dpad_left

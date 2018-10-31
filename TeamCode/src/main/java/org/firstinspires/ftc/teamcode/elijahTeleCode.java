@@ -2,12 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name="Eli Test Bot", group="Pushbot")
+import org.firstinspires.ftc.teamcode.oldcode.DriveTrain;
+
+import static java.lang.Math.abs;
+
+@TeleOp(name="Eli Tele Test Bot", group="Pushbot")
 //@Disabled
 
 
-public class elijahCode extends LinearOpMode {
+public class elijahTeleCode extends LinearOpMode {
 
     // Set all status flags to false
     public boolean dpadup = false;
@@ -31,6 +36,10 @@ public class elijahCode extends LinearOpMode {
     public boolean rightstickbutton = false;
     public boolean leftstickbutton = false;
 
+    public float forward;
+    public float strafe;
+    public float rotate;
+
     public int currentEdit = 0;
     public int driveDis1 = 10;
     public int driveDis2 = 15;
@@ -43,6 +52,14 @@ public class elijahCode extends LinearOpMode {
     public String arrow2 = " ";
     public String arrow3 = " ";
 
+
+//    public DcMotor leftFront   = null;
+//    public DcMotor  rightFront  = null;
+//    public DcMotor  leftRear    = null;
+//    public DcMotor  rightRear   = null;
+
+    public boolean frontIsForward = true;
+    private DriveTrain.SpeedSetting speedMode;
 
     @Override
     public void runOpMode() {
@@ -121,6 +138,8 @@ public class elijahCode extends LinearOpMode {
 
 
 
+            //Variable Change GUI
+
             if (gamepad1.dpad_down) {
                 dpadPressedDown = true;
             }
@@ -128,7 +147,7 @@ public class elijahCode extends LinearOpMode {
                 dpadPressedDown = false;
                 currentEdit += 1;
                 if (currentEdit > 2) {
-                    currentEdit = 2;
+                    currentEdit = 0;
                 }
             }
 
@@ -139,7 +158,7 @@ public class elijahCode extends LinearOpMode {
                 dpadPressedUp = false;
                 currentEdit -= 1;
                 if (currentEdit < 0) {
-                    currentEdit = 0;
+                    currentEdit = 2;
                 }
             }
 
@@ -196,6 +215,95 @@ public class elijahCode extends LinearOpMode {
                 }
             }
 
+            //----------------//
+
+            forward = -gamepad1.right_stick_y;
+            strafe = -gamepad1.right_stick_x;
+            rotate = gamepad1.left_stick_x;
+
+
+//            leftFront.setPower ( forward/1.0 - strafe/1.0 + rotate/1.0 );
+//            leftRear.setPower  ( forward/1.0 + strafe/1.0 + rotate/1.0 );
+//            rightFront.setPower( forward/1.0 + strafe/1.0 - rotate/1.0 );
+//            rightRear.setPower ( forward/1.0 - strafe/1.0 - rotate/1.0 );
+
+
+            /**
+             //Drive Train
+
+            speedMode = DriveTrain.SpeedSetting.FAST;
+
+            public void drivesmart(double x, double y, double turn) {
+                //speed change code
+                //   double drive_direction = atan(y/x);
+                double speedMultiplier;
+                switch (speedMode) {
+                    // lookup parameter for "fast mode"
+                    case FAST:
+                        speedMultiplier = 1.0;
+                        break;
+                    case MID:
+                        speedMultiplier = 0.5;
+                        break;
+                    case SLOW:
+                        // lookup slow speed parameter
+                        speedMultiplier = 0.25;
+                        break;
+                    default:
+                        speedMultiplier = 0.5;
+                }
+
+                double lfpower;
+                double lrpower;
+                double rfpower;
+                double rrpower;
+
+                double rotation = turn*0.75;
+
+                if (frontIsForward) {             // driving with the front facing forward
+                } else {                            // driving with the rear facing forward
+                    y = -y;
+                    x = -x;
+                }
+
+
+//        lfpower = signum(y)*Math.cos(Math.toRadians(drive_direction + 45));
+//        lrpower = signum(y)*Math.sin(Math.toRadians(drive_direction + 45));
+//        rfpower = signum(y)*Math.sin(Math.toRadians(drive_direction + 45));
+//        rrpower = signum(y)*Math.cos(Math.toRadians(drive_direction + 45));
+//
+
+                //Determine largest power being applied in either direction
+
+                lfpower = ( y - x + rotation);
+                lrpower = ( y + x + rotation);
+                rfpower = ( y + x - rotation);
+                rrpower = ( y - x - rotation);
+
+//        //Determine largest power being applied in either direction
+                double max = abs(lfpower);
+                if (abs(lrpower) > max) max = abs(lrpower);
+                if (abs(rfpower) > max) max = abs(rfpower);
+                if (abs(rrpower) > max) max = abs(rrpower);
+
+//            double multiplier = speedMultiplier / max; //multiplier to adjust speeds of each wheel so you can have a max power of 1 on atleast 1 wheel
+                double multiplier = (speedMultiplier / max) + 0.2*Math.abs(x);  // try to boost up the strafing power
+
+//        double multiplier = speedMultiplier / max;
+
+                lfpower *= multiplier;
+                lrpower *= multiplier;
+                rfpower *= multiplier;
+                rrpower *= multiplier;
+
+                leftFront.setPower(lfpower);
+                leftRear.setPower(lrpower);
+                rightFront.setPower(rfpower);
+                rightRear.setPower(rrpower);
+            }
+
+            //----------------//
+             */
 /**    controller buttons I can think of
  *      gamepad1.dpad_left
  gamepad1.dpad_right
