@@ -53,10 +53,10 @@ public class elijahTeleCode extends LinearOpMode {
     public String arrow3 = " ";
 
 
-//    public DcMotor leftFront   = null;
-//    public DcMotor  rightFront  = null;
-//    public DcMotor  leftRear    = null;
-//    public DcMotor  rightRear   = null;
+    public DcMotor leftFront   = null;
+    public DcMotor  rightFront  = null;
+    public DcMotor  leftRear    = null;
+    public DcMotor  rightRear   = null;
 
     public boolean frontIsForward = true;
     private DriveTrain.SpeedSetting speedMode;
@@ -221,6 +221,35 @@ public class elijahTeleCode extends LinearOpMode {
             strafe = -gamepad1.right_stick_x;
             rotate = gamepad1.left_stick_x;
 
+//            gamepad1.right_stick_x
+//            gamepad1.right_stick_y
+//            gamepad1.left_stick_x
+//            gamepad1.left_stick_y
+
+            if(gamepad1.left_stick_y >= 0.5) {
+                leftFront.setPower(1.0);
+                rightFront.setPower(1.0);
+                leftRear.setPower(1.0);
+                rightRear.setPower(1.0);
+            }
+            if(gamepad1.left_stick_y <= -0.5) {
+                leftFront.setPower(-1.0);
+                rightFront.setPower(-1.0);
+                leftRear.setPower(-1.0);
+                rightRear.setPower(-1.0);
+            }
+            if(gamepad1.left_stick_x >= 0.5) {
+                leftFront.setPower(1.0);
+                rightFront.setPower(1.0);
+                leftRear.setPower(-1.0);
+                rightRear.setPower(-1.0);
+            }
+            if(gamepad1.left_stick_x <= -0.5) {
+                leftFront.setPower(-1.0);
+                rightFront.setPower(-1.0);
+                leftRear.setPower(1.0);
+                rightRear.setPower(1.0);
+            }
 
 //            leftFront.setPower ( forward/1.0 - strafe/1.0 + rotate/1.0 );
 //            leftRear.setPower  ( forward/1.0 + strafe/1.0 + rotate/1.0 );

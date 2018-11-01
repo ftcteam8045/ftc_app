@@ -210,13 +210,11 @@ public class HardwareK9bot
     //            telemetry.addLine().addData("", leftstickbutton ).addData(" Left Stick Button  ", gamepad1.left_stick_button);
     //            telemetry.addLine().addData("", rightstickbutton ).addData(" Right Stick Button  ", gamepad1.right_stick_button);
 
-                // --- Eli Test Code -- \\
                 telemetry.addLine("VVV Eli's Test VVV");
                 telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", arrow1);
                 telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
                 telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
                 telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
-                // -------------------- \\
 
 
                 // set status flag true if pressed
