@@ -53,10 +53,9 @@ public class elijahTeleCode extends LinearOpMode {
     public String arrow3 = " ";
 
 
-    public DcMotor leftFront   = null;
-    public DcMotor  rightFront  = null;
-    public DcMotor  leftRear    = null;
-    public DcMotor  rightRear   = null;
+    Hardware8045         robot   = new Hardware8045();   // Use a Pushbot's hardware
+
+
 
     public boolean frontIsForward = true;
     private DriveTrain.SpeedSetting speedMode;
@@ -69,7 +68,7 @@ public class elijahTeleCode extends LinearOpMode {
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-        //robot.init(hardwareMap);
+        robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("To Start Test", "Press Play");    //
@@ -227,28 +226,28 @@ public class elijahTeleCode extends LinearOpMode {
 //            gamepad1.left_stick_y
 
             if(gamepad1.left_stick_y >= 0.5) {
-                leftFront.setPower(1.0);
-                rightFront.setPower(1.0);
-                leftRear.setPower(1.0);
-                rightRear.setPower(1.0);
+                robot.leftFront.setPower(1.0);
+                robot.rightFront.setPower(1.0);
+                robot.leftRear.setPower(1.0);
+                robot.rightRear.setPower(1.0);
             }
             if(gamepad1.left_stick_y <= -0.5) {
-                leftFront.setPower(-1.0);
-                rightFront.setPower(-1.0);
-                leftRear.setPower(-1.0);
-                rightRear.setPower(-1.0);
+                robot.leftFront.setPower(-1.0);
+                robot.rightFront.setPower(-1.0);
+                robot.leftRear.setPower(-1.0);
+                robot.rightRear.setPower(-1.0);
             }
             if(gamepad1.left_stick_x >= 0.5) {
-                leftFront.setPower(1.0);
-                rightFront.setPower(1.0);
-                leftRear.setPower(-1.0);
-                rightRear.setPower(-1.0);
+                robot.leftFront.setPower(1.0);
+                robot.rightFront.setPower(1.0);
+                robot.leftRear.setPower(-1.0);
+                robot.rightRear.setPower(-1.0);
             }
             if(gamepad1.left_stick_x <= -0.5) {
-                leftFront.setPower(-1.0);
-                rightFront.setPower(-1.0);
-                leftRear.setPower(1.0);
-                rightRear.setPower(1.0);
+                robot.leftFront.setPower(-1.0);
+                robot.rightFront.setPower(-1.0);
+                robot.leftRear.setPower(1.0);
+                robot.rightRear.setPower(1.0);
             }
 
 //            leftFront.setPower ( forward/1.0 - strafe/1.0 + rotate/1.0 );
