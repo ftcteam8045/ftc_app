@@ -120,9 +120,6 @@ public class HardwareK9bot
 //        claw.setPosition(CLAW_HOME);
     }
 
-    @TeleOp(name="Eli Test Bot", group="Pushbot")
-    //@Disabled
-
 
     public static class elijahTeleCode extends LinearOpMode {
 
