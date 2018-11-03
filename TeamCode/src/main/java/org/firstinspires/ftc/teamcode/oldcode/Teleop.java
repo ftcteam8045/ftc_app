@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.oldcode;
 
 import android.content.Context;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -28,7 +29,7 @@ import static java.lang.Math.atan;
 
 
 @TeleOp(name = "zMoo", group = "8045")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class Teleop extends OpMode {
 
     RobotRR gromit;

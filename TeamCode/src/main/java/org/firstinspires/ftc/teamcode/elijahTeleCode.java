@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.oldcode.DriveTrain;
 
 import static java.lang.Math.abs;
 
-@TeleOp(name="Eli Tele Test Bot", group="Pushbot")
+@TeleOp(name="Eli Tele Bot", group="Pushbot")
 //@Disabled
 
 

@@ -36,7 +36,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 
 @Autonomous(name = "TheAutoFIXEDV2", group = "8045")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class AutoFIXEDNATHAN extends LinearOpMode {
 
     RobotRR gromit;
