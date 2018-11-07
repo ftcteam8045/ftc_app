@@ -48,9 +48,12 @@ public class elijahTeleCode extends LinearOpMode {
     public boolean dpadPressedDown = false;
     public boolean dpadPressedLeft = false;
     public boolean dpadPressedRight = false;
+    public int colorRed = 1;
+    public String[] teamColor = {"Blue", "Red"};
     public String arrow1 = " ";
     public String arrow2 = " ";
     public String arrow3 = " ";
+    public String arrow4 = " ";
 
 
     Hardware8045         robot   = new Hardware8045();   // Use a Pushbot's hardware
@@ -109,6 +112,7 @@ public class elijahTeleCode extends LinearOpMode {
             telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", arrow1);
             telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
             telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
+            telemetry.addLine().addData(arrow4, "Team Color:       ").addData(teamColor[colorRed], arrow4);
             telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
             // -------------------- \\
 
@@ -145,7 +149,7 @@ public class elijahTeleCode extends LinearOpMode {
             else if (gamepad1.dpad_down == false && dpadPressedDown) {
                 dpadPressedDown = false;
                 currentEdit += 1;
-                if (currentEdit > 2) {
+                if (currentEdit > 3) {
                     currentEdit = 0;
                 }
             }
@@ -180,7 +184,12 @@ public class elijahTeleCode extends LinearOpMode {
             else {
                 arrow3 = "    ";
             }
-
+            if (currentEdit == 3) {
+                arrow4 = "<>";
+            }
+            else {
+                arrow4 = "    ";
+            }
 
             if (gamepad1.dpad_left) {
                 dpadPressedLeft = true;
@@ -195,6 +204,13 @@ public class elijahTeleCode extends LinearOpMode {
                 }
                 if (currentEdit == 2) {
                 driveDis3 -= 1;
+                }
+                if (currentEdit == 3) {
+                    if (colorRed == 1) {
+                        colorRed = 0;
+                    } else {
+                        colorRed = 1;
+                    }
                 }
             }
 
@@ -212,8 +228,14 @@ public class elijahTeleCode extends LinearOpMode {
                 if (currentEdit == 2) {
                     driveDis3 += 1;
                 }
+                if (currentEdit == 3) {
+                    if (colorRed == 1) {
+                        colorRed = 0;
+                    } else {
+                        colorRed = 1;
+                    }
+                }
             }
-
             //----------------//
 
             forward = -gamepad1.right_stick_y;
@@ -254,7 +276,9 @@ public class elijahTeleCode extends LinearOpMode {
                 robot.leftRear.setPower(gamepad1.left_stick_x);
                 robot.rightRear.setPower(-gamepad1.left_stick_x);
             }
-
+//            if() {
+//                robot.leftFront.setPower(-gamepad1.left_stick_x);
+//            }
 
 //            leftFront.setPower ( forward/1.0 - strafe/1.0 + rotate/1.0 );
 //            leftRear.setPower  ( forward/1.0 + strafe/1.0 + rotate/1.0 );
