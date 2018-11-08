@@ -49,7 +49,7 @@ import java.util.Locale;
  * The code is structured as an Iterative OpMode
  *
  * This OpMode uses the common Pushbot hardware class to define the devices on the gromit.
- * All device access is managed through the HardwarePushbot class.
+ * All device access is managed through the hardware class.
  *
  * This particular OpMode executes a basic Tank Drive Teleop for a PushBot
  * It raises and lowers the claw using the Gampad Y and A buttons respectively.
