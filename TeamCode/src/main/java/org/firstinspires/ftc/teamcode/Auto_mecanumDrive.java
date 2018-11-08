@@ -155,9 +155,11 @@ public class Auto_mecanumDrive extends LinearOpMode {
         sleep(1000);
     }
 
-        //  Drive routine using the IMU and Mecanum wheels
+    //  Drive routine using the IMU and Mecanum wheels
+    //  Robot Orientation is to the field
+    //  Drive direction is from the robot
 
-    public void mecanumDrive(double speed, double distance, double robot_orientation, double drive_direction) { //Orientation is to the field //Drive direction is from the robot
+    public void mecanumDrive(double speed, double distance, double robot_orientation, double drive_direction) {
         double max;
         double multiplier;
         int right_start;
