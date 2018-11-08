@@ -30,11 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 //Lara + Liesel positioning code
 
 
@@ -61,7 +58,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 @Autonomous(name="Main Auto", group="Pushbot")
 //@Disabled
-public class TEauto extends LinearOpMode {
+public class elijahAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware8045         robot   = new Hardware8045();   // Use a Pushbot's hardware
