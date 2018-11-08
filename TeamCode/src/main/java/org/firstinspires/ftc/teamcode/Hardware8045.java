@@ -54,6 +54,8 @@ public class Hardware8045
     public DcMotor  rightRear   = null;
 //    public Servo    rightClaw   = null;
 
+    public com.qualcomm.hardware.rev.RevBlinkinLedDriver LEDDriver;
+    //public com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern LEDpattern;
 
     // The IMU sensor object
     BNO055IMU imu;
@@ -75,6 +77,8 @@ public class Hardware8045
 //    public static final double ARM_DOWN_POWER  = -0.45 ;
 
 
+
+
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
@@ -88,6 +92,11 @@ public class Hardware8045
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
+
+        // LED lights
+        LEDDriver = hwMap.get(com.qualcomm.hardware.rev.RevBlinkinLedDriver.class, "ledlights");
+        //LEDpattern =  com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
+
 
         // Define and Initialize Motors
         leftFront  = hwMap.get(DcMotor.class, "left_front");

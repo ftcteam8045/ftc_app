@@ -1,6 +1,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.*;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -39,6 +41,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
         final double FORWARD_SPEED = 0.3;
         final double TURN_SPEED = 0.3;
+        final int cycletime = 500;
 
         final int goldPosition = 1;   // 0 is on left, 1 in center, 2 on right
 
@@ -49,9 +52,22 @@ public class Auto_mecanumDrive extends LinearOpMode {
          */
         Cosmo.init(hardwareMap);
 
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
+
+        // Actual Init loop
+        while (!opModeIsActive()) {
+            if (opModeIsActive() && (runtime.milliseconds()%cycletime < cycletime/2) ){
+                // turn on lights
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+
+            }else{
+                // turn off lights
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            }
+        }
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
