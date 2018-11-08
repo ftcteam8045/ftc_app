@@ -29,26 +29,21 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 /**
  * This is NOT an opmode.
  *
  * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a Pushbot.
- * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
  *
- * This hardware class assumes the following device names have been configured on the robot:
- * Note:  All names are lower case and some have single spaces between words.
  *
- * Motor channel:  Left  drive motor:        "left_drive"
- * Motor channel:  Right drive motor:        "right_drive"
- * Motor channel:  Manipulator drive motor:  "left_arm"
- * Servo channel:  Servo to open left claw:  "left_hand"
- * Servo channel:  Servo to open right claw: "right_hand"
  */
 public class Hardware8045
 {
@@ -59,9 +54,26 @@ public class Hardware8045
     public DcMotor  rightRear   = null;
 //    public Servo    rightClaw   = null;
 
+
+    // The IMU sensor object
+    BNO055IMU imu;
+    public final double turn_THRESHOLD = 2.0;
+    public static final double drive_THRESHOLD = 1.0;
+    public final double turn_MIN_SPEED = 0.15;
+    public final double turn_COEF = 1.0;
+    public static final double drive_COEF = 1.0; //Maximum additional speed to add to a motor during a gyro drive
+
+//    public final double WHEEL_DIAMETER = 4.0;
+//    public final double GEAR_RATIO = 24/24;
+//    public final double TICKS_REV = 537.6;
+//    public final double COUNTS_PER_INCH = (TICKS_REV * GEAR_RATIO) / (WHEEL_DIAMETER * 3.1415);
+    public final double COUNTS_PER_INCH = 42.7;
+    public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;
+
     public static final double MID_SERVO       =  0.5 ;
 //    public static final double ARM_UP_POWER    =  0.45 ;
 //    public static final double ARM_DOWN_POWER  = -0.45 ;
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -113,6 +125,9 @@ public class Hardware8045
 //        rightClaw = hwMap.get(Servo.class, "right_hand");
 //        leftClaw.setPosition(MID_SERVO);
 //        rightClaw.setPosition(MID_SERVO);
+
+
+
     }
  }
 
