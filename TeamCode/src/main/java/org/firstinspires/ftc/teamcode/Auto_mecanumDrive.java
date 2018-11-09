@@ -41,7 +41,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
         final double FORWARD_SPEED = 0.3;
         final double TURN_SPEED = 0.3;
-        final int cycletime = 500;
+
 
         final int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
 
@@ -58,15 +58,28 @@ public class Auto_mecanumDrive extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
-        // Actual Init loop
-        while (!opModeIsActive()) {
-            if (opModeIsActive() && (runtime.milliseconds()%cycletime < cycletime/2) ){
-                // turn on lights
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        int ledontime = 200;
+        int ledofftime = 200;
+        int ledcyclewaittime = 500;
+        int ledcycletime = 3 * (ledontime+ledofftime) + ledcyclewaittime;
 
-            }else{
-                // turn off lights
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+        // Actual Init loop
+        runtime.reset();
+        while (!opModeIsActive()) {
+            if (runtime.milliseconds() <       ledontime ){
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            }else if (runtime.milliseconds() < ledontime + ledofftime     ){
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            }else if (runtime.milliseconds() < 2*ledontime + ledofftime   ){
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            }else if (runtime.milliseconds() < 2*(ledontime + ledofftime) ){
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            }else if (runtime.milliseconds() < 3*ledontime + 2*ledofftime ){
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            }else if (runtime.milliseconds() < 3*ledontime + 3*ledofftime ){
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            }else if (runtime.milliseconds() > ledcycletime){
+                runtime.reset();
             }
         }
 
