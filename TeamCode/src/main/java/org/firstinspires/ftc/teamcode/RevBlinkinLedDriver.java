@@ -81,7 +81,7 @@ public class RevBlinkinLedDriver extends OpMode {
     {
         displayKind = DisplayKind.AUTO;
 
-        blinkinLedDriver = hardwareMap.get(com.qualcomm.hardware.rev.RevBlinkinLedDriver.class, "blinkin");
+        blinkinLedDriver = hardwareMap.get(com.qualcomm.hardware.rev.RevBlinkinLedDriver.class, "ledlights");
         pattern = com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
         blinkinLedDriver.setPattern(pattern);
 

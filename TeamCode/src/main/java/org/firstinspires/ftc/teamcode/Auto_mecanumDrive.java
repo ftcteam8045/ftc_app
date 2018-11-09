@@ -43,7 +43,8 @@ public class Auto_mecanumDrive extends LinearOpMode {
         final double TURN_SPEED = 0.3;
         final int cycletime = 500;
 
-        final int goldPosition = 1;   // 0 is on left, 1 in center, 2 on right
+        final int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
+
 
 
         /*
@@ -61,11 +62,11 @@ public class Auto_mecanumDrive extends LinearOpMode {
         while (!opModeIsActive()) {
             if (opModeIsActive() && (runtime.milliseconds()%cycletime < cycletime/2) ){
                 // turn on lights
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
             }else{
                 // turn off lights
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
             }
         }
 
@@ -74,12 +75,12 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
-        // Step 1:  Drive forward for 1.5 seconds
-        Cosmo.leftFront.setPower(FORWARD_SPEED);
-        Cosmo.rightFront.setPower(FORWARD_SPEED);
-        Cosmo.leftRear.setPower(FORWARD_SPEED);
-        Cosmo.rightRear.setPower(FORWARD_SPEED);
-        runtime.reset();
+//        // Step 1:  Drive forward for 1.5 seconds
+//        Cosmo.leftFront.setPower(FORWARD_SPEED);
+//        Cosmo.rightFront.setPower(FORWARD_SPEED);
+//        Cosmo.leftRear.setPower(FORWARD_SPEED);
+//        Cosmo.rightRear.setPower(FORWARD_SPEED);
+//        runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.5)) {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -87,31 +88,34 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
 
         if (goldPosition == 0) {
+//            mecanumTurn(0.3, 45);
+//            mecanumTurn(0.3, -45);
+            mecanumDrive(0.5, 10, 0, 0);
+            mecanumDrive(0.5, 10, 0, 90);
 
-
-            // Step 3.5: Strafe left
-            // Step 2:  Spin right for 1.3 seconds
-            Cosmo.leftFront.setPower(TURN_SPEED);
-            Cosmo.rightFront.setPower(-TURN_SPEED);
-            Cosmo.leftRear.setPower(-TURN_SPEED);
-            Cosmo.rightRear.setPower(TURN_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-                telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-
-            }
-
-            // Step 1:  Drive forward for .5 seconds
-            Cosmo.leftFront.setPower(FORWARD_SPEED);
-            Cosmo.rightFront.setPower(FORWARD_SPEED);
-            Cosmo.leftRear.setPower(FORWARD_SPEED);
-            Cosmo.rightRear.setPower(FORWARD_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 0.75)) {
-                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
+//            // Step 3.5: Strafe left
+//            // Step 2:  Spin right for 1.3 seconds
+//            Cosmo.leftFront.setPower(TURN_SPEED);
+//            Cosmo.rightFront.setPower(-TURN_SPEED);
+//            Cosmo.leftRear.setPower(-TURN_SPEED);
+//            Cosmo.rightRear.setPower(TURN_SPEED);
+//            runtime.reset();
+//            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+//                telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
+//                telemetry.update();
+//
+//            }
+//
+//            // Step 1:  Drive forward for .5 seconds
+//            Cosmo.leftFront.setPower(FORWARD_SPEED);
+//            Cosmo.rightFront.setPower(FORWARD_SPEED);
+//            Cosmo.leftRear.setPower(FORWARD_SPEED);
+//            Cosmo.rightRear.setPower(FORWARD_SPEED);
+//            runtime.reset();
+//            while (opModeIsActive() && (runtime.seconds() < 0.75)) {
+//                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+//                telemetry.update();
+//            }
         }
 
         if (goldPosition == 1) {
