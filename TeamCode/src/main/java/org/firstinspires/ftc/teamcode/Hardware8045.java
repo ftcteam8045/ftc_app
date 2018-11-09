@@ -72,7 +72,7 @@ public class Hardware8045
     public final double COUNTS_PER_INCH = 42.7;
     public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;
 
-    public static final double MID_SERVO       =  0.5 ;
+//    public static final double MID_SERVO       =  0.5 ;
 //    public static final double ARM_UP_POWER    =  0.45 ;
 //    public static final double ARM_DOWN_POWER  = -0.45 ;
 
@@ -99,10 +99,10 @@ public class Hardware8045
 
 
         // Define and Initialize Motors
-        leftFront  = hwMap.get(DcMotor.class, "left_front");
-        rightFront = hwMap.get(DcMotor.class, "right_front");
-        leftRear  = hwMap.get(DcMotor.class, "left_rear");
-        rightRear = hwMap.get(DcMotor.class, "right_rear");
+        leftFront  = hwMap.get(DcMotor.class, "leftFront");
+        rightFront = hwMap.get(DcMotor.class, "rightFront");
+        leftRear  = hwMap.get(DcMotor.class, "leftRear");
+        rightRear = hwMap.get(DcMotor.class, "rightRear");
         /**       leftFront.setDirection(DcMotor.Direction.FORWARD);
          leftRear.setDirection(DcMotor.Direction.FORWARD);
          rightFront.setDirection(DcMotor.Direction.REVERSE);
