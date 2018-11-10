@@ -174,9 +174,9 @@ public class AutoFIXEDNATHAN extends LinearOpMode {
 
         // Actual Init loop
         while (!opModeIsActive()) {
-            telemetry.addData("IMU", "Heading: %4.2f ", gromit.driveTrain.getheading());
-            telemetry.addData("Blue/Red Ratio", " %4.2f ", gromit.jewelArm.BRRatio);
-            telemetry.addData("VuMark", "%s is visible", vuMark);
+                telemetry.addData("IMU", "Heading: %4.2f ", gromit.driveTrain.getheading());
+                telemetry.addData("Blue/Red Ratio", " %4.2f ", gromit.jewelArm.BRRatio);
+                telemetry.addData("VuMark", "%s is visible", vuMark);
             double sharpIRVoltage = gromit.driveTrain.sharpIRSensor.getVoltage();
             double IRdistance = 18.7754 * Math.pow(sharpIRVoltage, -1.51);
 //            telemetry.addData("Sharp IR V ", sharpIRVoltage);
