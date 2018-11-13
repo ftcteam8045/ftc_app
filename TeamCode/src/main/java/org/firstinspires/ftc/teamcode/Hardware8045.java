@@ -53,7 +53,10 @@ public class Hardware8045
     public DcMotor  rightFront  = null;
     public DcMotor  leftRear    = null;
     public DcMotor  rightRear   = null;
-//    public Servo    rightClaw   = null;
+    public DcMotor  liftUp   = null;
+    public DcMotor  liftDown   = null;
+
+    //    public Servo    rightClaw   = null;
 
     public com.qualcomm.hardware.rev.RevBlinkinLedDriver LEDDriver;
     //public com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern LEDpattern;

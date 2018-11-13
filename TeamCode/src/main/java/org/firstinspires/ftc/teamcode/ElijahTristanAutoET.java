@@ -95,6 +95,16 @@ public class ElijahTristanAutoET extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+    public String arrow1 = " ";
+    public String arrow2 = " ";
+    public String arrow3 = " ";
+    public String arrow4 = " ";
+    public int currentEdit = 0;
+    public int driveDis1 = 10;
+    public int driveDis2 = 15;
+    public int driveDis3 = 20;
+    public int colorRed = 1;
+    public String[] teamColor = {"Blue", "Red"};
 
     private void initVuforia() {
         /*
@@ -141,7 +151,12 @@ public class ElijahTristanAutoET extends LinearOpMode {
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
+        telemetry.addLine("VVV Eli's Test VVV");
+        telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", arrow1);
+        telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
+        telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
+        telemetry.addLine().addData(arrow4, "Team Color:       ").addData(teamColor[colorRed], arrow4);
+        telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
