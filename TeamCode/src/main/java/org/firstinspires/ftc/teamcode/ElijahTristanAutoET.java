@@ -90,21 +90,56 @@ public class ElijahTristanAutoET extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     static final double FORWARD_SPEED = 0.3;
     static final double TURN_SPEED = 0.3;
-    static final int position = 1;   // 0 is on left, 1 in center, 2 on right
+    static int goldPosition = 1;   // 0 is on left, 1 in center, 2 on right
     private static final String VUFORIA_KEY = "AWfr4/T/////AAAAGRMg80Ehu059mDMJI2h/y+4aBmz86AidOcs89UScq+n+QQyGFT4cZP+rzg1M9B/CW5bgDoVf16x6x3WlD5wYKZddt0UWQS65VIFPjZlM9ADBWvWJss9L1dj4X2LZydWltdeaBhkXTXFnKBkKLDcdTyC2ozJlcAUP0VnLMeI1n+f5jGx25+NdFTs0GPJYVrPQRjODb6hYdoHsffiOCsOKgDnzFsalKuff1u4Z8oihSY9pvv3me2gJjzrQKqp2gCRIZAXDdYzln28Z/8vNSU+aXr6eoRrNXPpYdAwyYI+fX2V9H04806eSUKsNYcPBSbVlhe2KoUsSD7qbOsBMagcEIdMZxo010kVCHHhnhV3IFIs8";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+    public int currentEdit = 0;
+    public int waitTime1 = 0;
+    public int driveDis2 = 15;
+    public int driveDis3 = 20;
+    public boolean dpadPressedUp = false;
+    public boolean dpadPressedDown = false;
+    public boolean dpadPressedLeft = false;
+    public boolean dpadPressedRight = false;
+    public int sideBase = 1;
+    public String[] side = {"base", "crater"};
     public String arrow1 = " ";
     public String arrow2 = " ";
     public String arrow3 = " ";
     public String arrow4 = " ";
-    public int currentEdit = 0;
-    public int driveDis1 = 10;
-    public int driveDis2 = 15;
-    public int driveDis3 = 20;
-    public int colorRed = 1;
-    public String[] teamColor = {"Blue", "Red"};
+
+    public boolean dpadup = false;
+    public boolean dpaddown = false;
+    public boolean dpadleft = false;
+    public boolean dpadright = false;
+    public boolean button_a = false;
+    public boolean button_b = false;
+    public boolean button_x = false;
+    public boolean button_y = false;
+    public boolean start = false;
+    public boolean backbutton = false;
+    public boolean righttrigger = false;
+    public boolean lefttrigger = false;
+    public boolean rightbumper = false;
+    public boolean leftbumper = false;
+    public boolean rightstickx = false;
+    public boolean rightsticky = false;
+    public boolean leftstickx = false;
+    public boolean leftsticky = false;
+    public boolean rightstickbutton = false;
+    public boolean leftstickbutton = false;
+
+
+
+    /**********************************************************************************************\
+     |--------------------------------- Pre Init Loop ----------------------------------------------|
+     \**********************************************************************************************/
+
+    /**********************************************************************************************\
+     |--------------------------------- Vuforia Setup ----------------------------------------------|
+     \**********************************************************************************************/
 
     private void initVuforia() {
         /*
@@ -138,10 +173,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.cameraDirection = CAMERA_CHOICE;
-
-
         initVuforia();
-
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
@@ -150,14 +182,159 @@ public class ElijahTristanAutoET extends LinearOpMode {
 
         robot.init(hardwareMap);
 
+
+        /**********************************************************************************************\
+         |--------------------------------------Init Loop-----------------------------------------------|
+         \**********************************************************************************************/
+
+
+        /** Activate Tensor Flow Object Detection. */
+        if (tfod != null) {
+            tfod.activate();
+        }
         // Send telemetry message to signify robot waiting;
-        telemetry.addLine("VVV Eli's Test VVV");
-        telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance One", arrow1);
-        telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
-        telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
-        telemetry.addLine().addData(arrow4, "Team Color:       ").addData(teamColor[colorRed], arrow4);
-        telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
-        telemetry.update();
+        while(!opModeIsActive()) {
+
+
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    if (updatedRecognitions.size() == 3) {
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                goldMineralX = (int) recognition.getLeft();
+                            } else if (silverMineral1X == -1) {
+                                silverMineral1X = (int) recognition.getLeft();
+                            } else {
+                                silverMineral2X = (int) recognition.getLeft();
+                            }
+                        }
+                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Left");
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Right");
+                            } else {
+                                telemetry.addData("Gold Mineral Position", "Center");
+                            }
+                        }
+                    }
+                    telemetry.update();
+                }
+            }
+
+
+
+
+
+//            // --- Eli Test Code -- \\
+//            telemetry.addLine("VVV Eli's Test VVV");
+//            telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
+//            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
+//            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
+//            telemetry.addLine().addData(arrow4, "side:       ").addData(side[sideBase], arrow4);
+//            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
+//            telemetry.update();
+//            // -------------------- \\
+//
+//
+//
+//            //Variable Change GUI
+//
+//            if (gamepad1.dpad_down) {
+//                dpadPressedDown = true;
+//            } else if (gamepad1.dpad_down == false && dpadPressedDown) {
+//                dpadPressedDown = false;
+//                currentEdit += 1;
+//                if (currentEdit > 3) {
+//                    currentEdit = 0;
+//                }
+//            }
+//
+//            if (gamepad1.dpad_up) {
+//                dpadPressedUp = true;
+//            } else if (gamepad1.dpad_up == false && dpadPressedUp) {
+//                dpadPressedUp = false;
+//                currentEdit -= 1;
+//                if (currentEdit < 0) {
+//                    currentEdit = 2;
+//                }
+//            }
+//
+//
+//            if (currentEdit == 0) {
+//                arrow1 = "<>";
+//            } else {
+//                arrow1 = "    ";
+//            }
+//            if (currentEdit == 1) {
+//                arrow2 = "<>";
+//            } else {
+//                arrow2 = "    ";
+//            }
+//            if (currentEdit == 2) {
+//                arrow3 = "<>";
+//            } else {
+//                arrow3 = "    ";
+//            }
+//            if (currentEdit == 3) {
+//                arrow4 = "<>";
+//            } else {
+//                arrow4 = "    ";
+//            }
+//
+//            if (gamepad1.dpad_left) {
+//                dpadPressedLeft = true;
+//            } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
+//                dpadPressedLeft = false;
+//                if (currentEdit == 0) {
+//                    waitTime1 -= 1;
+//                }
+//                if (currentEdit == 1) {
+//                    driveDis2 -= 1;
+//                }
+//                if (currentEdit == 2) {
+//                    driveDis3 -= 1;
+//                }
+//                if (currentEdit == 3) {
+//                    if (sideBase == 1) {
+//                        sideBase = 0;
+//                    } else {
+//                        sideBase = 1;
+//                    }
+//                }
+//            }
+//
+//            if (gamepad1.dpad_right) {
+//                dpadPressedRight = true;
+//            } else if (gamepad1.dpad_right == false && dpadPressedRight) {
+//                dpadPressedRight = false;
+//                if (currentEdit == 0) {
+//                    waitTime1 += 1;
+//                }
+//                if (currentEdit == 1) {
+//                    driveDis2 += 1;
+//                }
+//                if (currentEdit == 2) {
+//                    driveDis3 += 1;
+//                }
+//                if (currentEdit == 3) {
+//                    if (sideBase == 1) {
+//                        sideBase = 0;
+//                    } else {
+//                        sideBase = 1;
+//                    }
+//                }
+//            }
+        }
+
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -169,57 +346,36 @@ public class ElijahTristanAutoET extends LinearOpMode {
         robot.rightRear.setPower(FORWARD_SPEED);
         runtime.reset();
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
-                tfod.activate();
-            }
-            while (opModeIsActive() && (runtime.seconds() < 10)) {
-                telemetry.addLine("WORK");
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 3) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-                                } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
-                                } else {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Left");
-                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                } else {
-                                    telemetry.addData("Gold Mineral Position", "Center");
-                                }
-                            }
-                        }
-                        telemetry.update();
+
+
+
+                if(side[sideBase] == side[0]) {
+                    if (goldPosition == 0) {
+
+                    }
+
+                    if (goldPosition == 1) {
+
+                    }
+
+                    if (goldPosition == 2) {
+
                     }
                 }
 
-                if (position == 1) {
+                if(side[sideBase] == side[0]) {
+                    if (goldPosition == 0) {
 
+                    }
+
+                    if (goldPosition == 1) {
+
+                    }
+
+                    if (goldPosition == 2) {
+
+                    }
                 }
-
-                if (position == 2) {
-
-                }
-
-                if (position == 3) {
-
-                }
-
 
             }
             if (tfod != null) {
@@ -228,4 +384,4 @@ public class ElijahTristanAutoET extends LinearOpMode {
 
         }
     }
-}
+

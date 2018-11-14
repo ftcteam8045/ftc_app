@@ -53,8 +53,7 @@ public class Hardware8045
     public DcMotor  rightFront  = null;
     public DcMotor  leftRear    = null;
     public DcMotor  rightRear   = null;
-    public DcMotor  liftUp   = null;
-    public DcMotor  liftDown   = null;
+//    public DcMotor  lift   = null;
 
     //    public Servo    rightClaw   = null;
 
@@ -110,10 +109,10 @@ public class Hardware8045
 
 
         // Define and Initialize Motors
-        leftFront  = hwMap.get(DcMotor.class, "leftFront");
-        rightFront = hwMap.get(DcMotor.class, "rightFront");
-        leftRear  = hwMap.get(DcMotor.class, "leftRear");
-        rightRear = hwMap.get(DcMotor.class, "rightRear");
+        leftFront  = hwMap.get(DcMotor.class, "left_Front");
+        rightFront = hwMap.get(DcMotor.class, "right_Front");
+        leftRear  = hwMap.get(DcMotor.class, "left_Rear");
+        rightRear = hwMap.get(DcMotor.class, "right_Rear");
         /**       leftFront.setDirection(DcMotor.Direction.FORWARD);
          leftRear.setDirection(DcMotor.Direction.FORWARD);
          rightFront.setDirection(DcMotor.Direction.REVERSE);
