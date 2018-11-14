@@ -53,7 +53,8 @@ public class Hardware8045
     public DcMotor  rightFront  = null;
     public DcMotor  leftRear    = null;
     public DcMotor  rightRear   = null;
-//    public DcMotor  lift   = null;
+    public DcMotor  liftUp   = null;
+    public DcMotor  liftDown   = null;
 
     //    public Servo    rightClaw   = null;
 
@@ -79,7 +80,7 @@ public class Hardware8045
 //    public final double GEAR_RATIO = 24/24;
 //    public final double TICKS_REV = 537.6;
 //    public final double COUNTS_PER_INCH = (TICKS_REV * GEAR_RATIO) / (WHEEL_DIAMETER * 3.1415);
-    public final double COUNTS_PER_INCH = 42.7;
+    public final double COUNTS_PER_INCH = 42.7 * 2.5;
     public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;
 
 //    public static final double MID_SERVO       =  0.5 ;
@@ -109,10 +110,10 @@ public class Hardware8045
 
 
         // Define and Initialize Motors
-        leftFront  = hwMap.get(DcMotor.class, "left_Front");
-        rightFront = hwMap.get(DcMotor.class, "right_Front");
-        leftRear  = hwMap.get(DcMotor.class, "left_Rear");
-        rightRear = hwMap.get(DcMotor.class, "right_Rear");
+        leftFront  = hwMap.get(DcMotor.class, "left_front");
+        rightFront = hwMap.get(DcMotor.class, "right_front");
+        leftRear  = hwMap.get(DcMotor.class, "left_rear");
+        rightRear = hwMap.get(DcMotor.class, "right_rear");
         /**       leftFront.setDirection(DcMotor.Direction.FORWARD);
          leftRear.setDirection(DcMotor.Direction.FORWARD);
          rightFront.setDirection(DcMotor.Direction.REVERSE);
