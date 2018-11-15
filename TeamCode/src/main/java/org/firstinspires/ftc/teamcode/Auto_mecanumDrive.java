@@ -68,12 +68,13 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
 
         // Actual Init loop
-        while (!opModeIsActive()) {
+        while (!opModeIsActive()&&!isStopRequested()) {
+
 
         }
 
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
+        // Wait for the game to start (driver presses PLAY) replaced by init loop
+        //waitForStart();
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
