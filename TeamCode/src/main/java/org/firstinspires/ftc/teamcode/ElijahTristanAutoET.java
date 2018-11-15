@@ -194,8 +194,108 @@ public class ElijahTristanAutoET extends LinearOpMode {
         }
         // Send telemetry message to signify robot waiting;
         while(!opModeIsActive()) {
+            // --- Eli Test Code -- \\
+            telemetry.addLine("VVV Eli's Test VVV");
+            telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
+            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
+            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
+            telemetry.addLine().addData(arrow4, "side:       ").addData(side[sideBase], arrow4);
+            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
+            telemetry.update();
+            // -------------------- \\
+
+            //Variable Change GUI
+            if (gamepad1.dpad_down) {
+                dpadPressedDown = true;
+            } else if (gamepad1.dpad_down == false && dpadPressedDown) {
+                dpadPressedDown = false;
+                currentEdit += 1;
+                if (currentEdit > 3) {
+                    currentEdit = 0;
+                }
+            }
+
+            if (gamepad1.dpad_up) {
+                dpadPressedUp = true;
+            } else if (gamepad1.dpad_up == false && dpadPressedUp) {
+                dpadPressedUp = false;
+                currentEdit -= 1;
+                if (currentEdit < 0) {
+                    currentEdit = 2;
+                }
+            }
 
 
+            if (currentEdit == 0) {
+                arrow1 = "<>";
+            } else {
+                arrow1 = "    ";
+            }
+            if (currentEdit == 1) {
+                arrow2 = "<>";
+            } else {
+                arrow2 = "    ";
+            }
+            if (currentEdit == 2) {
+                arrow3 = "<>";
+            } else {
+                arrow3 = "    ";
+            }
+            if (currentEdit == 3) {
+                arrow4 = "<>";
+            } else {
+                arrow4 = "    ";
+            }
+
+            if (gamepad1.dpad_left) {
+                dpadPressedLeft = true;
+            } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
+                dpadPressedLeft = false;
+                if (currentEdit == 0) {
+                    waitTime1 -= 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis2 -= 1;
+                }
+                if (currentEdit == 2) {
+                    driveDis3 -= 1;
+                }
+                if (currentEdit == 3) {
+                    if (sideBase == 1) {
+                        sideBase = 0;
+                    } else {
+                        sideBase = 1;
+                    }
+                }
+            }
+
+            if (gamepad1.dpad_right) {
+                dpadPressedRight = true;
+            } else if (gamepad1.dpad_right == false && dpadPressedRight) {
+                dpadPressedRight = false;
+                if (currentEdit == 0) {
+                    waitTime1 += 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis2 += 1;
+                }
+                if (currentEdit == 2) {
+                    driveDis3 += 1;
+                }
+                if (currentEdit == 3) {
+                    if (sideBase == 1) {
+                        sideBase = 0;
+                    } else {
+                        sideBase = 1;
+                    }
+                }
+            }
+            if (gamepad1.y) {
+                break;
+            }
+        }
+
+        while(!opModeIsActive()) {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -228,113 +328,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
                     telemetry.update();
                 }
             }
-
-
-
-
-
-//            // --- Eli Test Code -- \\
-//            telemetry.addLine("VVV Eli's Test VVV");
-//            telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
-//            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
-//            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
-//            telemetry.addLine().addData(arrow4, "side:       ").addData(side[sideBase], arrow4);
-//            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
-//            telemetry.update();
-//            // -------------------- \\
-//
-//
-//
-//            //Variable Change GUI
-//
-//            if (gamepad1.dpad_down) {
-//                dpadPressedDown = true;
-//            } else if (gamepad1.dpad_down == false && dpadPressedDown) {
-//                dpadPressedDown = false;
-//                currentEdit += 1;
-//                if (currentEdit > 3) {
-//                    currentEdit = 0;
-//                }
-//            }
-//
-//            if (gamepad1.dpad_up) {
-//                dpadPressedUp = true;
-//            } else if (gamepad1.dpad_up == false && dpadPressedUp) {
-//                dpadPressedUp = false;
-//                currentEdit -= 1;
-//                if (currentEdit < 0) {
-//                    currentEdit = 2;
-//                }
-//            }
-//
-//
-//            if (currentEdit == 0) {
-//                arrow1 = "<>";
-//            } else {
-//                arrow1 = "    ";
-//            }
-//            if (currentEdit == 1) {
-//                arrow2 = "<>";
-//            } else {
-//                arrow2 = "    ";
-//            }
-//            if (currentEdit == 2) {
-//                arrow3 = "<>";
-//            } else {
-//                arrow3 = "    ";
-//            }
-//            if (currentEdit == 3) {
-//                arrow4 = "<>";
-//            } else {
-//                arrow4 = "    ";
-//            }
-//
-//            if (gamepad1.dpad_left) {
-//                dpadPressedLeft = true;
-//            } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
-//                dpadPressedLeft = false;
-//                if (currentEdit == 0) {
-//                    waitTime1 -= 1;
-//                }
-//                if (currentEdit == 1) {
-//                    driveDis2 -= 1;
-//                }
-//                if (currentEdit == 2) {
-//                    driveDis3 -= 1;
-//                }
-//                if (currentEdit == 3) {
-//                    if (sideBase == 1) {
-//                        sideBase = 0;
-//                    } else {
-//                        sideBase = 1;
-//                    }
-//                }
-//            }
-//
-//            if (gamepad1.dpad_right) {
-//                dpadPressedRight = true;
-//            } else if (gamepad1.dpad_right == false && dpadPressedRight) {
-//                dpadPressedRight = false;
-//                if (currentEdit == 0) {
-//                    waitTime1 += 1;
-//                }
-//                if (currentEdit == 1) {
-//                    driveDis2 += 1;
-//                }
-//                if (currentEdit == 2) {
-//                    driveDis3 += 1;
-//                }
-//                if (currentEdit == 3) {
-//                    if (sideBase == 1) {
-//                        sideBase = 0;
-//                    } else {
-//                        sideBase = 1;
-//                    }
-//                }
-//            }
         }
-
-
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -346,9 +340,6 @@ public class ElijahTristanAutoET extends LinearOpMode {
         robot.rightRear.setPower(FORWARD_SPEED);
         runtime.reset();
         if (opModeIsActive()) {
-
-
-
                 if(side[sideBase] == side[0]) {
                     if (goldPosition == 0) {
 
