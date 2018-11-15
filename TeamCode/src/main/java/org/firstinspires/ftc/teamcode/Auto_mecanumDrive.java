@@ -22,7 +22,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "Auto MEc", group = "Cosmos")
+@Autonomous(name = "Auto MEc", group = "Cosmo")
 //@Disabled
 public class Auto_mecanumDrive extends LinearOpMode {
 
@@ -44,6 +44,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
         final int cycletime = 500;
 
         final int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
+        final boolean teamIsRed = true;
 
 
 
@@ -58,16 +59,17 @@ public class Auto_mecanumDrive extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
+
+        if (teamIsRed) {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
+        } else {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
+        }
+
+
         // Actual Init loop
         while (!opModeIsActive()) {
-            if (opModeIsActive() && (runtime.milliseconds()%cycletime < cycletime/2) ){
-                // turn on lights
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
-            }else{
-                // turn off lights
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-            }
         }
 
         // Wait for the game to start (driver presses PLAY)
@@ -89,12 +91,12 @@ public class Auto_mecanumDrive extends LinearOpMode {
 // goldposition 0 = left,1 = center, 2 = right
 
         
-        if (goldPosition == 0) {
+        if (goldPosition == 0) {        // left position
 //            mecanumTurn(0.3, 45);
 //            mecanumTurn(0.3, -45);
-            mecanumDrive(0.5, 18, 0, 0);
-            mecanumDrive(0.5, 15, 0, 90);
-            mecanumDrive(0.5, 12, 0, 0);
+            mecanumDrive(0.5, 18, 0, 0);     // drive forward
+            mecanumDrive(0.5, 15, 0, 90);    // drive left
+            mecanumDrive(0.5, 12, 0, 0);     // drive forward
 //            // Step 3.5: Strafe left
 //            // Step 2:  Spin right for 1.3 seconds
 //            Cosmo.leftFront.setPower(TURN_SPEED);
