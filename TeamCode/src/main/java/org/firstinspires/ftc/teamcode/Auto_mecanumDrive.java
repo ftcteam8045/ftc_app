@@ -91,7 +91,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
 // goldposition 0 = left,1 = center, 2 = right
 
-        
+
         if (goldPosition == 0) {        // left position
 //            mecanumTurn(0.3, 45);
 //            mecanumTurn(0.3, -45);
