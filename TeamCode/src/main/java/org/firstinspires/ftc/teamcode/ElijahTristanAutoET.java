@@ -97,7 +97,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     /* Declare OpMode members. */
-    Hardware8045 robot = new Hardware8045();   // Use a Pushbot's hardware
+    //Hardware8045 robot = new Hardware8045();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
     static final double FORWARD_SPEED = 0.3;
     static final double TURN_SPEED = 0.3;
@@ -191,7 +191,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
 
-        robot.init(hardwareMap);
+        Cosmo.init(hardwareMap);
 
 
         /**********************************************************************************************\
@@ -328,11 +328,14 @@ public class ElijahTristanAutoET extends LinearOpMode {
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Left");
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                 telemetry.addData("Gold Mineral Position", "Right");
+//                                goldPosition = 2;
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Left");
+//                                goldPosition = 0;
                             } else {
                                 telemetry.addData("Gold Mineral Position", "Center");
+//                                goldPosition = 1;
                             }
                         }
                     }
@@ -345,10 +348,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
         waitForStart();
 
 
-        Cosmo.leftFront.setPower(FORWARD_SPEED);
-        Cosmo.rightFront.setPower(FORWARD_SPEED);
-        Cosmo.leftRear.setPower(FORWARD_SPEED);
-        Cosmo.rightRear.setPower(FORWARD_SPEED);
+
         runtime.reset();
         if (opModeIsActive()) {
                 if(side[sideBase] == side[0]) {
