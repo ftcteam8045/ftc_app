@@ -8,15 +8,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import java.util.List;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.signum;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
@@ -33,7 +40,48 @@ public class Auto_mecanumDrive extends LinearOpMode {
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
+    private static final String VUFORIA_KEY = "AWfr4/T/////AAAAGRMg80Ehu059mDMJI2h/y+4aBmz86AidOcs89UScq+n+QQyGFT4cZP+rzg1M9B/CW5bgDoVf16x6x3WlD5wYKZddt0UWQS65VIFPjZlM9ADBWvWJss9L1dj4X2LZydWltdeaBhkXTXFnKBkKLDcdTyC2ozJlcAUP0VnLMeI1n+f5jGx25+NdFTs0GPJYVrPQRjODb6hYdoHsffiOCsOKgDnzFsalKuff1u4Z8oihSY9pvv3me2gJjzrQKqp2gCRIZAXDdYzln28Z/8vNSU+aXr6eoRrNXPpYdAwyYI+fX2V9H04806eSUKsNYcPBSbVlhe2KoUsSD7qbOsBMagcEIdMZxo010kVCHHhnhV3IFIs8";
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+
+    /**********************************************************************************************\
+     |--------------------------------- Pre Init Loop ----------------------------------------------|
+     \**********************************************************************************************/
+
+    /**********************************************************************************************\
+     |--------------------------------- Vuforia Setup ----------------------------------------------|
+     \**********************************************************************************************/
+
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+    }
+
+    /**
+     * Initialize the Tensor Flow Object Detection engine.
+     */
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
 
 
     @Override
@@ -42,10 +90,19 @@ public class Auto_mecanumDrive extends LinearOpMode {
         final double FORWARD_SPEED = 0.3;
         final double TURN_SPEED = 0.3;
         final int cycletime = 500;
+        int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
 
-        final int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
         final boolean teamIsRed = true;
 
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        parameters.cameraDirection = CAMERA_CHOICE;
+        initVuforia();
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
 
 
         /*
@@ -53,6 +110,10 @@ public class Auto_mecanumDrive extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         Cosmo.init(hardwareMap);
+
+
+
+
 
 
         // Send telemetry message to signify robot waiting;
@@ -66,23 +127,64 @@ public class Auto_mecanumDrive extends LinearOpMode {
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
         }
 
-
+        /** Activate Tensor Flow Object Detection. */
+        if (tfod != null) {
+            tfod.activate();
+        }
         // Actual Init loop
         while (!opModeIsActive()) {
 
+            /** Activate Tensor Flow Object Detection. */
+            if (tfod != null) {
+                tfod.activate();
+            }
+            // Send telemetry message to signify robot waiting;
+            while(!opModeIsActive()) {
+
+
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        if (updatedRecognitions.size() == 3) {
+                            int goldMineralX = -1;
+                            int silverMineral1X = -1;
+                            int silverMineral2X = -1;
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    goldMineralX = (int) recognition.getLeft();
+                                } else if (silverMineral1X == -1) {
+                                    silverMineral1X = (int) recognition.getLeft();
+                                } else {
+                                    silverMineral2X = (int) recognition.getLeft();
+                                }
+                            }
+                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                    telemetry.addData("Gold Mineral Position", "Left");
+                                    goldPosition = 2;
+                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                    telemetry.addData("Gold Mineral Position", "Right");
+                                    goldPosition = 0;
+                                } else {
+                                    telemetry.addData("Gold Mineral Position", "Center");
+                                    goldPosition = 1;
+                                }
+                            }
+                        }
+                        telemetry.update();
+                    }
+                }
+
+
+            }
         }
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
-
-//        // Step 1:  Drive forward for 1.5 seconds
-//        Cosmo.leftFront.setPower(FORWARD_SPEED);
-//        Cosmo.rightFront.setPower(FORWARD_SPEED);
-//        Cosmo.leftRear.setPower(FORWARD_SPEED);
-//        Cosmo.rightRear.setPower(FORWARD_SPEED);
-//        runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.5)) {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -97,6 +199,10 @@ public class Auto_mecanumDrive extends LinearOpMode {
             mecanumDrive(0.5, 18, 0, 0);     // drive forward
             mecanumDrive(0.5, 15, 0, 90);    // drive left
             mecanumDrive(0.5, 12, 0, 0);     // drive forward
+
+            mecanumDrive(0.5, -12, 0, 0);     // drive backwards
+            mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
+
 //            // Step 3.5: Strafe left
 //            // Step 2:  Spin right for 1.3 seconds
 //            Cosmo.leftFront.setPower(TURN_SPEED);
@@ -125,44 +231,46 @@ public class Auto_mecanumDrive extends LinearOpMode {
         if (goldPosition == 1) {
 
             // Step 1:  Drive forward for 1.5 seconds
-            Cosmo.leftFront.setPower(FORWARD_SPEED);
-            Cosmo.rightFront.setPower(FORWARD_SPEED);
-            Cosmo.leftRear.setPower(FORWARD_SPEED);
-            Cosmo.rightRear.setPower(FORWARD_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.5)) {
-                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
+//            Cosmo.leftFront.setPower(FORWARD_SPEED);
+//            Cosmo.rightFront.setPower(FORWARD_SPEED);
+//            Cosmo.leftRear.setPower(FORWARD_SPEED);
+//            Cosmo.rightRear.setPower(FORWARD_SPEED);
+//            runtime.reset();
+//            while (opModeIsActive() && (runtime.seconds() < 1.5)) {
+//                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+//                telemetry.update();
+//            }
         }
 
         if (goldPosition == 2) {
 
-
+            mecanumDrive(0.5, 18, 0, 0);     // drive forward
+            mecanumDrive(0.5, 15, 0, -90);    // drive left
+            mecanumDrive(0.5, 12, 0, 0);     // drive forward
             // Step 3.5: Strafe right
-            // Step 2:  Spin right for 1.3 seconds
-            Cosmo.leftFront.setPower(-TURN_SPEED);
-            Cosmo.rightFront.setPower(TURN_SPEED);
-            Cosmo.leftRear.setPower(TURN_SPEED);
-            Cosmo.rightRear.setPower(-TURN_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-                telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-
-            }
-
-
-            // Step 1:  Drive forward for .5 seconds
-            Cosmo.leftFront.setPower(FORWARD_SPEED);
-            Cosmo.rightFront.setPower(FORWARD_SPEED);
-            Cosmo.leftRear.setPower(FORWARD_SPEED);
-            Cosmo.rightRear.setPower(FORWARD_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 0.75)) {
-                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
+//            // Step 2:  Spin right for 1.3 seconds
+//            Cosmo.leftFront.setPower(-TURN_SPEED);
+//            Cosmo.rightFront.setPower(TURN_SPEED);
+//            Cosmo.leftRear.setPower(TURN_SPEED);
+//            Cosmo.rightRear.setPower(-TURN_SPEED);
+//            runtime.reset();
+//            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+//                telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
+//                telemetry.update();
+//
+//            }
+//
+//
+//            // Step 1:  Drive forward for .5 seconds
+//            Cosmo.leftFront.setPower(FORWARD_SPEED);
+//            Cosmo.rightFront.setPower(FORWARD_SPEED);
+//            Cosmo.leftRear.setPower(FORWARD_SPEED);
+//            Cosmo.rightRear.setPower(FORWARD_SPEED);
+//            runtime.reset();
+//            while (opModeIsActive() && (runtime.seconds() < 0.75)) {
+//                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+//                telemetry.update();
+//            }
         }
 
         // Step 4:  Stop and close the claw.
