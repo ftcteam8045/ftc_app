@@ -34,6 +34,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -49,6 +52,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.signum;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
@@ -59,6 +65,7 @@ import java.util.List;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -75,6 +82,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,15 +91,17 @@ import java.util.List;
 @Autonomous(name="Main Auto", group="Pushbot")
 //@Disabled
 public class ElijahTristanAutoET extends LinearOpMode {
+    Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
+    public Orientation angles;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     /* Declare OpMode members. */
-    Hardware8045 robot = new Hardware8045();   // Use a Pushbot's hardware
+    //Hardware8045 robot = new Hardware8045();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
     static final double FORWARD_SPEED = 0.3;
     static final double TURN_SPEED = 0.3;
-    static int goldPosition = 1;   // 0 is on left, 1 in center, 2 on right
+    static int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
     private static final String VUFORIA_KEY = "AWfr4/T/////AAAAGRMg80Ehu059mDMJI2h/y+4aBmz86AidOcs89UScq+n+QQyGFT4cZP+rzg1M9B/CW5bgDoVf16x6x3WlD5wYKZddt0UWQS65VIFPjZlM9ADBWvWJss9L1dj4X2LZydWltdeaBhkXTXFnKBkKLDcdTyC2ozJlcAUP0VnLMeI1n+f5jGx25+NdFTs0GPJYVrPQRjODb6hYdoHsffiOCsOKgDnzFsalKuff1u4Z8oihSY9pvv3me2gJjzrQKqp2gCRIZAXDdYzln28Z/8vNSU+aXr6eoRrNXPpYdAwyYI+fX2V9H04806eSUKsNYcPBSbVlhe2KoUsSD7qbOsBMagcEIdMZxo010kVCHHhnhV3IFIs8";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
@@ -180,7 +191,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
 
-        robot.init(hardwareMap);
+        Cosmo.init(hardwareMap);
 
 
         /**********************************************************************************************\
@@ -194,8 +205,108 @@ public class ElijahTristanAutoET extends LinearOpMode {
         }
         // Send telemetry message to signify robot waiting;
         while(!opModeIsActive()) {
+            // --- Eli Test Code -- \\
+            telemetry.addLine("VVV Eli's Test VVV");
+            telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
+            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
+            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
+            telemetry.addLine().addData(arrow4, "side:       ").addData(side[sideBase], arrow4);
+            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
+            telemetry.update();
+            // -------------------- \\
+
+            //Variable Change GUI
+            if (gamepad1.dpad_down) {
+                dpadPressedDown = true;
+            } else if (gamepad1.dpad_down == false && dpadPressedDown) {
+                dpadPressedDown = false;
+                currentEdit += 1;
+                if (currentEdit > 3) {
+                    currentEdit = 0;
+                }
+            }
+
+            if (gamepad1.dpad_up) {
+                dpadPressedUp = true;
+            } else if (gamepad1.dpad_up == false && dpadPressedUp) {
+                dpadPressedUp = false;
+                currentEdit -= 1;
+                if (currentEdit < 0) {
+                    currentEdit = 2;
+                }
+            }
 
 
+            if (currentEdit == 0) {
+                arrow1 = "<>";
+            } else {
+                arrow1 = "    ";
+            }
+            if (currentEdit == 1) {
+                arrow2 = "<>";
+            } else {
+                arrow2 = "    ";
+            }
+            if (currentEdit == 2) {
+                arrow3 = "<>";
+            } else {
+                arrow3 = "    ";
+            }
+            if (currentEdit == 3) {
+                arrow4 = "<>";
+            } else {
+                arrow4 = "    ";
+            }
+
+            if (gamepad1.dpad_left) {
+                dpadPressedLeft = true;
+            } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
+                dpadPressedLeft = false;
+                if (currentEdit == 0) {
+                    waitTime1 -= 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis2 -= 1;
+                }
+                if (currentEdit == 2) {
+                    driveDis3 -= 1;
+                }
+                if (currentEdit == 3) {
+                    if (sideBase == 1) {
+                        sideBase = 0;
+                    } else {
+                        sideBase = 1;
+                    }
+                }
+            }
+
+            if (gamepad1.dpad_right) {
+                dpadPressedRight = true;
+            } else if (gamepad1.dpad_right == false && dpadPressedRight) {
+                dpadPressedRight = false;
+                if (currentEdit == 0) {
+                    waitTime1 += 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis2 += 1;
+                }
+                if (currentEdit == 2) {
+                    driveDis3 += 1;
+                }
+                if (currentEdit == 3) {
+                    if (sideBase == 1) {
+                        sideBase = 0;
+                    } else {
+                        sideBase = 1;
+                    }
+                }
+            }
+            if (gamepad1.y) {
+                break;
+            }
+        }
+
+        while(!opModeIsActive()) {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -217,141 +328,40 @@ public class ElijahTristanAutoET extends LinearOpMode {
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Left");
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                 telemetry.addData("Gold Mineral Position", "Right");
+//                                goldPosition = 2;
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Left");
+//                                goldPosition = 0;
                             } else {
                                 telemetry.addData("Gold Mineral Position", "Center");
+//                                goldPosition = 1;
                             }
                         }
                     }
                     telemetry.update();
                 }
             }
-
-
-
-
-
-//            // --- Eli Test Code -- \\
-//            telemetry.addLine("VVV Eli's Test VVV");
-//            telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
-//            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
-//            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
-//            telemetry.addLine().addData(arrow4, "side:       ").addData(side[sideBase], arrow4);
-//            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
-//            telemetry.update();
-//            // -------------------- \\
-//
-//
-//
-//            //Variable Change GUI
-//
-//            if (gamepad1.dpad_down) {
-//                dpadPressedDown = true;
-//            } else if (gamepad1.dpad_down == false && dpadPressedDown) {
-//                dpadPressedDown = false;
-//                currentEdit += 1;
-//                if (currentEdit > 3) {
-//                    currentEdit = 0;
-//                }
-//            }
-//
-//            if (gamepad1.dpad_up) {
-//                dpadPressedUp = true;
-//            } else if (gamepad1.dpad_up == false && dpadPressedUp) {
-//                dpadPressedUp = false;
-//                currentEdit -= 1;
-//                if (currentEdit < 0) {
-//                    currentEdit = 2;
-//                }
-//            }
-//
-//
-//            if (currentEdit == 0) {
-//                arrow1 = "<>";
-//            } else {
-//                arrow1 = "    ";
-//            }
-//            if (currentEdit == 1) {
-//                arrow2 = "<>";
-//            } else {
-//                arrow2 = "    ";
-//            }
-//            if (currentEdit == 2) {
-//                arrow3 = "<>";
-//            } else {
-//                arrow3 = "    ";
-//            }
-//            if (currentEdit == 3) {
-//                arrow4 = "<>";
-//            } else {
-//                arrow4 = "    ";
-//            }
-//
-//            if (gamepad1.dpad_left) {
-//                dpadPressedLeft = true;
-//            } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
-//                dpadPressedLeft = false;
-//                if (currentEdit == 0) {
-//                    waitTime1 -= 1;
-//                }
-//                if (currentEdit == 1) {
-//                    driveDis2 -= 1;
-//                }
-//                if (currentEdit == 2) {
-//                    driveDis3 -= 1;
-//                }
-//                if (currentEdit == 3) {
-//                    if (sideBase == 1) {
-//                        sideBase = 0;
-//                    } else {
-//                        sideBase = 1;
-//                    }
-//                }
-//            }
-//
-//            if (gamepad1.dpad_right) {
-//                dpadPressedRight = true;
-//            } else if (gamepad1.dpad_right == false && dpadPressedRight) {
-//                dpadPressedRight = false;
-//                if (currentEdit == 0) {
-//                    waitTime1 += 1;
-//                }
-//                if (currentEdit == 1) {
-//                    driveDis2 += 1;
-//                }
-//                if (currentEdit == 2) {
-//                    driveDis3 += 1;
-//                }
-//                if (currentEdit == 3) {
-//                    if (sideBase == 1) {
-//                        sideBase = 0;
-//                    } else {
-//                        sideBase = 1;
-//                    }
-//                }
-//            }
         }
-
-
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
 
-        robot.leftFront.setPower(FORWARD_SPEED);
-        robot.rightFront.setPower(FORWARD_SPEED);
-        robot.leftRear.setPower(FORWARD_SPEED);
-        robot.rightRear.setPower(FORWARD_SPEED);
+
         runtime.reset();
         if (opModeIsActive()) {
-
-
-
                 if(side[sideBase] == side[0]) {
                     if (goldPosition == 0) {
-
+                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
+                            mecanumDrive(0.5, 18, 0, 0);
+                            mecanumDrive(0.5, 18, 0, 90);
+                            mecanumDrive(0.5, 18, 0, 180);
+                        }
+                        //                        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
+//                            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+//                            telemetry.update();
+//                        }
                     }
 
                     if (goldPosition == 1) {
@@ -383,5 +393,121 @@ public class ElijahTristanAutoET extends LinearOpMode {
             }
 
         }
+    public void mecanumDrive(double speed, double distance, double robot_orientation, double drive_direction) {
+        double max;
+        double multiplier;
+        int right_start;
+        int left_start;
+        int moveCounts;
+        //int drive_direction = -90;
+        moveCounts = (int) (distance * Cosmo.COUNTS_PER_INCH);
+        right_start = Cosmo.rightRear.getCurrentPosition();
+        left_start = Cosmo.leftRear.getCurrentPosition();
+        double lfpower;
+        double lrpower;
+        double rfpower;
+        double rrpower;
+
+        double lfbase;
+        double lrbase;
+        double rfbase;
+        double rrbase;
+        lfbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
+        lrbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
+        rfbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
+        rrbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
+        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive() /* ENCODERS*/) {//Should we average all four motors?
+            //Determine correction
+            double correction = robot_orientation - getheading();
+            if (correction <= -180) {
+                correction += 360;
+            } else if (correction >= 180) {                      // correction should be +/- 180 (to the left negative, right positive)
+                correction -= 360;
+            }
+            lrpower = lrbase; //MIGHT BE MORE EFFECIENT TO COMBINE THESE WITHT HE ADJUSTMENT PART AND SET ADJUSTMENT TO ZERO IF NOT NEEDED
+            lfpower = lfbase;
+            rrpower = rrbase;
+            rfpower = rfbase;
+            if (abs(correction) > drive_THRESHOLD) {//If you are off
+                //Apply power to one side of the robot to turn the robot back to the right heading
+                double right_adjustment = Range.clip((drive_COEF * correction / 45), -1, 1);
+                lrpower -= right_adjustment;
+                lfpower -= right_adjustment;
+                rrpower = rrbase + right_adjustment;
+                rfpower = rfbase + right_adjustment;
+
+            }//Otherwise you Are at the right orientation
+
+            //Determine largest power being applied in either direction
+            max = abs(lfpower);
+            if (abs(lrpower) > max) max = abs(lrpower);
+            if (abs(rfpower) > max) max = abs(rfpower);
+            if (abs(rrpower) > max) max = abs(rrpower);
+
+            multiplier = speed / max; //multiplier to adjust speeds of each wheel so you can have a max power of 1 on atleast 1 wheel
+
+            lfpower *= multiplier;
+            lrpower *= multiplier;
+            rfpower *= multiplier;
+            rrpower *= multiplier;
+
+            Cosmo.leftFront.setPower(lfpower);
+            Cosmo.leftRear.setPower(lrpower);
+            Cosmo.rightFront.setPower(rfpower);
+            Cosmo.rightRear.setPower(rrpower);
+
+//            RobotLog.ii("[GromitIR] ", Double.toString(18.7754*Math.pow(sharpIRSensor.getVoltage(),-1.51)), Integer.toString(left_front.getCurrentPosition()));
+
+        }
+        //gromit.driveTrain.stopMotors();
+        Cosmo.leftFront.setPower(0.0);
+        Cosmo.rightFront.setPower(0.0);
+        Cosmo.rightRear.setPower(0.0);
+        Cosmo.leftRear.setPower(0.0);
     }
+    public void mecanumTurn(double speed, double target_heading) {
+        if (speed > 1) speed = 1.0;
+        //else if(speed <= 0) speed = 0.1;
+
+        double correction = target_heading - getheading();
+        if (correction <= -180) {
+            correction += 360;   // correction should be +/- 180 (to the left negative, right positive)
+        } else if (correction >= 180) {
+            correction -= 360;
+        }
+
+        while (abs(correction) >= Cosmo.turn_THRESHOLD && opModeIsActive()) { //opmode active?{
+            correction = target_heading - getheading();
+            if (abs(correction) <= Cosmo.turn_THRESHOLD) break;
+
+            if (correction <= -180)
+                correction += 360;   // correction should be +/- 180 (to the left negative, right positive)
+            if (correction >= 180) correction -= 360;
+            /**^^^^^^^^^^^MAYBE WE ONLY NEED TO DO THIS ONCE?????*/
+
+            double adjustment = Range.clip((Math.signum(correction) * Cosmo.turn_MIN_SPEED + Cosmo.turn_COEF * correction / 100), -1, 1);  // adjustment is motor power: sign of correction *0.07 (base power)  + a proportional bit
+
+            Cosmo.leftFront.setPower(-adjustment * speed);
+            Cosmo.leftRear.setPower(-adjustment * speed);
+            Cosmo.rightFront.setPower((adjustment * speed));
+            Cosmo.rightRear.setPower((adjustment * speed));
+        }
+//        gromit.driveTrain.stopMotors();
+        Cosmo.leftFront.setPower(0.0);
+        Cosmo.rightFront.setPower(0.0);
+        Cosmo.rightRear.setPower(0.0);
+        Cosmo.leftRear.setPower(0.0);
+    }
+
+
+    public float getheading() {
+        // Acquiring the angles is relatively expensive; we don't want
+        // to do that in each of the three items that need that info, as that's
+        // three times the necessary expense.
+        angles = Cosmo.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return angles.firstAngle; //For a -180 to 180 range
+        //return (angles.firstAngle + 180 + 180)%360; // for a zero to 360 range
+    }
+
+}
 

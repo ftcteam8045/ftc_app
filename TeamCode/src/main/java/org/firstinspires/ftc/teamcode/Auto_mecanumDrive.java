@@ -132,7 +132,8 @@ public class Auto_mecanumDrive extends LinearOpMode {
             tfod.activate();
         }
         // Actual Init loop
-        while (!opModeIsActive()) {
+        while (!opModeIsActive()&&!isStopRequested()) {
+
 
             /** Activate Tensor Flow Object Detection. */
             if (tfod != null) {
@@ -182,8 +183,8 @@ public class Auto_mecanumDrive extends LinearOpMode {
             }
         }
 
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
+        // Wait for the game to start (driver presses PLAY) replaced by init loop
+        //waitForStart();
 
         while (opModeIsActive() && (runtime.seconds() < 1.5)) {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
@@ -192,7 +193,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
 // goldposition 0 = left,1 = center, 2 = right
 
-        
+
         if (goldPosition == 0) {        // left position
 //            mecanumTurn(0.3, 45);
 //            mecanumTurn(0.3, -45);

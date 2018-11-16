@@ -95,30 +95,35 @@ public class elijahTeleCode extends LinearOpMode {
             robot.rightRear.setPower(0);
 //            robot.lift.setPower(0);
 
-            if(gamepad1.left_stick_y >= 0.5) {
-                robot.leftFront.setPower(gamepad1.left_stick_y);
-                robot.rightFront.setPower(gamepad1.left_stick_y);
-                robot.leftRear.setPower(gamepad1.left_stick_y);
-                robot.rightRear.setPower(gamepad1.left_stick_y);
+//            if(gamepad1.left_stick_y >= 0.5) {
+//                robot.leftFront.setPower(gamepad1.left_stick_y);
+//                robot.rightFront.setPower(gamepad1.left_stick_y);
+//                robot.leftRear.setPower(gamepad1.left_stick_y);
+//                robot.rightRear.setPower(gamepad1.left_stick_y);
+//            }
+//            if(gamepad1.left_stick_y <= -0.5) {
+//                robot.leftFront.setPower(gamepad1.left_stick_y);
+//                robot.rightFront.setPower(gamepad1.left_stick_y);
+//                robot.leftRear.setPower(gamepad1.left_stick_y);
+//                robot.rightRear.setPower(gamepad1.left_stick_y);
+//            }
+//            if(gamepad1.left_stick_x >= 0.5) {
+//                robot.leftFront.setPower(-gamepad1.left_stick_x);
+//                robot.rightFront.setPower(gamepad1.left_stick_x);
+//                robot.leftRear.setPower(gamepad1.left_stick_x);
+//                robot.rightRear.setPower(-gamepad1.left_stick_x);
+//            }
+//            if(gamepad1.left_stick_x <= -0.5) {
+//                robot.leftFront.setPower(-gamepad1.left_stick_x);
+//                robot.rightFront.setPower(gamepad1.left_stick_x);
+//                robot.leftRear.setPower(gamepad1.left_stick_x);
+//                robot.rightRear.setPower(-gamepad1.left_stick_x);
+//            }
+
+            if (gamepad1.left_stick_x >= 0.5) {
+                robot.leftFront.setPower(gamepad1.left_stick_x);
             }
-            if(gamepad1.left_stick_y <= -0.5) {
-                robot.leftFront.setPower(gamepad1.left_stick_y);
-                robot.rightFront.setPower(gamepad1.left_stick_y);
-                robot.leftRear.setPower(gamepad1.left_stick_y);
-                robot.rightRear.setPower(gamepad1.left_stick_y);
-            }
-            if(gamepad1.left_stick_x >= 0.5) {
-                robot.leftFront.setPower(-gamepad1.left_stick_x);
-                robot.rightFront.setPower(gamepad1.left_stick_x);
-                robot.leftRear.setPower(gamepad1.left_stick_x);
-                robot.rightRear.setPower(-gamepad1.left_stick_x);
-            }
-            if(gamepad1.left_stick_x <= -0.5) {
-                robot.leftFront.setPower(-gamepad1.left_stick_x);
-                robot.rightFront.setPower(gamepad1.left_stick_x);
-                robot.leftRear.setPower(gamepad1.left_stick_x);
-                robot.rightRear.setPower(-gamepad1.left_stick_x);
-            }
+
             //Lift
 //            if(gamepad1.left_trigger <= 0.5) {
 //                robot.lift.setPower(gamepad1.left_trigger);
