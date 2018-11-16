@@ -45,46 +45,16 @@ public class Auto_mecanumDrive extends LinearOpMode {
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
     private static final String VUFORIA_KEY = "AWfr4/T/////AAAAGRMg80Ehu059mDMJI2h/y+4aBmz86AidOcs89UScq+n+QQyGFT4cZP+rzg1M9B/CW5bgDoVf16x6x3WlD5wYKZddt0UWQS65VIFPjZlM9ADBWvWJss9L1dj4X2LZydWltdeaBhkXTXFnKBkKLDcdTyC2ozJlcAUP0VnLMeI1n+f5jGx25+NdFTs0GPJYVrPQRjODb6hYdoHsffiOCsOKgDnzFsalKuff1u4Z8oihSY9pvv3me2gJjzrQKqp2gCRIZAXDdYzln28Z/8vNSU+aXr6eoRrNXPpYdAwyYI+fX2V9H04806eSUKsNYcPBSbVlhe2KoUsSD7qbOsBMagcEIdMZxo010kVCHHhnhV3IFIs8";
+
+    /** {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * localization engine.     */
     private VuforiaLocalizer vuforia;
+
+    /** {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
+     * Detection engine.     */
     private TFObjectDetector tfod;
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
 
-    /**********************************************************************************************\
-     |--------------------------------- Pre Init Loop ----------------------------------------------|
-     \**********************************************************************************************/
-
-    /**********************************************************************************************\
-     |--------------------------------- Vuforia Setup ----------------------------------------------|
-     \**********************************************************************************************/
-
-    private void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
-    }
-
-    /**
-     * Initialize the Tensor Flow Object Detection engine.
-     */
-    private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
-    }
-
-
-    @Override
+     @Override
     public void runOpMode() {
 
         final double FORWARD_SPEED = 0.3;
@@ -93,26 +63,44 @@ public class Auto_mecanumDrive extends LinearOpMode {
         int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
 
         final boolean teamIsRed = true;
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.cameraDirection = CAMERA_CHOICE;
-        initVuforia();
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-
-
         /*
          * Initialize the drive system variables.the Robot
          * The init() method of the hardware class does all the work here
          */
         Cosmo.init(hardwareMap);
 
+        /** TURN ON LIGHTS */
+        if (teamIsRed) {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
+        } else {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
+        }
 
+        /** The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
+        // first.
+        /** Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.  */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
 
+        /** Initialize the Tensor Flow Object Detection engine. */
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+            tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
+
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
+        /** Activate Tensor Flow Object Detection. */
+        if (tfod != null) {
+            tfod.activate();
+        }
 
 
 
@@ -121,66 +109,53 @@ public class Auto_mecanumDrive extends LinearOpMode {
         telemetry.update();
 
 
-        if (teamIsRed) {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
-        } else {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
-        }
-
-        /** Activate Tensor Flow Object Detection. */
-        if (tfod != null) {
-            tfod.activate();
-        }
         // Actual Init loop
-        while (!opModeIsActive()&&!isStopRequested()) {
+        while (!opModeIsActive() && !isStopRequested()) {
 
-
-            /** Activate Tensor Flow Object Detection. */
             if (tfod != null) {
-                tfod.activate();
-            }
-            // Send telemetry message to signify robot waiting;
-            while(!opModeIsActive()) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addLine().addData(recognition.getLabel(),recognition.getLeft()).addData(" Y ", recognition.getBottom());
+
+//                        telemetry.addData("  ", ).addData(" X ",recognition.getLeft()).addData(" Y ",recognition.getBottom());
+                    }
 
 
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 3) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-                                } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
-                                } else {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Left");
-                                    goldPosition = 2;
-                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                    goldPosition = 0;
-                                } else {
-                                    telemetry.addData("Gold Mineral Position", "Center");
-                                    goldPosition = 1;
-                                }
+                    if (updatedRecognitions.size() == 3) {
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals("Gold")) {
+                                goldMineralX = (int) recognition.getLeft();
+                            } else if (silverMineral1X == -1) {
+                                silverMineral1X = (int) recognition.getLeft();
+                            } else {
+                                silverMineral2X = (int) recognition.getLeft();
                             }
                         }
-                        telemetry.update();
+                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Left");
+                                goldPosition = 2;
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Right");
+                                goldPosition = 0;
+                            } else {
+                                telemetry.addData("Gold Mineral Position", "Center");
+                                goldPosition = 1;
+                            }
+                        }
                     }
+                    telemetry.update();
                 }
-
-
             }
+
+
         }
 
         // Wait for the game to start (driver presses PLAY) replaced by init loop
@@ -196,52 +171,21 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
         if (goldPosition == 0) {        // left position
 //            mecanumTurn(0.3, 45);
-//            mecanumTurn(0.3, -45);
             mecanumDrive(0.5, 18, 0, 0);     // drive forward
             mecanumDrive(0.5, 15, 0, 90);    // drive left
             mecanumDrive(0.5, 12, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -12, 0, 0);     // drive backwards
             mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
+            mecanumTurn(0.3, -45);
 
 
-//            // Step 3.5: Strafe left
-//            // Step 2:  Spin right for 1.3 seconds
-//            Cosmo.leftFront.setPower(TURN_SPEED);
-//            Cosmo.rightFront.setPower(-TURN_SPEED);
-//            Cosmo.leftRear.setPower(-TURN_SPEED);
-//            Cosmo.rightRear.setPower(TURN_SPEED);
-//            runtime.reset();
-//            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-//                telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
-//                telemetry.update();
-//
-//            }
-//
-//            // Step 1:  Drive forward for .5 seconds
-//            Cosmo.leftFront.setPower(FORWARD_SPEED);
-//            Cosmo.rightFront.setPower(FORWARD_SPEED);
-//            Cosmo.leftRear.setPower(FORWARD_SPEED);
-//            Cosmo.rightRear.setPower(FORWARD_SPEED);
-//            runtime.reset();
-//            while (opModeIsActive() && (runtime.seconds() < 0.75)) {
-//                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-//                telemetry.update();
-//            }
+
         }
 
         if (goldPosition == 1) {
 
-            // Step 1:  Drive forward for 1.5 seconds
-//            Cosmo.leftFront.setPower(FORWARD_SPEED);
-//            Cosmo.rightFront.setPower(FORWARD_SPEED);
-//            Cosmo.leftRear.setPower(FORWARD_SPEED);
-//            Cosmo.rightRear.setPower(FORWARD_SPEED);
-//            runtime.reset();
-//            while (opModeIsActive() && (runtime.seconds() < 1.5)) {
-//                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-//                telemetry.update();
-//            }
+
         }
 
         if (goldPosition == 2) {
@@ -249,30 +193,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
             mecanumDrive(0.5, 18, 0, 0);     // drive forward
             mecanumDrive(0.5, 15, 0, -90);    // drive left
             mecanumDrive(0.5, 12, 0, 0);     // drive forward
-            // Step 3.5: Strafe right
-//            // Step 2:  Spin right for 1.3 seconds
-//            Cosmo.leftFront.setPower(-TURN_SPEED);
-//            Cosmo.rightFront.setPower(TURN_SPEED);
-//            Cosmo.leftRear.setPower(TURN_SPEED);
-//            Cosmo.rightRear.setPower(-TURN_SPEED);
-//            runtime.reset();
-//            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-//                telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
-//                telemetry.update();
-//
-//            }
-//
-//
-//            // Step 1:  Drive forward for .5 seconds
-//            Cosmo.leftFront.setPower(FORWARD_SPEED);
-//            Cosmo.rightFront.setPower(FORWARD_SPEED);
-//            Cosmo.leftRear.setPower(FORWARD_SPEED);
-//            Cosmo.rightRear.setPower(FORWARD_SPEED);
-//            runtime.reset();
-//            while (opModeIsActive() && (runtime.seconds() < 0.75)) {
-//                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-//                telemetry.update();
-//            }
+
         }
 
         // Step 4:  Stop and close the claw.

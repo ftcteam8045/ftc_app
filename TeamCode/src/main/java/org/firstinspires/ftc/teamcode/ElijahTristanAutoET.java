@@ -208,8 +208,8 @@ public class ElijahTristanAutoET extends LinearOpMode {
             // --- Eli Test Code -- \\
             telemetry.addLine("VVV Eli's Test VVV");
             telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
-            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance One", arrow2);
-            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance One", arrow3);
+            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
+            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
             telemetry.addLine().addData(arrow4, "side:       ").addData(side[sideBase], arrow4);
             telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
             telemetry.update();
