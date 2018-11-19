@@ -29,68 +29,38 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-
-import java.util.List;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.signum;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-
 import java.util.List;
 
-//Imports for front facing camera
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static java.lang.Math.abs;
+import static java.lang.Math.signum;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
-import java.util.ArrayList;
-import java.util.List;
+//Imports for front facing camera
 
-@Autonomous(name="Main Auto", group="Pushbot")
+@Autonomous(name="editMethod", group="Pushbot")
 //@Disabled
-public class ElijahTristanAutoET extends LinearOpMode {
+public class ElijahTristanAutoET_editmethod extends LinearOpMode {
     Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
     public Orientation angles;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -105,7 +75,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
     private static final String VUFORIA_KEY = "AWfr4/T/////AAAAGRMg80Ehu059mDMJI2h/y+4aBmz86AidOcs89UScq+n+QQyGFT4cZP+rzg1M9B/CW5bgDoVf16x6x3WlD5wYKZddt0UWQS65VIFPjZlM9ADBWvWJss9L1dj4X2LZydWltdeaBhkXTXFnKBkKLDcdTyC2ozJlcAUP0VnLMeI1n+f5jGx25+NdFTs0GPJYVrPQRjODb6hYdoHsffiOCsOKgDnzFsalKuff1u4Z8oihSY9pvv3me2gJjzrQKqp2gCRIZAXDdYzln28Z/8vNSU+aXr6eoRrNXPpYdAwyYI+fX2V9H04806eSUKsNYcPBSbVlhe2KoUsSD7qbOsBMagcEIdMZxo010kVCHHhnhV3IFIs8";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+    private static final CameraDirection CAMERA_CHOICE = FRONT;
     public int currentEdit = 0;
     public int waitTime1 = 0;
     public int driveDis2 = 15;
@@ -114,8 +84,8 @@ public class ElijahTristanAutoET extends LinearOpMode {
     public boolean dpadPressedDown = false;
     public boolean dpadPressedLeft = false;
     public boolean dpadPressedRight = false;
-    public int sideBase = 1;
-    public String[] side = {"base", "crater"};
+    public String[] position = {"base", "crater"};
+    public int positionIndex = 1;
     public String arrow1 = " ";
     public String arrow2 = " ";
     public String arrow3 = " ";
@@ -159,7 +129,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -180,6 +150,11 @@ public class ElijahTristanAutoET extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        // get a reference to the RelativeLayout so we can change the background  for Edit mode
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -203,19 +178,137 @@ public class ElijahTristanAutoET extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
-        // Send telemetry message to signify robot waiting;
-        while(!opModeIsActive()) {
+
+
+        while(!opModeIsActive()  && !isStopRequested()) {
+
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData("Press left Joystick to edit ","");
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    if (updatedRecognitions.size() == 3) {
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                goldMineralX = (int) recognition.getLeft();
+                            } else if (silverMineral1X == -1) {
+                                silverMineral1X = (int) recognition.getLeft();
+                            } else {
+                                silverMineral2X = (int) recognition.getLeft();
+                            }
+                        }
+                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Right");
+//                                goldPosition = 2;
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                telemetry.addData("Gold Mineral Position", "Left");
+//                                goldPosition = 0;
+                            } else {
+                                telemetry.addData("Gold Mineral Position", "Center");
+//                                goldPosition = 1;
+                            }
+                        }
+                    }
+                    telemetry.update();
+                }
+            }
+
+            // edit Menu params
+            if (gamepad1.start || gamepad1.back || gamepad1.left_stick_button) {             // edit parameters  & write the new file
+                // change the background color to yellow
+                relativeLayout.post(new Runnable() {
+                    public void run() {
+                        relativeLayout.setBackgroundColor(Color.YELLOW);
+                    }
+                });
+
+
+                editParameters();
+
+                relativeLayout.post(new Runnable() {    // change back to black
+                    public void run() {
+                        relativeLayout.setBackgroundColor(Color.BLACK);
+                    }
+                });
+
+            }
+        }
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+
+
+
+        runtime.reset();
+        if (opModeIsActive()) {
+                if(position[positionIndex] == position[0]) {
+                    if (goldPosition == 0) {
+                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
+                            mecanumDrive(0.5, 18, 0, 0);
+                            mecanumDrive(0.5, 18, 0, 90);
+                            mecanumDrive(0.5, 18, 0, 180);
+                        }
+                        //                        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
+//                            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+//                            telemetry.update();
+//                        }
+                    }
+
+                    if (goldPosition == 1) {
+
+                    }
+
+                    if (goldPosition == 2) {
+
+                    }
+                }
+
+                if(position[positionIndex] == position[0]) {
+                    if (goldPosition == 0) {
+
+                    }
+
+                    if (goldPosition == 1) {
+
+                    }
+
+                    if (goldPosition == 2) {
+
+                    }
+                }
+
+            }
+            if (tfod != null) {
+                tfod.shutdown();
+            }
+
+        }
+
+    public void editParameters() {
+
+        while (!gamepad1.right_stick_button && !opModeIsActive() && !isStopRequested()) {
+            telemetry.addLine("===> Press Right Joystick to exit EDIT mode <===");
+            // Send telemetry message to signify robot waiting;
+            // -------------------- \\
+            //Variable Change GUI
             // --- Eli Test Code -- \\
+            // -------------------- \\
+
             telemetry.addLine("VVV Eli's Test VVV");
+            telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
             telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
             telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
             telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
-            telemetry.addLine().addData(arrow4, "side:       ",sideBase).addData(side[sideBase], arrow4);
-            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
+            telemetry.addLine().addData(arrow4,  positionIndex).addData(position[positionIndex], arrow4);
+            telemetry.addLine().addData(arrow4, "Color       ");
             telemetry.update();
-            // -------------------- \\
 
-            //Variable Change GUI
             if (gamepad1.dpad_down) {
                 dpadPressedDown = true;
             } else if (gamepad1.dpad_down == false && dpadPressedDown) {
@@ -272,10 +365,10 @@ public class ElijahTristanAutoET extends LinearOpMode {
                     driveDis3 -= 1;
                 }
                 if (currentEdit == 3) {
-                    if (sideBase == 1) {
-                        sideBase = 0;
+                    if (positionIndex == 1) {
+                        positionIndex = 0;
                     } else {
-                        sideBase = 1;
+                        positionIndex = 1;
                     }
                 }
             }
@@ -294,105 +387,19 @@ public class ElijahTristanAutoET extends LinearOpMode {
                     driveDis3 += 1;
                 }
                 if (currentEdit == 3) {
-                    if (sideBase == 1) {
-                        sideBase = 0;
+                    if (positionIndex == 1) {
+                        positionIndex = 0;
                     } else {
-                        sideBase = 1;
+                        positionIndex = 1;
                     }
                 }
             }
-            if (gamepad1.y) {
-                break;
-            }
+//                if (gamepad1.y) {
+//                    break;
+//                }
         }
-
-        while(!opModeIsActive()) {
-            if (tfod != null) {
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() == 3) {
-                        int goldMineralX = -1;
-                        int silverMineral1X = -1;
-                        int silverMineral2X = -1;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
-                            } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
-                            } else {
-                                silverMineral2X = (int) recognition.getLeft();
-                            }
-                        }
-                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Right");
-//                                goldPosition = 2;
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Left");
-//                                goldPosition = 0;
-                            } else {
-                                telemetry.addData("Gold Mineral Position", "Center");
-//                                goldPosition = 1;
-                            }
-                        }
-                    }
-                    telemetry.update();
-                }
-            }
-        }
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-
-
-
-        runtime.reset();
-        if (opModeIsActive()) {
-                if(side[sideBase] == side[0]) {
-                    if (goldPosition == 0) {
-                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
-                            mecanumDrive(0.5, 18, 0, 0);
-                            mecanumDrive(0.5, 18, 0, 90);
-                            mecanumDrive(0.5, 18, 0, 180);
-                        }
-                        //                        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
-//                            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-//                            telemetry.update();
-//                        }
-                    }
-
-                    if (goldPosition == 1) {
-
-                    }
-
-                    if (goldPosition == 2) {
-
-                    }
-                }
-
-                if(side[sideBase] == side[0]) {
-                    if (goldPosition == 0) {
-
-                    }
-
-                    if (goldPosition == 1) {
-
-                    }
-
-                    if (goldPosition == 2) {
-
-                    }
-                }
-
-            }
-            if (tfod != null) {
-                tfod.shutdown();
-            }
-
-        }
+        telemetry.update();
+    }
     public void mecanumDrive(double speed, double distance, double robot_orientation, double drive_direction) {
         double max;
         double multiplier;
