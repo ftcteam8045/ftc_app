@@ -82,9 +82,9 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if (gamepad2.start)
+            if (gamepad1.start)
                 telemetry.addData("Button", "Start");
-            if (gamepad2.back)
+            if (gamepad1.back)
                 telemetry.addData("Button", "Back");
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
