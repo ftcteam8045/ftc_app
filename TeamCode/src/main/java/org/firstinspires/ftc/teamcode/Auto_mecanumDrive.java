@@ -62,7 +62,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
         final int cycletime = 500;
         int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
 
-        final boolean teamIsRed = false;
+        final boolean teamIsRed = true;
         /*
          * Initialize the drive system variables.the Robot
          * The init() method of the hardware class does all the work here
