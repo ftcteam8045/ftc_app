@@ -62,7 +62,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
         final int cycletime = 500;
         int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
 
-        final boolean teamIsRed = true;
+        final boolean teamIsRed = false;
         /*
          * Initialize the drive system variables.the Robot
          * The init() method of the hardware class does all the work here
@@ -71,9 +71,9 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
         /** TURN ON LIGHTS */
         if (teamIsRed) {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED);
         } else {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE);
         }
 
         /** The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
@@ -140,14 +140,14 @@ public class Auto_mecanumDrive extends LinearOpMode {
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Left");
-                                goldPosition = 2;
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Right");
                                 goldPosition = 0;
+                                telemetry.addData("Gold Mineral Position", "Left").addData(" ",goldPosition);
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                goldPosition = 2;
+                                telemetry.addData("Gold Mineral Position", "Right").addData(" ",goldPosition);
                             } else {
-                                telemetry.addData("Gold Mineral Position", "Center");
                                 goldPosition = 1;
+                                telemetry.addData("Gold Mineral Position", "Center").addData(" ",goldPosition);
                             }
                         }
                     }
@@ -171,13 +171,14 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
         if (goldPosition == 0) {        // left position
 //            mecanumTurn(0.3, 45);
-            mecanumDrive(0.5, 18, 0, 0);     // drive forward
-            mecanumDrive(0.5, 15, 0, 90);    // drive left
             mecanumDrive(0.5, 12, 0, 0);     // drive forward
+            mecanumDrive(0.5, 15, 0, -90);    // drive left
+            mecanumDrive(0.5, 8, 0, 0);     // drive forward
 
-            mecanumDrive(0.5, -12, 0, 0);     // drive backwards
-            mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
-            mecanumTurn(0.3, -45);
+            mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+
+            //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
+            //mecanumTurn(0.3, -45);
 
 
 
@@ -185,16 +186,26 @@ public class Auto_mecanumDrive extends LinearOpMode {
 
         if (goldPosition == 1) {
 
+            mecanumDrive(0.5, 12, 0, 0);     // drive forward
+            mecanumDrive(0.5, 12, 0, 0);     // drive forward
+
+            mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+            mecanumDrive(0.5,30,0,-90);      // drive left
 
         }
 
         if (goldPosition == 2) {
 
-            mecanumDrive(0.5, 18, 0, 0);     // drive forward
-            mecanumDrive(0.5, 15, 0, -90);    // drive left
+            mecanumDrive(0.5, 12, 0, 0);     // drive forward
+            mecanumDrive(0.5, 15, 0, 90);    // drive right
             mecanumDrive(0.5, 12, 0, 0);     // drive forward
 
+            mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+            mecanumDrive(0.5,30,0,-90);      // drive left
+            //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
         }
+
+        // mecanumDrive(0.5,30,0,-90);      // drive towards wall
 
         // Step 4:  Stop and close the claw.
         Cosmo.leftFront.setPower(0);
