@@ -61,7 +61,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 @Autonomous(name="editMethod", group="Pushbot")
 //@Disabled
 public class ElijahTristanAutoET_editmethod extends LinearOpMode {
-    Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
+    Hardware8045neverrest Cosmo = new Hardware8045neverrest();   // Use a Pushbot's hardware
     public Orientation angles;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -245,18 +245,18 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
 
 
 
+
+        mecanumDrive(0.5, 18, 0, 0);
+        mecanumDrive(0.5, 18, 0, 90);
+        mecanumDrive(0.5, 18, 0, 180);
         runtime.reset();
         if (opModeIsActive()) {
                 if(position[positionIndex] == position[0]) {
                     if (goldPosition == 0) {
-                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
-                            mecanumDrive(0.5, 18, 0, 0);
-                            mecanumDrive(0.5, 18, 0, 90);
-                            mecanumDrive(0.5, 18, 0, 180);
-                        }
-                        //                        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
-//                            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-//                            telemetry.update();
+//                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
+//                            mecanumDrive(0.5, 18, 0, 0);
+//                            mecanumDrive(0.5, 18, 0, 90);
+//                            mecanumDrive(0.5, 18, 0, 180);
 //                        }
                     }
 
@@ -269,9 +269,9 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                     }
                 }
 
-                if(position[positionIndex] == position[0]) {
+                if(position[positionIndex] == position[1]) {
                     if (goldPosition == 0) {
-
+                        mecanumDrive(0.125, 1, 0, 0);
                     }
 
                     if (goldPosition == 1) {
@@ -292,13 +292,10 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
 
     public void editParameters() {
 
-        while (!gamepad1.right_stick_button && !opModeIsActive() && !isStopRequested()) {
+        while (!gamepad1.right_stick_button && !opModeIsActive() && !isStopRequested()) {   // while haven't presse exit button, not in play mode, and not in stop
             telemetry.addLine("===> Press Right Joystick to exit EDIT mode <===");
             // Send telemetry message to signify robot waiting;
-            // -------------------- \\
-            //Variable Change GUI
-            // --- Eli Test Code -- \\
-            // -------------------- \\
+
 
             telemetry.addLine("VVV Eli's Test VVV");
             telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
@@ -306,7 +303,7 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
             telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
             telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
             telemetry.addLine().addData(arrow4,  positionIndex).addData(position[positionIndex], arrow4);
-            telemetry.addLine().addData(arrow4, "Color       ");
+//            telemetry.addLine().addData(arrow4, "Color       ");
             telemetry.update();
 
             if (gamepad1.dpad_down) {
@@ -400,6 +397,9 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
         }
         telemetry.update();
     }
+
+
+
     public void mecanumDrive(double speed, double distance, double robot_orientation, double drive_direction) {
         double max;
         double multiplier;
@@ -458,9 +458,9 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
             rfpower *= multiplier;
             rrpower *= multiplier;
 
-            Cosmo.leftFront.setPower(lfpower);
+            Cosmo.leftFront.setPower(-lfpower);
             Cosmo.leftRear.setPower(lrpower);
-            Cosmo.rightFront.setPower(rfpower);
+            Cosmo.rightFront.setPower(-rfpower);
             Cosmo.rightRear.setPower(rrpower);
 
 //            RobotLog.ii("[GromitIR] ", Double.toString(18.7754*Math.pow(sharpIRSensor.getVoltage(),-1.51)), Integer.toString(left_front.getCurrentPosition()));
@@ -494,9 +494,9 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
 
             double adjustment = Range.clip((Math.signum(correction) * Cosmo.turn_MIN_SPEED + Cosmo.turn_COEF * correction / 100), -1, 1);  // adjustment is motor power: sign of correction *0.07 (base power)  + a proportional bit
 
-            Cosmo.leftFront.setPower(-adjustment * speed);
-            Cosmo.leftRear.setPower(-adjustment * speed);
-            Cosmo.rightFront.setPower((adjustment * speed));
+            Cosmo.leftFront.setPower(adjustment * speed);
+            Cosmo.leftRear.setPower(adjustment * speed);
+            Cosmo.rightFront.setPower(adjustment * speed);
             Cosmo.rightRear.setPower((adjustment * speed));
         }
 //        gromit.driveTrain.stopMotors();

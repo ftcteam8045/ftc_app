@@ -358,10 +358,6 @@ public class ElijahTristanAutoET extends LinearOpMode {
                             mecanumDrive(0.5, 18, 0, 90);
                             mecanumDrive(0.5, 18, 0, 180);
                         }
-                        //                        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
-//                            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-//                            telemetry.update();
-//                        }
                     }
 
                     if (goldPosition == 1) {
@@ -375,7 +371,11 @@ public class ElijahTristanAutoET extends LinearOpMode {
 
                 if(side[sideBase] == side[0]) {
                     if (goldPosition == 0) {
-
+                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
+                            mecanumDrive(0.5, 18, 0, 0);
+                            mecanumDrive(0.5, 18, 0, 90);
+                            mecanumDrive(0.5, 18, 0, 180);
+                        }
                     }
 
                     if (goldPosition == 1) {
