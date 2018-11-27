@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 
 @TeleOp(name = "zMoo", group = "8045")  // @Autonomous(...) is the other common choice
@@ -20,7 +22,7 @@ public class Teleop_basic extends OpMode {
     double timeLeft;
 
 //    double turnDirection;
-    public double speedMultiplier = 0.5 ;
+    public double topSpeed = 0.5 ;
 
     //Booleans
 
@@ -103,19 +105,19 @@ public class Teleop_basic extends OpMode {
         rfpower = ( y + x - rotation);
         rrpower = ( y - x - rotation);
 
-//        //Determine largest power being applied in either direction
-        double max = abs(lfpower);
-        if (abs(lrpower) > max) max = abs(lrpower);
-        if (abs(rfpower) > max) max = abs(rfpower);
-        if (abs(rrpower) > max) max = abs(rrpower);
+////        //Determine largest power being applied in either direction  apply scales so that the Top wheel speed is not over 1 and scaled down to the topSpeed
+//        double max = abs(lfpower);
+//        if (abs(lrpower) > max) max = abs(lrpower);
+//        if (abs(rfpower) > max) max = abs(rfpower);
+//        if (abs(rrpower) > max) max = abs(rrpower);
+//            double multiplier = topSpeed / max; //multiplier to adjust speeds of each wheel so you can have a max power of 1 on atleast 1 wheel
+//        double multiplier = (topSpeed / max) + 0.2*Math.abs(x);  // try to boost up the strafing power
+//        double multiplier = (((topSpeed) * sqrt(pow(x,2.) + pow(y,2.))) / max) ;  // take ibto account the joysticks position from the origin
 
-//            double multiplier = speedMultiplier / max; //multiplier to adjust speeds of each wheel so you can have a max power of 1 on atleast 1 wheel
-        double multiplier = (speedMultiplier / max) + 0.2*Math.abs(x);  // try to boost up the strafing power
-
-        lfpower *= multiplier;
-        lrpower *= multiplier;
-        rfpower *= multiplier;
-        rrpower *= multiplier;
+        lfpower = lfpower * topSpeed;
+        lrpower = lrpower * topSpeed;
+        rfpower = rfpower * topSpeed;
+        rrpower = rrpower * topSpeed;
 
         Cosmo.leftFront.setPower(lfpower);
         Cosmo.leftRear.setPower(lrpower);
