@@ -32,7 +32,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "Auto MEc2", group = "Cosmo")
+@Autonomous(name = "Auto MEc", group = "Cosmo")
 //@Disabled
 public class Auto_mecanumDrive extends LinearOpMode {
 
