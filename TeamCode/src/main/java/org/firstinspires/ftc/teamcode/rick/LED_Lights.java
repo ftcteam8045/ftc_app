@@ -1,7 +1,6 @@
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.rick;
 
-import com.qualcomm.hardware.rev.*;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,19 +14,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.R
-
-
-
-        ;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.Hardware8045;
 
 import java.util.List;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.cos;
 import static java.lang.Math.signum;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
@@ -35,7 +27,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 @Autonomous(name = "Auto MEc", group = "Cosmo")
 //@Disabled
-public class Auto_mecanumDrive extends LinearOpMode {
+public class LED_Lights extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
@@ -54,9 +46,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
      * localization engine.     */
     private VuforiaLocalizer vuforia;
 
-    /** {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
-     * Detection engine.     */
-    private TFObjectDetector tfod;
+
 
      @Override
     public void runOpMode() {
@@ -80,94 +70,24 @@ public class Auto_mecanumDrive extends LinearOpMode {
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE);
         }
 
-        /** The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
-        /** Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.  */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
-
-        /** Initialize the Tensor Flow Object Detection engine. */
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
-
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-        /** Activate Tensor Flow Object Detection. */
-        if (tfod != null) {
-            tfod.activate();
-        }
-
-
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
-        telemetry.update();
-
-
-        // Actual Init loop
-        while (!opModeIsActive() && !isStopRequested()) {
-
-            if (tfod != null) {
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addLine().addData(recognition.getLabel(),recognition.getLeft()).addData(" Y ", recognition.getBottom());
-
-//                        telemetry.addData("  ", ).addData(" X ",recognition.getLeft()).addData(" Y ",recognition.getBottom());
-                    }
-
-
-                    if (updatedRecognitions.size() == 3) {
-                        int goldMineralX = -1;
-                        int silverMineral1X = -1;
-                        int silverMineral2X = -1;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals("Gold")) {
-                                goldMineralX = (int) recognition.getLeft();
-                            } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
-                            } else {
-                                silverMineral2X = (int) recognition.getLeft();
-                            }
-                        }
-                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                goldPosition = 0;
-                                telemetry.addData("Gold Mineral Position", "Left").addData(" ",goldPosition);
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                goldPosition = 2;
-                                telemetry.addData("Gold Mineral Position", "Right").addData(" ",goldPosition);
-                            } else {
-                                goldPosition = 1;
-                                telemetry.addData("Gold Mineral Position", "Center").addData(" ",goldPosition);
-                            }
-                        }
-                    }
-                    telemetry.update();
-                }
-            }
-
-
-        }
 
         // Wait for the game to start (driver presses PLAY) replaced by init loop
         //waitForStart();
 
-        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+        while (opModeIsActive() && (runtime.seconds() < 30)) {
+            telemetry.addData("Path", " %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
+
+
+            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+
+            }
+            while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+
+            }
+
         }
 
 // goldposition 0 = left,1 = center, 2 = right
@@ -343,7 +263,7 @@ public class Auto_mecanumDrive extends LinearOpMode {
         // Acquiring the angles is relatively expensive; we don't want
         // to do that in each of the three items that need that info, as that's
         // three times the necessary expense.
-        angles = Cosmo.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//        angles = Cosmo.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return angles.firstAngle; //For a -180 to 180 range
         //return (angles.firstAngle + 180 + 180)%360; // for a zero to 360 range
     }
