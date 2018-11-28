@@ -347,6 +347,37 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
             } else {
                 arrow4 = "    ";
             }
+            if (currentEdit == 0) {
+                arrow5 = "<>";
+            } else {
+                arrow5 = "    ";
+            }
+            if (currentEdit == 1) {
+                arrow6 = "<>";
+            } else {
+                arrow6 = "    ";
+            }
+            if (currentEdit == 2) {
+                arrow7 = "<>";
+            } else {
+                arrow7 = "    ";
+            }
+            if (currentEdit == 3) {
+                arrow8 = "<>";
+            } else {
+                arrow8 = "    ";
+            }
+            if (currentEdit == 2) {
+                arrow9 = "<>";
+            } else {
+                arrow9 = "    ";
+            }
+            if (currentEdit == 3) {
+                arrow10 = "<>";
+            } else {
+                arrow10 = "    ";
+            }
+
 
             if (gamepad1.dpad_left) {
                 dpadPressedLeft = true;
