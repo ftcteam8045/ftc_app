@@ -1,5 +1,5 @@
 
-package org.firstinspires.ftc.teamcode.rick;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -25,7 +25,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "Auto MEc", group = "Cosmo")
+@Autonomous(name = "LED Lights", group = "Cosmo")
 //@Disabled
 public class LED_Lights extends LinearOpMode {
 
