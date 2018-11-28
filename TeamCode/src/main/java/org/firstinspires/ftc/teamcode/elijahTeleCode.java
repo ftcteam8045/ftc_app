@@ -1,168 +1,147 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.teamcode.oldcode.DriveTrain;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
-@TeleOp(name = "Eli Tele Bot", group = "Pushbot")
+
+@TeleOp(name = "Main Tele", group = "8045")  // @Autonomous(...) is the other common choice
 //@Disabled
+public class elijahTeleCode extends OpMode {
+
+    Hardware8045 Cosmo;
+
+    // variables used during the configuration process
 
 
-public class elijahTeleCode extends LinearOpMode {
+    private ElapsedTime runtime = new ElapsedTime();
+    double timeLeft;
 
-    // Set all status flags to false
-    public boolean dpadup = false;
-    public boolean dpaddown = false;
-    public boolean dpadleft = false;
-    public boolean dpadright = false;
-    public boolean button_a = false;
-    public boolean button_b = false;
-    public boolean button_x = false;
-    public boolean button_y = false;
-    public boolean start = false;
-    public boolean backbutton = false;
-    public boolean righttrigger = false;
-    public boolean lefttrigger = false;
-    public boolean rightbumper = false;
-    public boolean leftbumper = false;
-    public boolean rightstickx = false;
-    public boolean rightsticky = false;
-    public boolean leftstickx = false;
-    public boolean leftsticky = false;
-    public boolean rightstickbutton = false;
-    public boolean leftstickbutton = false;
+    //    double turnDirection;
+    public double topSpeed = 0.5 ;
 
-    public float forward;
-    public float strafe;
-    public float rotate;
+    //Booleans
 
-    public int currentEdit = 0;
-    public int driveDis1 = 10;
-    public int driveDis2 = 15;
-    public int driveDis3 = 20;
-    public boolean dpadPressedUp = false;
-    public boolean dpadPressedDown = false;
-    public boolean dpadPressedLeft = false;
-    public boolean dpadPressedRight = false;
-    public int colorRed = 1;
-    public String[] teamColor = {"Blue", "Red"};
-    public String arrow1 = " ";
-    public String arrow2 = " ";
-    public String arrow3 = " ";
-    public String arrow4 = " ";
+    public boolean aIsReleased = true;
 
 
-    Hardware8045 robot = new Hardware8045();   // Use a Pushbot's hardware
-
-
-    public boolean frontIsForward = true;
-    private DriveTrain.SpeedSetting speedMode;
 
     @Override
-    public void runOpMode() {
+    public void init() {
 
+        Cosmo = new Hardware8045();
+        Cosmo.init(hardwareMap);
+        telemetry.addData("Status", "Initializing");
+        telemetry.update();
 
+        timeLeft = 120;
 
-        /* Initialize the hardware variables.
-         * The init() method of the hardware class does all the work here
+        telemetry.addData("Finished", "Initializing");
+        telemetry.update();
+    }
+
+    @Override
+    public void start() {
+        runtime.reset();
+    }
+
+    @Override
+    public void loop() {
+        timeLeft = 120 - runtime.seconds();
+
+        /**
+         * DRIVE Functions HERE
          */
-        robot.init(hardwareMap);
 
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("To Start Test", "Press Play");    //
-        telemetry.update();
+        drivesmart(-gamepad1.right_stick_y, -gamepad1.right_stick_x,  -gamepad1.left_stick_x);
+        if (gamepad2.right_trigger >= 0.1) {
+            Cosmo.liftmotor.setPower(gamepad2.right_trigger);
 
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-
-            //----------------//
-
-            forward = -gamepad1.right_stick_y;
-            strafe = -gamepad1.right_stick_x;
-            rotate = gamepad1.left_stick_x;
-
-            robot.leftFront.setPower(0);
-            robot.rightFront.setPower(0);
-            robot.leftRear.setPower(0);
-            robot.rightRear.setPower(0);
-//            robot.lift.setPower(0);
-
-            if (gamepad1.left_stick_x >= 0.5) {
-                robot.leftFront.setPower(gamepad1.left_stick_y);
-                robot.rightFront.setPower(gamepad1.left_stick_y);
-                robot.leftRear.setPower(gamepad1.left_stick_y);
-                robot.rightRear.setPower(gamepad1.left_stick_y);
-            }
-            if (gamepad1.left_stick_x <= -0.5) {
-                robot.leftFront.setPower(gamepad1.left_stick_y);
-                robot.rightFront.setPower(gamepad1.left_stick_y);
-                robot.leftRear.setPower(gamepad1.left_stick_y);
-                robot.rightRear.setPower(gamepad1.left_stick_y);
-            }
-            if (gamepad1.left_stick_y >= 0.5) {
-                robot.leftFront.setPower(-gamepad1.left_stick_x);
-                robot.rightFront.setPower(gamepad1.left_stick_x);
-                robot.leftRear.setPower(gamepad1.left_stick_x);
-                robot.rightRear.setPower(-gamepad1.left_stick_x);
-            }
-            if (gamepad1.left_stick_y <= -0.5) {
-                robot.leftFront.setPower(-gamepad1.left_stick_x);
-                robot.rightFront.setPower(gamepad1.left_stick_x);
-                robot.leftRear.setPower(gamepad1.left_stick_x);
-                robot.rightRear.setPower(-gamepad1.left_stick_x);
-            }
-
-            if (gamepad2.right_trigger >= 0.1) {
-                robot.liftmotor.setPower(gamepad2.right_trigger);
-
-            }
-            if (gamepad2.left_trigger >= 0.1) {
-                robot.liftmotor.setPower(-gamepad2.left_trigger);
-
-            }
-
-            //Lift
-//            if(gamepad1.left_trigger <= 0.5) {
-//                robot.lift.setPower(gamepad1.left_trigger);
-//            }
-//            if(gamepad1.right_trigger <= 0.5) {
-//                robot.lift.setPower(gamepad1.right_trigger);
-//            }
-
-
-            // test to see if all have been set
-//            if (    (dpadup) &&
-//                    (dpaddown) &&
-//                    (button_a) &&
-//                    (button_b) &&
-//                    (button_x) &&
-//                    (button_y) &&
-//                    (start) &&
-//                    (backbutton) &&
-//                    (righttrigger) &&
-//                    (lefttrigger) &&
-//                    (rightbumper) &&
-//                    (leftbumper) &&
-//                    (rightstickx) &&
-//                    (rightsticky) &&
-//                    (leftstickx) &&
-//                    (leftsticky) &&
-//                    (leftstickbutton) &&
-//                    (rightstickbutton)
-//                    )
-//            {
-
-            telemetry.addLine("****** All TESTS COMPLETE*******");
         }
-        telemetry.update();
+        if (gamepad2.left_trigger >= 0.1) {
+            Cosmo.liftmotor.setPower(-gamepad2.left_trigger);
 
+        }
+
+        telemetry.addData("TimeLeft: ",timeLeft);
+        telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
+        telemetry.addData("Right -Y: ", -gamepad1.right_stick_y);
+        telemetry.addData(" Left -X: ", -gamepad1.left_stick_x);
+        telemetry.update();
 
     }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * This method puts the current thread to sleep for the given time in msec.
+     * It handles InterruptException where it recalculates the remaining time
+     * and calls sleep again repeatedly until the specified sleep time has past.
+     *
+     * @param sleepTime specifies sleep time in msec.
+     */
+    public static void sleep(long sleepTime) {
+        long wakeupTime = System.currentTimeMillis() + sleepTime;
+
+        while (sleepTime > 0) {
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+            }
+            sleepTime = wakeupTime - System.currentTimeMillis();
+        }
+    }   //sleep
+
+
+    public void drivesmart(double x, double y, double turn) {
+
+        double lfpower;
+        double lrpower;
+        double rfpower;
+        double rrpower;
+
+        double rotation = turn*0.75;  // knock down the turn power
+
+        //Determine largest power being applied in either direction
+
+        lfpower = ( y - x + rotation);
+        lrpower = ( y + x + rotation);
+        rfpower = ( y + x - rotation);
+        rrpower = ( y - x - rotation);
+
+////        //Determine largest power being applied in either direction  apply scales so that the Top wheel speed is not over 1 and scaled down to the topSpeed
+//        double max = abs(lfpower);
+//        if (abs(lrpower) > max) max = abs(lrpower);
+//        if (abs(rfpower) > max) max = abs(rfpower);
+//        if (abs(rrpower) > max) max = abs(rrpower);
+//            double multiplier = topSpeed / max; //multiplier to adjust speeds of each wheel so you can have a max power of 1 on atleast 1 wheel
+//        double multiplier = (topSpeed / max) + 0.2*Math.abs(x);  // try to boost up the strafing power
+//        double multiplier = (((topSpeed) * sqrt(pow(x,2.) + pow(y,2.))) / max) ;  // take ibto account the joysticks position from the origin
+
+        lfpower = lfpower * topSpeed;
+        lrpower = lrpower * topSpeed;
+        rfpower = rfpower * topSpeed;
+        rrpower = rrpower * topSpeed;
+
+        Cosmo.leftFront.setPower(lfpower);
+        Cosmo.leftRear.setPower(lrpower);
+        Cosmo.rightFront.setPower(rfpower);
+        Cosmo.rightRear.setPower(rrpower);
+    }
+//
+
+
+    public void stop() {
+        Cosmo.leftFront.setPower(0.0);
+        Cosmo.leftRear.setPower(0.0);
+        Cosmo.rightFront.setPower(0.0);
+        Cosmo.rightRear.setPower(0.0);
+    }
+
+
+
+
 }

@@ -78,18 +78,36 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
     private static final CameraDirection CAMERA_CHOICE = FRONT;
     public int currentEdit = 0;
     public int waitTime1 = 0;
-    public int driveDis2 = 15;
-    public int driveDis3 = 20;
+    public int driveDis1 = 0;
+    public int driveDis2 = 0;
+    public int driveDis3 = 0;
+    public int driveDis4 = 0;
+    public int driveDis5 = 0;
+    public int driveDis6 = 0;
+    public int driveDis7 = 0;
+    public int driveDis8 = 0;
+    public int driveDis9 = 0;
+    public int driveDis10 = 0;
+    public String arrow0 = " ";
+    public String arrow1 = " ";
+    public String arrow2 = " ";
+    public String arrow3 = " ";
+    public String arrow4 = " ";
+    public String arrow5 = " ";
+    public String arrow6 = " ";
+    public String arrow7 = " ";
+    public String arrow8 = " ";
+    public String arrow9 = " ";
+    public String arrow10 = " ";
+    public String arrow11 = " ";
     public boolean dpadPressedUp = false;
     public boolean dpadPressedDown = false;
     public boolean dpadPressedLeft = false;
     public boolean dpadPressedRight = false;
     public String[] position = {"base", "crater"};
     public int positionIndex = 1;
-    public String arrow1 = " ";
-    public String arrow2 = " ";
-    public String arrow3 = " ";
-    public String arrow4 = " ";
+    public String[] color = {"red", "blue"};
+    public int colorIndex = 1;
 
     public boolean dpadup = false;
     public boolean dpaddown = false;
@@ -299,10 +317,19 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
 
             telemetry.addLine("VVV Eli's Test VVV");
             telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
-            telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
+            telemetry.addLine().addData(arrow1, waitTime1).addData("Wait Time", arrow0);
+            telemetry.addLine().addData(arrow2, driveDis1).addData("Drive Distance one", arrow1);
             telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
             telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
-            telemetry.addLine().addData(arrow4,  positionIndex).addData(position[positionIndex], arrow4);
+            telemetry.addLine().addData(arrow3, driveDis4).addData("Drive Distance four", arrow4);
+            telemetry.addLine().addData(arrow3, driveDis5).addData("Drive Distance five", arrow5);
+            telemetry.addLine().addData(arrow3, driveDis6).addData("Drive Distance six", arrow6);
+            telemetry.addLine().addData(arrow3, driveDis7).addData("Drive Distance seven", arrow7);
+            telemetry.addLine().addData(arrow3, driveDis8).addData("Drive Distance eight", arrow8);
+            telemetry.addLine().addData(arrow3, driveDis9).addData("Drive Distance nine", arrow9);
+            telemetry.addLine().addData(arrow3, driveDis10).addData("Drive Distance ten", arrow10);
+            telemetry.addLine().addData(arrow4,  positionIndex).addData(position[positionIndex], arrow11);
+            telemetry.addLine().addData(arrow4,  positionIndex).addData(color[colorIndex], arrow11);
 //            telemetry.addLine().addData(arrow4, "Color       ");
             telemetry.update();
 
@@ -311,7 +338,7 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
             } else if (gamepad1.dpad_down == false && dpadPressedDown) {
                 dpadPressedDown = false;
                 currentEdit += 1;
-                if (currentEdit > 3) {
+                if (currentEdit > 10) {
                     currentEdit = 0;
                 }
             }
@@ -322,57 +349,67 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                 dpadPressedUp = false;
                 currentEdit -= 1;
                 if (currentEdit < 0) {
-                    currentEdit = 2;
+                    currentEdit = 10;
                 }
             }
 
 
             if (currentEdit == 0) {
+                arrow0 = "<>";
+            } else {
+                arrow0 = "    ";
+            }
+            if (currentEdit == 1) {
                 arrow1 = "<>";
             } else {
                 arrow1 = "    ";
             }
-            if (currentEdit == 1) {
+            if (currentEdit == 2) {
                 arrow2 = "<>";
             } else {
                 arrow2 = "    ";
             }
-            if (currentEdit == 2) {
+            if (currentEdit == 3) {
                 arrow3 = "<>";
             } else {
                 arrow3 = "    ";
             }
-            if (currentEdit == 3) {
+            if (currentEdit == 4) {
                 arrow4 = "<>";
             } else {
                 arrow4 = "    ";
             }
-            if (currentEdit == 0) {
+            if (currentEdit == 5) {
                 arrow5 = "<>";
             } else {
                 arrow5 = "    ";
             }
-            if (currentEdit == 1) {
+            if (currentEdit == 6) {
                 arrow6 = "<>";
             } else {
                 arrow6 = "    ";
             }
-            if (currentEdit == 2) {
+            if (currentEdit == 7) {
                 arrow7 = "<>";
             } else {
                 arrow7 = "    ";
             }
-            if (currentEdit == 3) {
+            if (currentEdit == 8) {
                 arrow8 = "<>";
             } else {
                 arrow8 = "    ";
             }
-            if (currentEdit == 2) {
+            if (currentEdit == 9) {
                 arrow9 = "<>";
             } else {
                 arrow9 = "    ";
             }
-            if (currentEdit == 3) {
+            if (currentEdit == 10) {
+                arrow10 = "<>";
+            } else {
+                arrow10 = "    ";
+            }
+            if (currentEdit == 11) {
                 arrow10 = "<>";
             } else {
                 arrow10 = "    ";
@@ -387,12 +424,36 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                     waitTime1 -= 1;
                 }
                 if (currentEdit == 1) {
-                    driveDis2 -= 1;
+                    driveDis1 -= 1;
                 }
                 if (currentEdit == 2) {
-                    driveDis3 -= 1;
+                    driveDis2 -= 1;
                 }
                 if (currentEdit == 3) {
+                    driveDis3 -= 1;
+                }
+                if (currentEdit == 4) {
+                    driveDis4 -= 1;
+                }
+                if (currentEdit == 5) {
+                    driveDis5 -= 1;
+                }
+                if (currentEdit == 6) {
+                    driveDis6 -= 1;
+                }
+                if (currentEdit == 7) {
+                    driveDis7 -= 1;
+                }
+                if (currentEdit == 8) {
+                    driveDis8 -= 1;
+                }
+                if (currentEdit == 9) {
+                    driveDis9 -= 1;
+                }
+                if (currentEdit == 10) {
+                    driveDis10 -= 1;
+                }
+                if (currentEdit == 11) {
                     if (positionIndex == 1) {
                         positionIndex = 0;
                     } else {
@@ -409,12 +470,36 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                     waitTime1 += 1;
                 }
                 if (currentEdit == 1) {
-                    driveDis2 += 1;
+                    driveDis1 += 1;
                 }
                 if (currentEdit == 2) {
-                    driveDis3 += 1;
+                    driveDis2 += 1;
                 }
                 if (currentEdit == 3) {
+                    driveDis3 += 1;
+                }
+                if (currentEdit == 4) {
+                    driveDis4 += 1;
+                }
+                if (currentEdit == 5) {
+                    driveDis5 += 1;
+                }
+                if (currentEdit == 6) {
+                    driveDis6 += 1;
+                }
+                if (currentEdit == 7) {
+                    driveDis7 += 1;
+                }
+                if (currentEdit == 8) {
+                    driveDis8 += 1;
+                }
+                if (currentEdit == 9) {
+                    driveDis9 += 1;
+                }
+                if (currentEdit == 10) {
+                    driveDis10 += 1;
+                }
+                if (currentEdit == 11) {
                     if (positionIndex == 1) {
                         positionIndex = 0;
                     } else {
