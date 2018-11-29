@@ -69,14 +69,17 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
     /* Declare OpMode members. */
     //Hardware8045 robot = new Hardware8045();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
-    static final double FORWARD_SPEED = 0.3;
-    static final double TURN_SPEED = 0.3;
+
     static int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
     private static final String VUFORIA_KEY = "AWfr4/T/////AAAAGRMg80Ehu059mDMJI2h/y+4aBmz86AidOcs89UScq+n+QQyGFT4cZP+rzg1M9B/CW5bgDoVf16x6x3WlD5wYKZddt0UWQS65VIFPjZlM9ADBWvWJss9L1dj4X2LZydWltdeaBhkXTXFnKBkKLDcdTyC2ozJlcAUP0VnLMeI1n+f5jGx25+NdFTs0GPJYVrPQRjODb6hYdoHsffiOCsOKgDnzFsalKuff1u4Z8oihSY9pvv3me2gJjzrQKqp2gCRIZAXDdYzln28Z/8vNSU+aXr6eoRrNXPpYdAwyYI+fX2V9H04806eSUKsNYcPBSbVlhe2KoUsSD7qbOsBMagcEIdMZxo010kVCHHhnhV3IFIs8";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
     private static final CameraDirection CAMERA_CHOICE = FRONT;
+
     public int currentEdit = 0;
+    public boolean teamIsRed = true;
+    public boolean craterPosition = true;
+    public boolean testBot = true;
     public int waitTime1 = 0;
     public int driveDis1 = 0;
     public int driveDis2 = 0;
@@ -88,53 +91,12 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
     public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
-    public String arrow0 = " ";
-    public String arrow1 = " ";
-    public String arrow2 = " ";
-    public String arrow3 = " ";
-    public String arrow4 = " ";
-    public String arrow5 = " ";
-    public String arrow6 = " ";
-    public String arrow7 = " ";
-    public String arrow8 = " ";
-    public String arrow9 = " ";
-    public String arrow10 = " ";
-    public String arrow11 = " ";
-    public boolean dpadPressedUp = false;
-    public boolean dpadPressedDown = false;
-    public boolean dpadPressedLeft = false;
-    public boolean dpadPressedRight = false;
-    public String[] position = {"base", "crater"};
-    public int positionIndex = 1;
-    public String[] color = {"red", "blue"};
-    public int colorIndex = 1;
 
-    public boolean dpadup = false;
-    public boolean dpaddown = false;
-    public boolean dpadleft = false;
-    public boolean dpadright = false;
-    public boolean button_a = false;
-    public boolean button_b = false;
-    public boolean button_x = false;
-    public boolean button_y = false;
     public boolean start = false;
-    public boolean backbutton = false;
-    public boolean righttrigger = false;
-    public boolean lefttrigger = false;
-    public boolean rightbumper = false;
-    public boolean leftbumper = false;
-    public boolean rightstickx = false;
-    public boolean rightsticky = false;
-    public boolean leftstickx = false;
-    public boolean leftsticky = false;
-    public boolean rightstickbutton = false;
-    public boolean leftstickbutton = false;
 
 
 
-    /**********************************************************************************************\
-     |--------------------------------- Pre Init Loop ----------------------------------------------|
-     \**********************************************************************************************/
+
 
     /**********************************************************************************************\
      |--------------------------------- Vuforia Setup ----------------------------------------------|
@@ -269,7 +231,7 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
         mecanumDrive(0.5, 18, 0, 180);
         runtime.reset();
         if (opModeIsActive()) {
-                if(position[positionIndex] == position[0]) {
+                if(craterPosition) {
                     if (goldPosition == 0) {
 //                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
 //                            mecanumDrive(0.5, 18, 0, 0);
@@ -287,7 +249,7 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                     }
                 }
 
-                if(position[positionIndex] == position[1]) {
+                if(!craterPosition) {
                     if (goldPosition == 0) {
                         mecanumDrive(0.125, 1, 0, 0);
                     }
@@ -308,7 +270,36 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
 
         }
 
+     /**********************************************************************************************\
+     |--------------------------------- Edit Method ----------------------------------------------|
+     \**********************************************************************************************/
+
     public void editParameters() {
+        String arrow0 = " ";
+         String arrow1 = " ";
+         String arrow2 = " ";
+         String arrow3 = " ";
+         String arrow4 = " ";
+         String arrow5 = " ";
+         String arrow6 = " ";
+         String arrow7 = " ";
+         String arrow8 = " ";
+         String arrow9 = " ";
+         String arrow10 = " ";
+         String arrow11 = " ";
+         String arrow12 = " ";
+         String arrow13 = " ";
+        boolean dpadPressedUp = false;
+        boolean dpadPressedDown = false;
+        boolean dpadPressedLeft = false;
+        boolean dpadPressedRight = false;
+        String[] position = {"base", "crater"};
+        int positionIndex = 1;
+        String[] color = {"Blue", "Red"};
+        int colorIndex = 1;
+        String[] botName = {"Real Bot", "TestBot"};
+        int botIndex = 1;
+
 
         while (!gamepad1.right_stick_button && !opModeIsActive() && !isStopRequested()) {   // while haven't presse exit button, not in play mode, and not in stop
             telemetry.addLine("===> Press Right Joystick to exit EDIT mode <===");
@@ -317,19 +308,20 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
 
             telemetry.addLine("VVV Eli's Test VVV");
             telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
-            telemetry.addLine().addData(arrow1, waitTime1).addData("Wait Time", arrow0);
-            telemetry.addLine().addData(arrow2, driveDis1).addData("Drive Distance one", arrow1);
-            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
-            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
-            telemetry.addLine().addData(arrow3, driveDis4).addData("Drive Distance four", arrow4);
-            telemetry.addLine().addData(arrow3, driveDis5).addData("Drive Distance five", arrow5);
-            telemetry.addLine().addData(arrow3, driveDis6).addData("Drive Distance six", arrow6);
-            telemetry.addLine().addData(arrow3, driveDis7).addData("Drive Distance seven", arrow7);
-            telemetry.addLine().addData(arrow3, driveDis8).addData("Drive Distance eight", arrow8);
-            telemetry.addLine().addData(arrow3, driveDis9).addData("Drive Distance nine", arrow9);
-            telemetry.addLine().addData(arrow3, driveDis10).addData("Drive Distance ten", arrow10);
-            telemetry.addLine().addData(arrow4,  positionIndex).addData(position[positionIndex], arrow11);
-            telemetry.addLine().addData(arrow4,  positionIndex).addData(color[colorIndex], arrow11);
+            telemetry.addLine().addData(arrow0,  waitTime1).addData("Wait Time",  arrow0);
+            telemetry.addLine().addData(arrow1,  colorIndex).addData(color[colorIndex],   arrow1);
+            telemetry.addLine().addData(arrow2,  positionIndex).addData(position[positionIndex], arrow2);
+            telemetry.addLine().addData(arrow3,  botIndex).addData(botName[botIndex],     arrow3);
+            telemetry.addLine().addData(arrow4,  driveDis1).addData("Distance 1", arrow4);
+            telemetry.addLine().addData(arrow5,  driveDis2).addData("Distance 2", arrow5);
+            telemetry.addLine().addData(arrow6,  driveDis3).addData("Distance 3", arrow6);
+            telemetry.addLine().addData(arrow7,  driveDis4).addData("Distance 4", arrow7);
+            telemetry.addLine().addData(arrow8,  driveDis5).addData("Distance 5", arrow8);
+            telemetry.addLine().addData(arrow9,  driveDis6).addData("Distance 6", arrow9);
+            telemetry.addLine().addData(arrow10, driveDis7).addData("Distance 7", arrow10);
+            telemetry.addLine().addData(arrow11, driveDis8).addData("Distance 8", arrow11);
+            telemetry.addLine().addData(arrow12, driveDis9).addData("Distance 9", arrow12);
+            telemetry.addLine().addData(arrow13, driveDis10).addData("Distance 10", arrow13);
 //            telemetry.addLine().addData(arrow4, "Color       ");
             telemetry.update();
 
@@ -338,7 +330,7 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
             } else if (gamepad1.dpad_down == false && dpadPressedDown) {
                 dpadPressedDown = false;
                 currentEdit += 1;
-                if (currentEdit > 10) {
+                if (currentEdit > 13) {
                     currentEdit = 0;
                 }
             }
@@ -349,7 +341,7 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                 dpadPressedUp = false;
                 currentEdit -= 1;
                 if (currentEdit < 0) {
-                    currentEdit = 10;
+                    currentEdit = 13;
                 }
             }
 
@@ -410,9 +402,19 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                 arrow10 = "    ";
             }
             if (currentEdit == 11) {
-                arrow10 = "<>";
+                arrow11 = "<>";
             } else {
-                arrow10 = "    ";
+                arrow11 = "    ";
+            }
+            if (currentEdit == 12) {
+                arrow12 = "<>";
+            } else {
+                arrow12 = "    ";
+            }
+            if (currentEdit == 13) {
+                arrow13 = "<>";
+            } else {
+                arrow13 = "    ";
             }
 
 
@@ -424,42 +426,63 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                     waitTime1 -= 1;
                 }
                 if (currentEdit == 1) {
-                    driveDis1 -= 1;
-                }
-                if (currentEdit == 2) {
-                    driveDis2 -= 1;
-                }
-                if (currentEdit == 3) {
-                    driveDis3 -= 1;
-                }
-                if (currentEdit == 4) {
-                    driveDis4 -= 1;
-                }
-                if (currentEdit == 5) {
-                    driveDis5 -= 1;
-                }
-                if (currentEdit == 6) {
-                    driveDis6 -= 1;
-                }
-                if (currentEdit == 7) {
-                    driveDis7 -= 1;
-                }
-                if (currentEdit == 8) {
-                    driveDis8 -= 1;
-                }
-                if (currentEdit == 9) {
-                    driveDis9 -= 1;
-                }
-                if (currentEdit == 10) {
-                    driveDis10 -= 1;
-                }
-                if (currentEdit == 11) {
-                    if (positionIndex == 1) {
-                        positionIndex = 0;
+                    if (colorIndex == 1) {
+                        colorIndex = 0;
+                        teamIsRed = false;
                     } else {
-                        positionIndex = 1;
+                        colorIndex = 1;
+                        teamIsRed = true;
                     }
                 }
+                if (currentEdit == 2) {
+                    if (positionIndex == 1) {
+                        positionIndex = 0;
+                        craterPosition=false;
+                    } else {
+                        positionIndex = 1;
+                        craterPosition=true;
+                    }
+                }
+                if (currentEdit == 3) {
+                    if (botIndex == 1) {
+                        botIndex = 0;
+                        testBot = false;
+                    } else {
+                        botIndex = 1;
+                        testBot = true;
+                    }
+                }
+                if (currentEdit == 4) {
+                    driveDis1 -= 1;
+                }
+                if (currentEdit == 5) {
+                    driveDis2 -= 1;
+                }
+                if (currentEdit == 6) {
+                    driveDis3 -= 1;
+                }
+                if (currentEdit == 7) {
+                    driveDis4 -= 1;
+                }
+                if (currentEdit == 8) {
+                    driveDis5 -= 1;
+                }
+                if (currentEdit == 9) {
+                    driveDis6 -= 1;
+                }
+                if (currentEdit == 10) {
+                    driveDis7 -= 1;
+                }
+                if (currentEdit == 11) {
+                    driveDis8 -= 1;
+                }
+                if (currentEdit == 12) {
+                    driveDis9 -= 1;
+                }
+                if (currentEdit == 13) {
+                    driveDis10 -= 1;
+                }
+
             }
 
             if (gamepad1.dpad_right) {
@@ -470,42 +493,57 @@ public class ElijahTristanAutoET_editmethod extends LinearOpMode {
                     waitTime1 += 1;
                 }
                 if (currentEdit == 1) {
-                    driveDis1 += 1;
+                    if (colorIndex == 1) {
+                        colorIndex = 0;
+                    } else {
+                        colorIndex = 1;
+                    }
                 }
                 if (currentEdit == 2) {
-                    driveDis2 += 1;
-                }
-                if (currentEdit == 3) {
-                    driveDis3 += 1;
-                }
-                if (currentEdit == 4) {
-                    driveDis4 += 1;
-                }
-                if (currentEdit == 5) {
-                    driveDis5 += 1;
-                }
-                if (currentEdit == 6) {
-                    driveDis6 += 1;
-                }
-                if (currentEdit == 7) {
-                    driveDis7 += 1;
-                }
-                if (currentEdit == 8) {
-                    driveDis8 += 1;
-                }
-                if (currentEdit == 9) {
-                    driveDis9 += 1;
-                }
-                if (currentEdit == 10) {
-                    driveDis10 += 1;
-                }
-                if (currentEdit == 11) {
                     if (positionIndex == 1) {
                         positionIndex = 0;
                     } else {
                         positionIndex = 1;
                     }
                 }
+                if (currentEdit == 3) {
+                    if (botIndex == 1) {
+                        botIndex = 0;
+                    } else {
+                        botIndex = 1;
+                    }
+                }
+                if (currentEdit == 4) {
+                    driveDis1 += 1;
+                }
+                if (currentEdit == 5) {
+                    driveDis2 += 1;
+                }
+                if (currentEdit == 6) {
+                    driveDis3 += 1;
+                }
+                if (currentEdit == 7) {
+                    driveDis4 += 1;
+                }
+                if (currentEdit == 8) {
+                    driveDis5 += 1;
+                }
+                if (currentEdit == 9) {
+                    driveDis6 += 1;
+                }
+                if (currentEdit == 10) {
+                    driveDis7 += 1;
+                }
+                if (currentEdit == 11) {
+                    driveDis8 += 1;
+                }
+                if (currentEdit == 12) {
+                    driveDis9 += 1;
+                }
+                if (currentEdit == 13) {
+                    driveDis10 += 1;
+                }
+
             }
 //                if (gamepad1.y) {
 //                    break;
