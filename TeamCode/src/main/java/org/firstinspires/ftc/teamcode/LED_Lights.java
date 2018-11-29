@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware8045;
+import org.firstinspires.ftc.teamcode.Hardware8045testbot;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 public class LED_Lights extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
+    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
     // State used for updating telemetry
