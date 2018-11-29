@@ -5,9 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.oldcode.DriveTrain;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.SpeedSetting.FAST;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.SpeedSetting.MID;
+import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.SpeedSetting.SLOW;
 
 
 @TeleOp(name = "Main Tele", group = "8045")  // @Autonomous(...) is the other common choice
@@ -24,7 +29,6 @@ public class elijahTeleCode extends OpMode {
 
     //    double turnDirection;
     public double topSpeed = 0.5 ;
-
     //Booleans
 
     public boolean aIsReleased = true;
@@ -34,6 +38,7 @@ public class elijahTeleCode extends OpMode {
     @Override
     public void init() {
 
+//Init Hardware
         Cosmo = new Hardware8045();
         Cosmo.init(hardwareMap);
         telemetry.addData("Status", "Initializing");
@@ -52,21 +57,44 @@ public class elijahTeleCode extends OpMode {
 
     @Override
     public void loop() {
+
         timeLeft = 120 - runtime.seconds();
+
+
+//        //set drive speed
+//        if (gamepad1.left_bumper) {
+//            Cosmo.driveTrain.setSpeedMode(FAST);
+//        } else if (gamepad1.left_trigger > 0.1) {
+//            Cosmo.driveTrain.setSpeedMode(SLOW);
+//        } else {
+//            Cosmo.driveTrain.setSpeedMode(MID);
+//        }
+
+
+
+
+//        if (gamepad1.left_bumper) {
+//            Cosmo.driveTrain.setSpeedMode(FAST);
+//        } else if (gamepad1.left_trigger > 0.1) {
+//            Cosmo.driveTrain.setSpeedMode(SLOW);
+//        } else {
+//            Cosmo.driveTrain.setSpeedMode(MID);
+//        }
 
         /**
          * DRIVE Functions HERE
          */
 
         drivesmart(-gamepad1.right_stick_y, -gamepad1.right_stick_x,  -gamepad1.left_stick_x);
-        if (gamepad2.right_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(gamepad2.right_trigger);
 
-        }
-        if (gamepad2.left_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(-gamepad2.left_trigger);
-
-        }
+//        if (gamepad2.right_trigger >= 0.1) {
+//            Cosmo.liftmotor.setPower(gamepad2.right_trigger);
+//
+//        }
+//        if (gamepad2.left_trigger >= 0.1) {
+//            Cosmo.liftmotor.setPower(-gamepad2.left_trigger);
+//
+//        }
 
         telemetry.addData("TimeLeft: ",timeLeft);
         telemetry.addData("Right -X: ", -gamepad1.right_stick_x);

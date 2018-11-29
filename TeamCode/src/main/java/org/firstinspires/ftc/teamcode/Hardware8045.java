@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.oldcode.DriveTrain;
 
 /**
  * This is NOT an opmode.
@@ -56,6 +57,7 @@ public class Hardware8045
     public DcMotor  rightRear   = null;
     public DcMotor  liftmotor   = null;
     public DcMotor  liftDown   = null;
+
 
     //    public Servo    rightClaw   = null;
 
@@ -98,12 +100,17 @@ public class Hardware8045
     /* Constructor */
     public Hardware8045(){
 
+
+
+
     }
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
+
+
 
         // LED lights
         LEDDriver = hwMap.get(com.qualcomm.hardware.rev.RevBlinkinLedDriver.class, "ledlights");
@@ -115,7 +122,7 @@ public class Hardware8045
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftRear  = hwMap.get(DcMotor.class, "left_rear");
         rightRear = hwMap.get(DcMotor.class, "right_rear");
-        liftmotor = hwMap.get(DcMotor.class, "lift_motor");
+//        liftmotor = hwMap.get(DcMotor.class, "lift_motor");
         /**       leftFront.setDirection(DcMotor.Direction.FORWARD);
          leftRear.setDirection(DcMotor.Direction.FORWARD);
          rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -126,14 +133,14 @@ public class Hardware8045
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
-        liftmotor.setDirection (DcMotor.Direction.FORWARD);
+//        liftmotor.setDirection (DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftRear.setPower(0);
         rightRear.setPower(0);
-        liftmotor.setPower(0);
+//        liftmotor.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -141,7 +148,7 @@ public class Hardware8045
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and Initialize Motors
 
@@ -171,6 +178,9 @@ public class Hardware8045
         imu.initialize(parameters);
 
 
-    }
+
  }
+
+
+}
 
