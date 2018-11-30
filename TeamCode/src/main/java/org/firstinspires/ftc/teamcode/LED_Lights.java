@@ -73,18 +73,17 @@ public class LED_Lights extends LinearOpMode {
 
 
         // Wait for the game to start (driver presses PLAY) replaced by init loop
-        //waitForStart();
+        waitForStart();
 
         while (opModeIsActive() && (runtime.seconds() < 30)) {
             telemetry.addData("Path", " %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
 
 
-            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            if (opModeIsActive() && (runtime.seconds() < 10.0)) {
                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
-            }
-            while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+            } else{
                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
             }
