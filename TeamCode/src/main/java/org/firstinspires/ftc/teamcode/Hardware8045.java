@@ -57,6 +57,7 @@ public class Hardware8045
     public DcMotor  rightRear   = null;
     public DcMotor  liftmotor   = null;
     public DcMotor  liftDown   = null;
+    public Servo    flagServo  = null;
 
 
     //    public Servo    rightClaw   = null;
@@ -122,7 +123,7 @@ public class Hardware8045
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftRear  = hwMap.get(DcMotor.class, "left_rear");
         rightRear = hwMap.get(DcMotor.class, "right_rear");
-//        liftmotor = hwMap.get(DcMotor.class, "lift_motor");
+        liftmotor = hwMap.get(DcMotor.class, "lift_motor");
 //
          leftFront.setDirection(DcMotor.Direction.FORWARD);
          leftRear.setDirection(DcMotor.Direction.FORWARD);
@@ -134,7 +135,7 @@ public class Hardware8045
 //        leftRear.setDirection(DcMotor.Direction.REVERSE);
 //        rightFront.setDirection(DcMotor.Direction.FORWARD);
 //        rightRear.setDirection(DcMotor.Direction.FORWARD);
-////        liftmotor.setDirection (DcMotor.Direction.FORWARD);
+//        liftmotor.setDirection (DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         leftFront.setPower(0);
@@ -158,6 +159,7 @@ public class Hardware8045
 //        rightClaw = hwMap.get(Servo.class, "right_hand");
 //        leftClaw.setPosition(MID_SERVO);
 //        rightClaw.setPosition(MID_SERVO);
+        flagServo = hwMap.get(Servo.class, "flag_servo");
 
         /**
          * IMU SETUP

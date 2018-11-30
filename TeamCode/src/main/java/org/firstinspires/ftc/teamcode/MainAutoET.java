@@ -29,69 +29,39 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-
-import java.util.List;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.signum;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-
 import java.util.List;
 
-//Imports for front facing camera
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static java.lang.Math.abs;
+import static java.lang.Math.signum;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
-import java.util.ArrayList;
-import java.util.List;
+//Imports for front facing camera
 
-@Autonomous(name="Main Auto", group="Pushbot")
+@Autonomous(name="MainAuto", group="Pushbot")
 //@Disabled
-public class ElijahTristanAutoET extends LinearOpMode {
-    Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
+public class MainAutoET extends LinearOpMode {
+    Hardware8045neverrest Cosmo = new Hardware8045neverrest();   // Use a Pushbot's hardware
     public Orientation angles;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -105,21 +75,39 @@ public class ElijahTristanAutoET extends LinearOpMode {
     private static final String VUFORIA_KEY = "AWfr4/T/////AAAAGRMg80Ehu059mDMJI2h/y+4aBmz86AidOcs89UScq+n+QQyGFT4cZP+rzg1M9B/CW5bgDoVf16x6x3WlD5wYKZddt0UWQS65VIFPjZlM9ADBWvWJss9L1dj4X2LZydWltdeaBhkXTXFnKBkKLDcdTyC2ozJlcAUP0VnLMeI1n+f5jGx25+NdFTs0GPJYVrPQRjODb6hYdoHsffiOCsOKgDnzFsalKuff1u4Z8oihSY9pvv3me2gJjzrQKqp2gCRIZAXDdYzln28Z/8vNSU+aXr6eoRrNXPpYdAwyYI+fX2V9H04806eSUKsNYcPBSbVlhe2KoUsSD7qbOsBMagcEIdMZxo010kVCHHhnhV3IFIs8";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+    private static final CameraDirection CAMERA_CHOICE = FRONT;
     public int currentEdit = 0;
     public int waitTime1 = 0;
-    public int driveDis2 = 15;
-    public int driveDis3 = 20;
-    public boolean dpadPressedUp = false;
-    public boolean dpadPressedDown = false;
-    public boolean dpadPressedLeft = false;
-    public boolean dpadPressedRight = false;
-    public int sideBase = 1;
-    public String[] side = {"base", "crater"};
+    public int driveDis1 = 0;
+    public int driveDis2 = 0;
+    public int driveDis3 = 0;
+    public int driveDis4 = 0;
+    public int driveDis5 = 0;
+    public int driveDis6 = 0;
+    public int driveDis7 = 0;
+    public int driveDis8 = 0;
+    public int driveDis9 = 0;
+    public int driveDis10 = 0;
+    public String arrow0 = " ";
     public String arrow1 = " ";
     public String arrow2 = " ";
     public String arrow3 = " ";
     public String arrow4 = " ";
+    public String arrow5 = " ";
+    public String arrow6 = " ";
+    public String arrow7 = " ";
+    public String arrow8 = " ";
+    public String arrow9 = " ";
+    public String arrow10 = " ";
+    public String arrow11 = " ";
+    public boolean dpadPressedUp = false;
+    public boolean dpadPressedDown = false;
+    public boolean dpadPressedLeft = false;
+    public boolean dpadPressedRight = false;
+    public String[] position = {"base", "crater"};
+    public int positionIndex = 1;
+    public String[] color = {"red", "blue"};
+    public int colorIndex = 1;
 
     public boolean dpadup = false;
     public boolean dpaddown = false;
@@ -159,7 +147,7 @@ public class ElijahTristanAutoET extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -180,6 +168,11 @@ public class ElijahTristanAutoET extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        // get a reference to the RelativeLayout so we can change the background  for Edit mode
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -203,115 +196,27 @@ public class ElijahTristanAutoET extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
-        // Send telemetry message to signify robot waiting;
-        while(!opModeIsActive()) {
-            // --- Eli Test Code -- \\
-            telemetry.addLine("VVV Eli's Test VVV");
-            telemetry.addLine().addData(arrow1, waitTime1).addData("Drive Distance One", arrow1);
-            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
-            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
-            telemetry.addLine().addData(arrow4, "side:       ",sideBase).addData(side[sideBase], arrow4);
-            telemetry.addLine().addData("", currentEdit).addData("current edit number test", ' ');
-            telemetry.update();
-            // -------------------- \\
-
-            //Variable Change GUI
-            if (gamepad1.dpad_down) {
-                dpadPressedDown = true;
-            } else if (gamepad1.dpad_down == false && dpadPressedDown) {
-                dpadPressedDown = false;
-                currentEdit += 1;
-                if (currentEdit > 3) {
-                    currentEdit = 0;
-                }
-            }
-
-            if (gamepad1.dpad_up) {
-                dpadPressedUp = true;
-            } else if (gamepad1.dpad_up == false && dpadPressedUp) {
-                dpadPressedUp = false;
-                currentEdit -= 1;
-                if (currentEdit < 0) {
-                    currentEdit = 2;
-                }
-            }
 
 
-            if (currentEdit == 0) {
-                arrow1 = "<>";
-            } else {
-                arrow1 = "    ";
-            }
-            if (currentEdit == 1) {
-                arrow2 = "<>";
-            } else {
-                arrow2 = "    ";
-            }
-            if (currentEdit == 2) {
-                arrow3 = "<>";
-            } else {
-                arrow3 = "    ";
-            }
-            if (currentEdit == 3) {
-                arrow4 = "<>";
-            } else {
-                arrow4 = "    ";
-            }
+        while(!opModeIsActive()  && !isStopRequested()) {
 
-            if (gamepad1.dpad_left) {
-                dpadPressedLeft = true;
-            } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
-                dpadPressedLeft = false;
-                if (currentEdit == 0) {
-                    waitTime1 -= 1;
-                }
-                if (currentEdit == 1) {
-                    driveDis2 -= 1;
-                }
-                if (currentEdit == 2) {
-                    driveDis3 -= 1;
-                }
-                if (currentEdit == 3) {
-                    if (sideBase == 1) {
-                        sideBase = 0;
-                    } else {
-                        sideBase = 1;
-                    }
-                }
-            }
 
-            if (gamepad1.dpad_right) {
-                dpadPressedRight = true;
-            } else if (gamepad1.dpad_right == false && dpadPressedRight) {
-                dpadPressedRight = false;
-                if (currentEdit == 0) {
-                    waitTime1 += 1;
-                }
-                if (currentEdit == 1) {
-                    driveDis2 += 1;
-                }
-                if (currentEdit == 2) {
-                    driveDis3 += 1;
-                }
-                if (currentEdit == 3) {
-                    if (sideBase == 1) {
-                        sideBase = 0;
-                    } else {
-                        sideBase = 1;
-                    }
-                }
-            }
-            if (gamepad1.y) {
-                break;
-            }
-        }
 
-        while(!opModeIsActive()) {
+            /** Team Marker Servo Clamping
+             */
+
+
+//            Cosmo.flagServo.setPosition(0.4);
+
+
+
+
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
+                    telemetry.addData("Press left Joystick to edit ","");
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
                     if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
@@ -342,22 +247,53 @@ public class ElijahTristanAutoET extends LinearOpMode {
                     telemetry.update();
                 }
             }
+
+            // edit Menu params
+            if (gamepad1.start || gamepad1.back || gamepad1.left_stick_button) {             // edit parameters  & write the new file
+                // change the background color to yellow
+                relativeLayout.post(new Runnable() {
+                    public void run() {
+                        relativeLayout.setBackgroundColor(Color.YELLOW);
+                    }
+                });
+
+
+                editParameters();
+
+                relativeLayout.post(new Runnable() {    // change back to black
+                    public void run() {
+                        relativeLayout.setBackgroundColor(Color.BLACK);
+                    }
+                });
+
+            }
         }
+
+
+
+
+
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
 
 
+
+        mecanumDrive(0.5, 18, 0, 0);
+        mecanumDrive(0.5, 18, 0, 90);
+        mecanumDrive(0.5, 18, 0, 180);
         runtime.reset();
         if (opModeIsActive()) {
-                if(side[sideBase] == side[0]) {
+
+                if(position[positionIndex] == position[0]) {
                     if (goldPosition == 0) {
-                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
-                            mecanumDrive(0.5, 18, 0, 0);
-                            mecanumDrive(0.5, 18, 0, 90);
-                            mecanumDrive(0.5, 18, 0, 180);
-                        }
+//                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
+//                            mecanumDrive(0.5, 18, 0, 0);
+//                            mecanumDrive(0.5, 18, 0, 90);
+//                            mecanumDrive(0.5, 18, 0, 180);
+//                        }
                     }
 
                     if (goldPosition == 1) {
@@ -369,13 +305,9 @@ public class ElijahTristanAutoET extends LinearOpMode {
                     }
                 }
 
-                if(side[sideBase] == side[0]) {
+                if(position[positionIndex] == position[1]) {
                     if (goldPosition == 0) {
-                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
-                            mecanumDrive(0.5, 18, 0, 0);
-                            mecanumDrive(0.5, 18, 0, 90);
-                            mecanumDrive(0.5, 18, 0, 180);
-                        }
+                        mecanumDrive(0.125, 1, 0, 0);
                     }
 
                     if (goldPosition == 1) {
@@ -393,6 +325,215 @@ public class ElijahTristanAutoET extends LinearOpMode {
             }
 
         }
+
+    public void editParameters() {
+
+        while (!gamepad1.right_stick_button && !opModeIsActive() && !isStopRequested()) {   // while haven't presse exit button, not in play mode, and not in stop
+            telemetry.addLine("===> Press Right Joystick to exit EDIT mode <===");
+            // Send telemetry message to signify robot waiting;
+
+
+            telemetry.addLine("VVV Eli's Test VVV");
+            telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
+            telemetry.addLine().addData(arrow1, waitTime1).addData("Wait Time", arrow0);
+            telemetry.addLine().addData(arrow2, driveDis1).addData("Drive Distance one", arrow1);
+            telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
+            telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
+            telemetry.addLine().addData(arrow3, driveDis4).addData("Drive Distance four", arrow4);
+            telemetry.addLine().addData(arrow3, driveDis5).addData("Drive Distance five", arrow5);
+            telemetry.addLine().addData(arrow3, driveDis6).addData("Drive Distance six", arrow6);
+            telemetry.addLine().addData(arrow3, driveDis7).addData("Drive Distance seven", arrow7);
+            telemetry.addLine().addData(arrow3, driveDis8).addData("Drive Distance eight", arrow8);
+            telemetry.addLine().addData(arrow3, driveDis9).addData("Drive Distance nine", arrow9);
+            telemetry.addLine().addData(arrow3, driveDis10).addData("Drive Distance ten", arrow10);
+            telemetry.addLine().addData(arrow4,  positionIndex).addData(position[positionIndex], arrow11);
+            telemetry.addLine().addData(arrow4,  positionIndex).addData(color[colorIndex], arrow11);
+//            telemetry.addLine().addData(arrow4, "Color       ");
+            telemetry.update();
+
+            if (gamepad1.dpad_down) {
+                dpadPressedDown = true;
+            } else if (gamepad1.dpad_down == false && dpadPressedDown) {
+                dpadPressedDown = false;
+                currentEdit += 1;
+                if (currentEdit > 10) {
+                    currentEdit = 0;
+                }
+            }
+
+            if (gamepad1.dpad_up) {
+                dpadPressedUp = true;
+            } else if (gamepad1.dpad_up == false && dpadPressedUp) {
+                dpadPressedUp = false;
+                currentEdit -= 1;
+                if (currentEdit < 0) {
+                    currentEdit = 10;
+                }
+            }
+
+
+            if (currentEdit == 0) {
+                arrow0 = "<>";
+            } else {
+                arrow0 = "    ";
+            }
+            if (currentEdit == 1) {
+                arrow1 = "<>";
+            } else {
+                arrow1 = "    ";
+            }
+            if (currentEdit == 2) {
+                arrow2 = "<>";
+            } else {
+                arrow2 = "    ";
+            }
+            if (currentEdit == 3) {
+                arrow3 = "<>";
+            } else {
+                arrow3 = "    ";
+            }
+            if (currentEdit == 4) {
+                arrow4 = "<>";
+            } else {
+                arrow4 = "    ";
+            }
+            if (currentEdit == 5) {
+                arrow5 = "<>";
+            } else {
+                arrow5 = "    ";
+            }
+            if (currentEdit == 6) {
+                arrow6 = "<>";
+            } else {
+                arrow6 = "    ";
+            }
+            if (currentEdit == 7) {
+                arrow7 = "<>";
+            } else {
+                arrow7 = "    ";
+            }
+            if (currentEdit == 8) {
+                arrow8 = "<>";
+            } else {
+                arrow8 = "    ";
+            }
+            if (currentEdit == 9) {
+                arrow9 = "<>";
+            } else {
+                arrow9 = "    ";
+            }
+            if (currentEdit == 10) {
+                arrow10 = "<>";
+            } else {
+                arrow10 = "    ";
+            }
+            if (currentEdit == 11) {
+                arrow10 = "<>";
+            } else {
+                arrow10 = "    ";
+            }
+
+
+            if (gamepad1.dpad_left) {
+                dpadPressedLeft = true;
+            } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
+                dpadPressedLeft = false;
+                if (currentEdit == 0) {
+                    waitTime1 -= 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis1 -= 1;
+                }
+                if (currentEdit == 2) {
+                    driveDis2 -= 1;
+                }
+                if (currentEdit == 3) {
+                    driveDis3 -= 1;
+                }
+                if (currentEdit == 4) {
+                    driveDis4 -= 1;
+                }
+                if (currentEdit == 5) {
+                    driveDis5 -= 1;
+                }
+                if (currentEdit == 6) {
+                    driveDis6 -= 1;
+                }
+                if (currentEdit == 7) {
+                    driveDis7 -= 1;
+                }
+                if (currentEdit == 8) {
+                    driveDis8 -= 1;
+                }
+                if (currentEdit == 9) {
+                    driveDis9 -= 1;
+                }
+                if (currentEdit == 10) {
+                    driveDis10 -= 1;
+                }
+                if (currentEdit == 11) {
+                    if (positionIndex == 1) {
+                        positionIndex = 0;
+                    } else {
+                        positionIndex = 1;
+                    }
+                }
+            }
+
+            if (gamepad1.dpad_right) {
+                dpadPressedRight = true;
+            } else if (gamepad1.dpad_right == false && dpadPressedRight) {
+                dpadPressedRight = false;
+                if (currentEdit == 0) {
+                    waitTime1 += 1;
+                }
+                if (currentEdit == 1) {
+                    driveDis1 += 1;
+                }
+                if (currentEdit == 2) {
+                    driveDis2 += 1;
+                }
+                if (currentEdit == 3) {
+                    driveDis3 += 1;
+                }
+                if (currentEdit == 4) {
+                    driveDis4 += 1;
+                }
+                if (currentEdit == 5) {
+                    driveDis5 += 1;
+                }
+                if (currentEdit == 6) {
+                    driveDis6 += 1;
+                }
+                if (currentEdit == 7) {
+                    driveDis7 += 1;
+                }
+                if (currentEdit == 8) {
+                    driveDis8 += 1;
+                }
+                if (currentEdit == 9) {
+                    driveDis9 += 1;
+                }
+                if (currentEdit == 10) {
+                    driveDis10 += 1;
+                }
+                if (currentEdit == 11) {
+                    if (positionIndex == 1) {
+                        positionIndex = 0;
+                    } else {
+                        positionIndex = 1;
+                    }
+                }
+            }
+//                if (gamepad1.y) {
+//                    break;
+//                }
+        }
+        telemetry.update();
+    }
+
+
+
     public void mecanumDrive(double speed, double distance, double robot_orientation, double drive_direction) {
         double max;
         double multiplier;
@@ -451,9 +592,9 @@ public class ElijahTristanAutoET extends LinearOpMode {
             rfpower *= multiplier;
             rrpower *= multiplier;
 
-            Cosmo.leftFront.setPower(lfpower);
+            Cosmo.leftFront.setPower(-lfpower);
             Cosmo.leftRear.setPower(lrpower);
-            Cosmo.rightFront.setPower(rfpower);
+            Cosmo.rightFront.setPower(-rfpower);
             Cosmo.rightRear.setPower(rrpower);
 
 //            RobotLog.ii("[GromitIR] ", Double.toString(18.7754*Math.pow(sharpIRSensor.getVoltage(),-1.51)), Integer.toString(left_front.getCurrentPosition()));
@@ -487,9 +628,9 @@ public class ElijahTristanAutoET extends LinearOpMode {
 
             double adjustment = Range.clip((Math.signum(correction) * Cosmo.turn_MIN_SPEED + Cosmo.turn_COEF * correction / 100), -1, 1);  // adjustment is motor power: sign of correction *0.07 (base power)  + a proportional bit
 
-            Cosmo.leftFront.setPower(-adjustment * speed);
-            Cosmo.leftRear.setPower(-adjustment * speed);
-            Cosmo.rightFront.setPower((adjustment * speed));
+            Cosmo.leftFront.setPower(adjustment * speed);
+            Cosmo.leftRear.setPower(adjustment * speed);
+            Cosmo.rightFront.setPower(adjustment * speed);
             Cosmo.rightRear.setPower((adjustment * speed));
         }
 //        gromit.driveTrain.stopMotors();

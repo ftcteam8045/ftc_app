@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static java.lang.Math.abs;
@@ -9,9 +10,9 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 
-@TeleOp(name = "zMoo", group = "8045")  // @Autonomous(...) is the other common choice
+@TeleOp(name = "MainTele", group = "8045")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Teleop_basic extends OpMode {
+public class MainTeleET extends OpMode {
 
     Hardware8045 Cosmo;
 
@@ -23,22 +24,24 @@ public class Teleop_basic extends OpMode {
 
 //    double turnDirection;
     public double topSpeed = 0.5 ;
-
+    public boolean reverseDrive = false;
     //Booleans
 
     public boolean aIsReleased = true;
+//    public Servo    flagServo  = null;
 
- 
- 
+
+
     @Override
     public void init() {
-
         Cosmo = new Hardware8045();
         Cosmo.init(hardwareMap);
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
         timeLeft = 120;
+
+
 
         telemetry.addData("Finished", "Initializing");
         telemetry.update();
@@ -53,19 +56,57 @@ public class Teleop_basic extends OpMode {
     public void loop() {
         timeLeft = 120 - runtime.seconds();
 
+
+
+        if(gamepad1.y) {
+            // move to 0 degrees.
+            Cosmo.flagServo.setPosition(0.4);
+        } else if (gamepad1.x) {
+            // move to 90 degrees.
+            Cosmo.flagServo.setPosition(0.5);
+        } else if (gamepad1.a) {
+            // move to 180 degrees.
+            Cosmo.flagServo.setPosition(0.6);
+        }
+
+
         /**
          * DRIVE Functions HERE
          */
 
          drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y,  gamepad1.left_stick_x);
-        if (gamepad2.right_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(gamepad2.right_trigger);
+//        if (gamepad1.right_trigger >= 0.01) {
+//            Cosmo.liftmotor.setPower(gamepad1.right_trigger);
+//
+//        }
+//        if (gamepad1.left_trigger >= 0.01) {
+//            Cosmo.liftmotor.setPower(-gamepad1.left_trigger);
+//
+//        }
 
-        }
-        if (gamepad2.left_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(-gamepad2.left_trigger);
 
+        //set drive speed
+        if (gamepad1.left_bumper) {
+            topSpeed = 1.0;
+        } else if (gamepad1.left_trigger > 0.1) {
+            topSpeed = 0.2;
+        } else {
+            topSpeed = 0.5;
         }
+
+//
+//        // BACK mode
+//        if (gamepad1.right_stick_button) {
+//            if (reverseDrive == false) {
+//                reverseDrive = true;
+//
+//            }
+//            else {
+//                reverseDrive = false;
+//            }
+//        }
+
+
 
         telemetry.addData("TimeLeft: ",timeLeft);
         telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
