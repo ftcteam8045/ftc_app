@@ -38,7 +38,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
     Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
     /**   Menu Parameter Initialization **/
-    public boolean teamIsRed = true;
+    public boolean teamIsRed = false;
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
@@ -96,15 +96,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
          int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
          final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
          if(teamIsRed){
-             relativeLayout.post(new Runnable() {    // change back to black
-                 public void run() {relativeLayout.setBackgroundColor(Color.RED);
-                 }
-             });
+             relativeLayout.post(new Runnable() { public void run() {relativeLayout.setBackgroundColor(Color.RED);   }    });
          }else{
-             relativeLayout.post(new Runnable() {    // change back to black
-                 public void run() {relativeLayout.setBackgroundColor(Color.BLUE);
-                 }
-             });
+             relativeLayout.post(new Runnable() { public void run() {relativeLayout.setBackgroundColor(Color.BLUE);  }    });
          }
 
         /** The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
@@ -139,24 +133,22 @@ public class Auto_LaraLiesel extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
-
+         /**************************************************************
         // Actual Init loop
+          *************************************************************/
         while (!opModeIsActive() && !isStopRequested()) {
-  //          if (teamIsRed) { telemetry.addData("","RED");} else {telemetry.addData("","BLUE");}
-//            if (craterPosition) { telemetry.addData("","Crater");} else {telemetry.addData("","Base");}
-//            telemetry.addLine(" Press Left Joystick for Edit");
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
+                    if (teamIsRed) { telemetry.addData("","RED");} else {telemetry.addData("","BLUE");}
+                    if (craterPosition) { telemetry.addData("","Crater");} else {telemetry.addData("","Base");}
+                    telemetry.addLine(" Press Left Joystick for Edit");
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
                     for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addLine().addData("","%s %.2f X %.0f Y %.0f",recognition.getLabel(),recognition.getConfidence(),recognition.getLeft(),recognition.getBottom());
-
-//                        telemetry.addData("  ", ).addData(" X ",recognition.getLeft()).addData(" Y ",recognition.getBottom());
+                        telemetry.addLine().addData("","%.2f %s   X %.0f Y %.0f",recognition.getConfidence(),recognition.getLabel(),recognition.getLeft(),recognition.getBottom());
                     }
-
 
                     if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
@@ -190,25 +182,17 @@ public class Auto_LaraLiesel extends LinearOpMode {
             // edit Menu params
             if (gamepad1.back || gamepad1.left_stick_button) {             // edit parameters  & write the new file
                 // change the background color to yellow
-                relativeLayout.post(new Runnable() {
-                    public void run() { relativeLayout.setBackgroundColor(Color.YELLOW);
-                    }
-                });
+                relativeLayout.post(new Runnable() { public void run() { relativeLayout.setBackgroundColor(Color.YELLOW);  }     });
 
 
                 editParameters();
 
                 if(teamIsRed){
-                    relativeLayout.post(new Runnable() {    // change back to black
-                        public void run() {relativeLayout.setBackgroundColor(Color.RED);
-                        }
-                    });
+                    relativeLayout.post(new Runnable() { public void run() {relativeLayout.setBackgroundColor(Color.RED);   }    });
                 }else{
-                    relativeLayout.post(new Runnable() {    // change back to black
-                        public void run() {relativeLayout.setBackgroundColor(Color.BLUE);
-                        }
-                    });
+                    relativeLayout.post(new Runnable() { public void run() {relativeLayout.setBackgroundColor(Color.BLUE);  }    });
                 }
+
 
 
             }
@@ -406,6 +390,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
      \************************************************************************************************/
 
     public void editParameters() {
+
         String arrow0 = " ";
         String arrow1 = " ";
         String arrow2 = " ";
@@ -425,12 +410,18 @@ public class Auto_LaraLiesel extends LinearOpMode {
         boolean dpadPressedLeft = false;
         boolean dpadPressedRight = false;
         String[] position = {"base", "crater"};
-        int positionIndex = 1;
+        int positionIndex = 0;
+        if (craterPosition) positionIndex = 1;
+
         String[] color = {"Blue", "Red"};
-        int colorIndex = 1;
+        int colorIndex = 0 ;
+        if(teamIsRed)  colorIndex = 1;
+
         String[] botName = {"Real Bot", "TestBot"};
-        int botIndex = 1;
-        int currentEdit = 0;
+        int botIndex = 0;
+        if (testBot) botIndex = 1;
+
+        int currentEdit = 1;
 
         while (!gamepad1.right_stick_button && !opModeIsActive() && !isStopRequested()) {   // while haven't presse exit button, not in play mode, and not in stop
             telemetry.addLine("===> Press Right Joystick to exit EDIT mode <===");
@@ -626,22 +617,28 @@ public class Auto_LaraLiesel extends LinearOpMode {
                 if (currentEdit == 1) {
                     if (colorIndex == 1) {
                         colorIndex = 0;
+                        teamIsRed = false;
                     } else {
                         colorIndex = 1;
+                        teamIsRed = true;
                     }
                 }
                 if (currentEdit == 2) {
                     if (positionIndex == 1) {
                         positionIndex = 0;
+                        craterPosition = false;
                     } else {
                         positionIndex = 1;
+                        craterPosition = true;
                     }
                 }
                 if (currentEdit == 3) {
                     if (botIndex == 1) {
                         botIndex = 0;
+                        testBot = false;
                     } else {
                         botIndex = 1;
+                        testBot = true;
                     }
                 }
                 if (currentEdit == 4) {
