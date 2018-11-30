@@ -66,7 +66,7 @@ public class LED_Lights extends LinearOpMode {
 
         /** TURN ON LIGHTS */
         if (teamIsRed) {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         } else {
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE);
         }
@@ -74,19 +74,34 @@ public class LED_Lights extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY) replaced by init loop
         waitForStart();
-
-        while (opModeIsActive() && (runtime.seconds() < 30)) {
-            telemetry.addData("Path", " %2.5f S Elapsed", runtime.seconds());
+                    runtime.reset();
+        while (opModeIsActive() ) {
+            telemetry.addData("Path", " %2.5f S Elapsed", runtime.milliseconds());
             telemetry.update();
 
 
-            if (opModeIsActive() && (runtime.seconds() < 10.0)) {
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            if ((runtime.milliseconds() < 500)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
 
-            } else{
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-
+            } else if ( (runtime.milliseconds() < 1000)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
+            else if ( (runtime.milliseconds() < 1500)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            }
+            else if ( (runtime.milliseconds() < 2000)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            }
+            else if ( (runtime.milliseconds() < 2500)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+            }
+            else if ( (runtime.milliseconds() < 3000)) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            }
+            else if ( (runtime.milliseconds() < 4500)) {
+            runtime.reset();
+            }
+
 
         }
 
