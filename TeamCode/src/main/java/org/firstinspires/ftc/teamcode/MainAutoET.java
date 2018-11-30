@@ -58,9 +58,9 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 //Imports for front facing camera
 
-@Autonomous(name="MainAuto", group="Pushbot")
+@Autonomous(name="editMethod", group="Pushbot")
 //@Disabled
-public class MainAutoET extends LinearOpMode {
+public class ElijahTristanAutoET_editmethod extends LinearOpMode {
     Hardware8045neverrest Cosmo = new Hardware8045neverrest();   // Use a Pushbot's hardware
     public Orientation angles;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -200,17 +200,6 @@ public class MainAutoET extends LinearOpMode {
 
         while(!opModeIsActive()  && !isStopRequested()) {
 
-
-
-            /** Team Marker Servo Clamping
-             */
-
-
-//            Cosmo.flagServo.setPosition(0.4);
-
-
-
-
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -269,12 +258,6 @@ public class MainAutoET extends LinearOpMode {
             }
         }
 
-
-
-
-
-
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -286,7 +269,6 @@ public class MainAutoET extends LinearOpMode {
         mecanumDrive(0.5, 18, 0, 180);
         runtime.reset();
         if (opModeIsActive()) {
-
                 if(position[positionIndex] == position[0]) {
                     if (goldPosition == 0) {
 //                        while (opModeIsActive() && runtime.seconds() <= 20.00) {

@@ -1,5 +1,5 @@
 
-package org.firstinspires.ftc.teamcode.rick;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware8045;
+import org.firstinspires.ftc.teamcode.Hardware8045testbot;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 public class LED_Lights extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
+    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
     // State used for updating telemetry
@@ -72,18 +73,17 @@ public class LED_Lights extends LinearOpMode {
 
 
         // Wait for the game to start (driver presses PLAY) replaced by init loop
-        //waitForStart();
+        waitForStart();
 
         while (opModeIsActive() && (runtime.seconds() < 30)) {
             telemetry.addData("Path", " %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
 
 
-            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            if (opModeIsActive() && (runtime.seconds() < 10.0)) {
                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
-            }
-            while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+            } else{
                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
             }
