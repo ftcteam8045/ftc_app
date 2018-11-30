@@ -31,6 +31,11 @@ public class MainTeleET extends OpMode {
 //    public Servo    flagServo  = null;
 
 
+//Back mode
+    public boolean frontIsForward = true;
+    public boolean rightbtnIsReleased = true;
+
+
 
     @Override
     public void init() {
@@ -56,6 +61,21 @@ public class MainTeleET extends OpMode {
     public void loop() {
         timeLeft = 120 - runtime.seconds();
 
+//        // BACK mode
+
+
+        if (gamepad1.right_stick_button) {
+            if (rightbtnIsReleased) {
+                rightbtnIsReleased = false;
+                frontIsForward = !frontIsForward;
+
+            }
+        } else {
+            rightbtnIsReleased = true;
+        }
+
+        telemetry.addData("Right Button Is Released", rightbtnIsReleased);
+        telemetry.addData("Front Is Forward", frontIsForward);
 
 
         if(gamepad1.y) {
@@ -95,16 +115,6 @@ public class MainTeleET extends OpMode {
         }
 
 //
-//        // BACK mode
-//        if (gamepad1.right_stick_button) {
-//            if (reverseDrive == false) {
-//                reverseDrive = true;
-//
-//            }
-//            else {
-//                reverseDrive = false;
-//            }
-//        }
 
 
 
@@ -139,6 +149,14 @@ public class MainTeleET extends OpMode {
 
     public void drivesmart(double x, double y, double turn) {
 
+
+        if (frontIsForward) {             // driving with the front facing forward
+
+        } else {                            // driving with the rear facing forward
+            y = -y;
+            x = -x;
+        }
+
         double lfpower;
         double lrpower;
         double rfpower;
@@ -171,6 +189,13 @@ public class MainTeleET extends OpMode {
         Cosmo.leftRear.setPower(lrpower);
         Cosmo.rightFront.setPower(rfpower);
         Cosmo.rightRear.setPower(rrpower);
+
+
+
+
+
+
+
     }
 //
 

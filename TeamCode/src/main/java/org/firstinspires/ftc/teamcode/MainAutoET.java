@@ -60,7 +60,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 @Autonomous(name="editMethod", group="Pushbot")
 //@Disabled
-public class ElijahTristanAutoET_editmethod extends LinearOpMode {
+public class MainAutoET extends LinearOpMode {
     Hardware8045neverrest Cosmo = new Hardware8045neverrest();   // Use a Pushbot's hardware
     public Orientation angles;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
