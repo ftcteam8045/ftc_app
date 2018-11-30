@@ -66,7 +66,7 @@ public class Hardware8045
     //public com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern LEDpattern;
 
     // The IMU sensor object
-    BNO055IMU imu;
+    public BNO055IMU imu;
     // State used for updating telemetry
     Orientation angles;
     Acceleration gravity;

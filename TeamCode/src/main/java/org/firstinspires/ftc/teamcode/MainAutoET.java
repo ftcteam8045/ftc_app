@@ -61,7 +61,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 @Autonomous(name="editMethod", group="Pushbot")
 //@Disabled
 public class MainAutoET extends LinearOpMode {
-    Hardware8045neverrest Cosmo = new Hardware8045neverrest();   // Use a Pushbot's hardware
+    Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
     public Orientation angles;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
