@@ -37,6 +37,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
     /* Declare OpMode members. */
     Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime cycletime = new ElapsedTime();
     /**   Menu Parameter Initialization **/
     public boolean teamIsRed = false;
     public boolean craterPosition = true;
@@ -179,11 +180,10 @@ public class Auto_LaraLiesel extends LinearOpMode {
                     //telemetry.update();
                 }
             }
-            // edit Menu params
+            /** Eli's edit Menu params  **/
             if (gamepad1.back || gamepad1.left_stick_button) {             // edit parameters  & write the new file
                 // change the background color to yellow
                 relativeLayout.post(new Runnable() { public void run() { relativeLayout.setBackgroundColor(Color.YELLOW);  }     });
-
 
                 editParameters();
 
@@ -193,7 +193,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
                     relativeLayout.post(new Runnable() { public void run() {relativeLayout.setBackgroundColor(Color.BLUE);  }    });
                 }
 
-
+                /** Signal the position of the gold mineral  here **/
+// insert code here
+                /** End of Signal the position of the gold mineral  here **/
 
             }
             telemetry.update();
