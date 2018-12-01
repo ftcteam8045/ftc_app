@@ -92,6 +92,8 @@ public class Auto_LaraLiesel extends LinearOpMode {
         } else {
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE);
         }
+
+
          // get a reference to the RelativeLayout so we can change the background  for Edit mode
          // color of the Robot Controller app to match the hue detected by the RGB sensor.
          int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
@@ -102,9 +104,10 @@ public class Auto_LaraLiesel extends LinearOpMode {
              relativeLayout.post(new Runnable() { public void run() {relativeLayout.setBackgroundColor(Color.BLUE);  }    });
          }
 
-        /** The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
-        /** Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.  */
+         /***********************************************************************************************
+          * The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that first.
+          *  Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.  */
+
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
@@ -194,7 +197,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
                 }
 
                 /** Signal the position of the gold mineral  here **/
-// insert code here
+
+     // insert code here
+
                 /** End of Signal the position of the gold mineral  here **/
 
             }
