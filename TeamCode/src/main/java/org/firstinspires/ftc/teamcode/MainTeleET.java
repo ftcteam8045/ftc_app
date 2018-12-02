@@ -89,24 +89,7 @@ public class MainTeleET extends OpMode {
             Cosmo.flagServo.setPosition(0.6);
         }
 
-
-        /**
-         * DRIVE Functions HERE
-         */
-
-         drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y,  gamepad1.left_stick_x);
-        if (gamepad1.right_trigger >= 0.01) {
-            Cosmo.liftmotor.setPower(gamepad1.right_trigger);
-
-        }
-        if (gamepad1.left_trigger >= 0.01) {
-            Cosmo.liftmotor.setPower(-gamepad1.left_trigger);
-
-        }
-
-
-        //set drive speed
-        /*
+        /**  set drive speed  **/
         if (gamepad1.left_bumper) {
             topSpeed = 1.0;
         } else if (gamepad1.left_trigger > 0.1) {
@@ -114,10 +97,18 @@ public class MainTeleET extends OpMode {
         } else {
             topSpeed = 0.5;
         }
-*/
-//
 
+        /** DRIVE  HERE   */
 
+         drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y,  gamepad1.left_stick_x);
+
+         /**    Raise and lower the lift    **/
+        if (gamepad1.right_trigger >= 0.01) {
+            Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
+        }
+        if (gamepad1.right_bumper)  {
+            Cosmo.liftmotor.setPower(0.5);
+        }
 
         telemetry.addData("TimeLeft: ",timeLeft);
         telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
