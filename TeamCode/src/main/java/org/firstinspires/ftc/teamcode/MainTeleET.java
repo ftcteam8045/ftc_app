@@ -18,7 +18,6 @@ public class MainTeleET extends OpMode {
 
     // variables used during the configuration process
 
-
     private ElapsedTime runtime = new ElapsedTime();
     double timeLeft;
 
@@ -28,14 +27,10 @@ public class MainTeleET extends OpMode {
     //Booleans
 
     public boolean aIsReleased = true;
-//    public Servo    flagServo  = null;
 
-
-//Back mode
+    //Back mode
     public boolean frontIsForward = true;
     public boolean rightbtnIsReleased = true;
-
-
 
     @Override
     public void init() {
@@ -163,15 +158,6 @@ public class MainTeleET extends OpMode {
         rfpower = ( y + x - rotation);
         rrpower = ( y - x - rotation);
 
-////        //Determine largest power being applied in either direction  apply scales so that the Top wheel speed is not over 1 and scaled down to the topSpeed
-//        double max = abs(lfpower);
-//        if (abs(lrpower) > max) max = abs(lrpower);
-//        if (abs(rfpower) > max) max = abs(rfpower);
-//        if (abs(rrpower) > max) max = abs(rrpower);
-//            double multiplier = topSpeed / max; //multiplier to adjust speeds of each wheel so you can have a max power of 1 on atleast 1 wheel
-//        double multiplier = (topSpeed / max) + 0.2*Math.abs(x);  // try to boost up the strafing power
-//        double multiplier = (((topSpeed) * sqrt(pow(x,2.) + pow(y,2.))) / max) ;  // take ibto account the joysticks position from the origin
-
         lfpower = lfpower * topSpeed;
         lrpower = lrpower * topSpeed;
         rfpower = rfpower * topSpeed;
@@ -181,12 +167,6 @@ public class MainTeleET extends OpMode {
         Cosmo.leftRear.setPower(lrpower);
         Cosmo.rightFront.setPower(rfpower);
         Cosmo.rightRear.setPower(rrpower);
-
-
-
-
-
-
 
     }
 //
