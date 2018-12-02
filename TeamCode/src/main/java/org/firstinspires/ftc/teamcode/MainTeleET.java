@@ -83,7 +83,7 @@ public class MainTeleET extends OpMode {
             Cosmo.flagServo.setPosition(0.4);
         } else if (gamepad1.x) {
             // move to 90 degrees.
-            Cosmo.flagServo.setPosition(0.5);
+            Cosmo.flagServo.setPosition(0.3);
         } else if (gamepad1.a) {
             // move to 180 degrees.
             Cosmo.flagServo.setPosition(0.6);
@@ -95,17 +95,18 @@ public class MainTeleET extends OpMode {
          */
 
          drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y,  gamepad1.left_stick_x);
-//        if (gamepad1.right_trigger >= 0.01) {
-//            Cosmo.liftmotor.setPower(gamepad1.right_trigger);
-//
-//        }
-//        if (gamepad1.left_trigger >= 0.01) {
-//            Cosmo.liftmotor.setPower(-gamepad1.left_trigger);
-//
-//        }
+        if (gamepad1.right_trigger >= 0.01) {
+            Cosmo.liftmotor.setPower(gamepad1.right_trigger);
+
+        }
+        if (gamepad1.left_trigger >= 0.01) {
+            Cosmo.liftmotor.setPower(-gamepad1.left_trigger);
+
+        }
 
 
         //set drive speed
+        /*
         if (gamepad1.left_bumper) {
             topSpeed = 1.0;
         } else if (gamepad1.left_trigger > 0.1) {
@@ -113,7 +114,7 @@ public class MainTeleET extends OpMode {
         } else {
             topSpeed = 0.5;
         }
-
+*/
 //
 
 
