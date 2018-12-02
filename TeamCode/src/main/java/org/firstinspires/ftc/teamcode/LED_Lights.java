@@ -65,13 +65,25 @@ public class LED_Lights extends LinearOpMode {
           * The init() method of the hardware class does all the work here
           */
          Cosmo.init(hardwareMap);
+         //Create Pattern based on team color
+         RevBlinkinLedDriver.BlinkinPattern teamColor;
+         if(teamIsRed){
+             teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+         }
+         else{
+             teamColor = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
+         }
 
          /** TURN ON LIGHTS */
+         Cosmo.LEDDriver.setPattern(teamColor);
+
+         /*
          if (teamIsRed) {
              Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
          } else {
              Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE);
-         }
+         }*/
+
          LEDcycletime.reset();
          while (!opModeIsActive()  && !isStopRequested() ) {
          /**   LED Light signalling  **/
@@ -79,21 +91,15 @@ public class LED_Lights extends LinearOpMode {
              if ((LEDcycletime.milliseconds() < 1 * blinktime)) {                 // blink pattern white white gold
                  Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
              } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
-                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                 Cosmo.LEDDriver.setPattern(teamColor);
              } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
                  Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
              } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
-                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                 Cosmo.LEDDriver.setPattern(teamColor);
              } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
                  Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-             } else if ((LEDcycletime.milliseconds() < 6 * blinktime)) {
-                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
              } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
-                 if (teamIsRed) {
-                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                 } else {
-                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-                 }
+                 Cosmo.LEDDriver.setPattern(teamColor);
              } else  {                                      // reset timer, repeat cycle
                  LEDcycletime.reset();
              }
