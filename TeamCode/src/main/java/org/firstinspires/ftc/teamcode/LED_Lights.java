@@ -23,8 +23,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
-//Lara + Liesel positioning code
-
 
 @Autonomous(name = "LED Lights", group = "Cosmo")
 //@Disabled
@@ -48,8 +46,6 @@ public class LED_Lights extends LinearOpMode {
      * localization engine.     */
     private VuforiaLocalizer vuforia;
 
-
-
      @Override
     public void runOpMode() {
 
@@ -65,30 +61,24 @@ public class LED_Lights extends LinearOpMode {
           * The init() method of the hardware class does all the work here
           */
          Cosmo.init(hardwareMap);
-         //Create Pattern based on team color
+
+         //Create variable thing for light colors  based on team color
          RevBlinkinLedDriver.BlinkinPattern teamColor;
          if(teamIsRed){
              teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
          }
          else{
-             teamColor = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
+             teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
          }
 
          /** TURN ON LIGHTS */
          Cosmo.LEDDriver.setPattern(teamColor);
 
-         /*
-         if (teamIsRed) {
-             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-         } else {
-             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE);
-         }*/
-
          LEDcycletime.reset();
          while (!opModeIsActive()  && !isStopRequested() ) {
          /**   LED Light signalling  **/
          if (goldPosition == 2) {
-             if ((LEDcycletime.milliseconds() < 1 * blinktime)) {                 // blink pattern white white gold
+             if        ((LEDcycletime.milliseconds() <     blinktime)) {                 // blink pattern white white gold
                  Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
              } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
                  Cosmo.LEDDriver.setPattern(teamColor);
@@ -103,6 +93,7 @@ public class LED_Lights extends LinearOpMode {
              } else  {                                      // reset timer, repeat cycle
                  LEDcycletime.reset();
              }
+
          } else if (goldPosition == 1) {     // insert blink pattern for white gold white  here
 
          } else if (goldPosition == 0) {     // insert blink pattern for gold white white  here
@@ -115,7 +106,7 @@ public class LED_Lights extends LinearOpMode {
                     runtime.reset();
                     LEDcycletime.reset();
         while (opModeIsActive() ) {
-            telemetry.addData("Path", " %2.5f S Elapsed", LEDcycletime.milliseconds());
+            telemetry.addData("Path", " %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
 
 
