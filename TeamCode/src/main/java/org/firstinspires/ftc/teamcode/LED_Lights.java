@@ -105,7 +105,7 @@ public class LED_Lights extends LinearOpMode {
         waitForStart();
                     runtime.reset();
                     LEDcycletime.reset();
-        while (opModeIsActive() ) {
+        while (opModeIsActive() && !isStopRequested() ) {
             telemetry.addData("Path", " %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
 
