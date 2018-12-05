@@ -53,9 +53,9 @@ public class LED_Lights extends LinearOpMode {
          final double TURN_SPEED = 0.3;
          final int blinktime = 300;  // milliseconds for the lights to be on/off
 
-         int goldPosition = 2;   // 0 is on left, 1 in center, 2 on right
+         int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
 
-         final boolean teamIsRed = true;
+         final boolean teamIsRed = false;
          /*
           * Initialize the drive system variables.the Robot
           * The init() method of the hardware class does all the work here
@@ -95,9 +95,37 @@ public class LED_Lights extends LinearOpMode {
              }
 
          } else if (goldPosition == 1) {     // insert blink pattern for white gold white  here
-
+             if        ((LEDcycletime.milliseconds() <     blinktime)) {                 // blink pattern white white gold
+                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+             } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(teamColor);
+             } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+             } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(teamColor);
+             } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+             } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
+                 Cosmo.LEDDriver.setPattern(teamColor);
+             } else  {                                      // reset timer, repeat cycle
+                 LEDcycletime.reset();
+             }
          } else if (goldPosition == 0) {     // insert blink pattern for gold white white  here
-
+             if        ((LEDcycletime.milliseconds() <     blinktime)) {                 // blink pattern white white gold
+                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+             } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(teamColor);
+             } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+             } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(teamColor);
+             } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
+                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+             } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
+                 Cosmo.LEDDriver.setPattern(teamColor);
+             } else  {                                      // reset timer, repeat cycle
+                 LEDcycletime.reset();
+             }
          }
          /**   End of  LED Light signalling  **/
      }
