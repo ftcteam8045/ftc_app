@@ -80,12 +80,16 @@ public class Hardware8045
     public final double turn_COEF = 1.0;
     public static final double drive_COEF = 1.0; //Maximum additional speed to add to a motor during a gyro drive
 
-//    public final double WHEEL_DIAMETER = 4.0;
-//    public final double GEAR_RATIO = 24/24;
-//    public final double TICKS_REV = 537.6;
-//    public final double COUNTS_PER_INCH = (TICKS_REV * GEAR_RATIO) / (WHEEL_DIAMETER * 3.1415);
-    public final double COUNTS_PER_INCH = 42.7 * 2.5;
-    public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;
+////    public final double WHEEL_DIAMETER = 4.0;
+////    public final double GEAR_RATIO = 24/24;
+////    public final double TICKS_REV = 537.6;
+////    public final double COUNTS_PER_INCH = (TICKS_REV * GEAR_RATIO) / (WHEEL_DIAMETER * 3.1415);
+//    public final double COUNTS_PER_INCH = 45;   // Yellowjacket 223 24/32 gear ratio
+//    public final double COUNTS_PER_INCH = 60;   // Yellowjacket 223 32/32 gear ratio
+    public final double COUNTS_PER_INCH = 32;   // Neverest 20 orbitals 24/32 gear ratio
+//    public final double COUNTS_PER_INCH = 42;   // Neverest 20 orbitals 32/32 gear ratio
+//    public final double COUNTS_PER_INCH = 114;  // Tetrix Direct
+//    public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;
 
 //    public static final double MID_SERVO       =  0.5 ;
 //    public static final double ARM_UP_POWER    =  0.45 ;
