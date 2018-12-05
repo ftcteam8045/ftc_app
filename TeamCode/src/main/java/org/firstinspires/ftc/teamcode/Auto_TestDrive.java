@@ -35,7 +35,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 public class Auto_TestDrive extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
+    Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime cycletime = new ElapsedTime();
     /**   Menu Parameter Initialization **/
