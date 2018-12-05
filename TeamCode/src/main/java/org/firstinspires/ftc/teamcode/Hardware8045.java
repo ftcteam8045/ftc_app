@@ -84,9 +84,9 @@ public class Hardware8045
 ////    public final double GEAR_RATIO = 24/24;
 ////    public final double TICKS_REV = 537.6;
 ////    public final double COUNTS_PER_INCH = (TICKS_REV * GEAR_RATIO) / (WHEEL_DIAMETER * 3.1415);
-//    public final double COUNTS_PER_INCH = 45;   // Yellowjacket 223 24/32 gear ratio
+    public final double COUNTS_PER_INCH = 45;   // Yellowjacket 223 24/32 gear ratio
 //    public final double COUNTS_PER_INCH = 60;   // Yellowjacket 223 32/32 gear ratio
-    public final double COUNTS_PER_INCH = 32;   // Neverest 20 orbitals 24/32 gear ratio
+//    public final double COUNTS_PER_INCH = 32;   // Neverest 20 orbitals 24/32 gear ratio
 //    public final double COUNTS_PER_INCH = 42;   // Neverest 20 orbitals 32/32 gear ratio
 //    public final double COUNTS_PER_INCH = 114;  // Tetrix Direct
 //    public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;

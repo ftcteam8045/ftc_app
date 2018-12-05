@@ -100,6 +100,7 @@ public class MainAutoET extends LinearOpMode {
     public String arrow9 = " ";
     public String arrow10 = " ";
     public String arrow11 = " ";
+    public String arrow12 = " ";
     public boolean dpadPressedUp = false;
     public boolean dpadPressedDown = false;
     public boolean dpadPressedLeft = false;
@@ -168,6 +169,12 @@ public class MainAutoET extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+
+        /**********************************************************************************************\
+         |--------------------------------------Init Loop-----------------------------------------------|
+         \**********************************************************************************************/
+
         // get a reference to the RelativeLayout so we can change the background  for Edit mode
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
@@ -186,10 +193,11 @@ public class MainAutoET extends LinearOpMode {
 
         Cosmo.init(hardwareMap);
 
+        //Clamp Team Marker
+        Cosmo.flagServo.setPosition(0.315);
 
-        /**********************************************************************************************\
-         |--------------------------------------Init Loop-----------------------------------------------|
-         \**********************************************************************************************/
+
+
 
 
         /** Activate Tensor Flow Object Detection. */
@@ -270,20 +278,33 @@ public class MainAutoET extends LinearOpMode {
         runtime.reset();
         if (opModeIsActive()) {
                 if(position[positionIndex] == position[0]) {
-                    if (goldPosition == 0) {
-//                        while (opModeIsActive() && runtime.seconds() <= 20.00) {
-//                            mecanumDrive(0.5, 18, 0, 0);
-//                            mecanumDrive(0.5, 18, 0, 90);
-//                            mecanumDrive(0.5, 18, 0, 180);
-//                        }
+                    if (goldPosition == 0) {        // left position
+                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+                        mecanumDrive(0.5, 15, 0, -90);    // drive left
+                        mecanumDrive(0.5, 8, 0, 0);     // drive forward
+                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+
                     }
 
                     if (goldPosition == 1) {
+
+                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+
+                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+                        mecanumDrive(0.5,30,0,-90);      // drive left
 
                     }
 
                     if (goldPosition == 2) {
 
+                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+                        mecanumDrive(0.5, 15, 0, 90);    // drive right
+                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+
+                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+                        mecanumDrive(0.5,30,0,-90);      // drive left
+                        //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
                     }
                 }
 
@@ -317,19 +338,19 @@ public class MainAutoET extends LinearOpMode {
 
             telemetry.addLine("VVV Eli's Test VVV");
             telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
-            telemetry.addLine().addData(arrow1, waitTime1).addData("Wait Time", arrow0);
-            telemetry.addLine().addData(arrow2, driveDis1).addData("Drive Distance one", arrow1);
+            telemetry.addLine().addData(arrow0, waitTime1).addData("Wait Time", arrow0);
+            telemetry.addLine().addData(arrow1, driveDis1).addData("Drive Distance one", arrow1);
             telemetry.addLine().addData(arrow2, driveDis2).addData("Drive Distance two", arrow2);
             telemetry.addLine().addData(arrow3, driveDis3).addData("Drive Distance three", arrow3);
-            telemetry.addLine().addData(arrow3, driveDis4).addData("Drive Distance four", arrow4);
-            telemetry.addLine().addData(arrow3, driveDis5).addData("Drive Distance five", arrow5);
-            telemetry.addLine().addData(arrow3, driveDis6).addData("Drive Distance six", arrow6);
-            telemetry.addLine().addData(arrow3, driveDis7).addData("Drive Distance seven", arrow7);
-            telemetry.addLine().addData(arrow3, driveDis8).addData("Drive Distance eight", arrow8);
-            telemetry.addLine().addData(arrow3, driveDis9).addData("Drive Distance nine", arrow9);
-            telemetry.addLine().addData(arrow3, driveDis10).addData("Drive Distance ten", arrow10);
-            telemetry.addLine().addData(arrow4,  positionIndex).addData(position[positionIndex], arrow11);
-            telemetry.addLine().addData(arrow4,  positionIndex).addData(color[colorIndex], arrow11);
+            telemetry.addLine().addData(arrow4, driveDis4).addData("Drive Distance four", arrow4);
+            telemetry.addLine().addData(arrow5, driveDis5).addData("Drive Distance five", arrow5);
+            telemetry.addLine().addData(arrow6, driveDis6).addData("Drive Distance six", arrow6);
+            telemetry.addLine().addData(arrow7, driveDis7).addData("Drive Distance seven", arrow7);
+            telemetry.addLine().addData(arrow8, driveDis8).addData("Drive Distance eight", arrow8);
+            telemetry.addLine().addData(arrow9, driveDis9).addData("Drive Distance nine", arrow9);
+            telemetry.addLine().addData(arrow10, driveDis10).addData("Drive Distance ten", arrow10);
+            telemetry.addLine().addData(arrow11,  positionIndex).addData(position[positionIndex], arrow11);
+            telemetry.addLine().addData(arrow12,  positionIndex).addData(color[colorIndex], arrow12);
 //            telemetry.addLine().addData(arrow4, "Color       ");
             telemetry.update();
 
@@ -338,7 +359,7 @@ public class MainAutoET extends LinearOpMode {
             } else if (gamepad1.dpad_down == false && dpadPressedDown) {
                 dpadPressedDown = false;
                 currentEdit += 1;
-                if (currentEdit > 10) {
+                if (currentEdit > 12) {
                     currentEdit = 0;
                 }
             }
@@ -349,7 +370,7 @@ public class MainAutoET extends LinearOpMode {
                 dpadPressedUp = false;
                 currentEdit -= 1;
                 if (currentEdit < 0) {
-                    currentEdit = 10;
+                    currentEdit = 12;
                 }
             }
 
@@ -410,9 +431,14 @@ public class MainAutoET extends LinearOpMode {
                 arrow10 = "    ";
             }
             if (currentEdit == 11) {
-                arrow10 = "<>";
+                arrow11 = "<>";
             } else {
-                arrow10 = "    ";
+                arrow11 = "    ";
+            }
+            if (currentEdit == 12) {
+                arrow12 = "<>";
+            } else {
+                arrow12 = "    ";
             }
 
 
@@ -460,6 +486,13 @@ public class MainAutoET extends LinearOpMode {
                         positionIndex = 1;
                     }
                 }
+                if (currentEdit == 12) {
+                    if (positionIndex == 1) {
+                        colorIndex = 0;
+                    } else {
+                        colorIndex = 1;
+                    }
+                }
             }
 
             if (gamepad1.dpad_right) {
@@ -504,6 +537,13 @@ public class MainAutoET extends LinearOpMode {
                         positionIndex = 0;
                     } else {
                         positionIndex = 1;
+                    }
+                }
+                if (currentEdit == 12) {
+                    if (positionIndex == 1) {
+                        colorIndex = 0;
+                    } else {
+                        colorIndex = 1;
                     }
                 }
             }
