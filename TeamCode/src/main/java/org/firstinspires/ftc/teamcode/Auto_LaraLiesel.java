@@ -37,7 +37,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
     /* Declare OpMode members. */
     Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
-    private ElapsedTime cycletime = new ElapsedTime();
+    private ElapsedTime LEDcycletime = new ElapsedTime();
+    final int blinktime = 200;  // milliseconds for the lights to be on/off
+
     /**   Menu Parameter Initialization **/
     public boolean teamIsRed = false;
     public boolean craterPosition = true;
@@ -53,6 +55,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
     public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
+
 
     // State used for updating telemetry
     public Orientation angles;
@@ -131,6 +134,17 @@ public class Auto_LaraLiesel extends LinearOpMode {
             tfod.activate();
         }
 
+         //Create variable thing for light colors  based on team color
+         RevBlinkinLedDriver.BlinkinPattern teamColor;
+         if(teamIsRed){
+             teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+         }
+         else{
+             teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
+         }
+
+         /** TURN ON LIGHTS */
+         Cosmo.LEDDriver.setPattern(teamColor);
 
 
         // Send telemetry message to signify robot waiting;
@@ -195,14 +209,64 @@ public class Auto_LaraLiesel extends LinearOpMode {
                 }else{
                     relativeLayout.post(new Runnable() { public void run() {relativeLayout.setBackgroundColor(Color.BLUE);  }    });
                 }
+            }
+                /** Signal the position of the gold mineral  here. From POV of driver**/
 
-                /** Signal the position of the gold mineral  here **/
+                if (goldPosition == 0) {
+                    if        ((LEDcycletime.milliseconds() <     blinktime)) {                 // blink pattern white white gold
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                    } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else  {                                      // reset timer, repeat cycle
+                        LEDcycletime.reset();
+                    }
 
-     // insert code here
+                } else if (goldPosition == 1) {     // insert blink pattern for white gold white  here
+                    if        ((LEDcycletime.milliseconds() <     blinktime)) {                 // blink pattern white white gold
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                    } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else  {                                      // reset timer, repeat cycle
+                        LEDcycletime.reset();
+                    }
+                } else if (goldPosition == 2) {     // insert blink pattern for gold white white  here
+                    if        ((LEDcycletime.milliseconds() <     blinktime)) {                 // blink pattern white white gold
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                    } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
+                        Cosmo.LEDDriver.setPattern(teamColor);
+                    } else  {                                      // reset timer, repeat cycle
+                        LEDcycletime.reset();
+                    }
+                }
+                /**   End of  LED Light signalling  **/
 
                 /** End of Signal the position of the gold mineral  here **/
 
-            }
+
             telemetry.update();
         }
 
