@@ -229,7 +229,6 @@ public class Auto_TestDrive extends LinearOpMode {
             mecanumDrive(0.5, -8, 0, 0);     // drive backwards
 
             //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
-            //mecanumTurn(0.3, -45);
 
 
 
@@ -256,16 +255,16 @@ public class Auto_TestDrive extends LinearOpMode {
             //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
         }
 
-        // mecanumDrive(0.5,30,0,-90);      // drive towards wall
+        mecanumDrive(0.5,30,0,-90);      // drive towards wall
+        mecanumTurn(0.3, -45);
 
-        // Step 4:  Stop and close the claw.
+
+
         Cosmo.leftFront.setPower(0);
         Cosmo.rightFront.setPower(0);
         Cosmo.leftRear.setPower(0);
         Cosmo.rightRear.setPower(0);
 
-//        robot.leftClaw.setPosition(1.0);
-//        robot.rightClaw.setPosition(0.0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

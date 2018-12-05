@@ -330,10 +330,6 @@ public class Auto_LaraLiesel extends LinearOpMode {
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
 
-            //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
-            //mecanumTurn(0.3, -45);
-
-
         }
 
         if (goldPosition == 1) {
@@ -342,7 +338,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.5, 30, 0, -90);      // drive left
+            mecanumDrive(0.5, 15, 0, -90);      // drive left 1x
 
         }
 
@@ -353,11 +349,12 @@ public class Auto_LaraLiesel extends LinearOpMode {
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.5, 30, 0, -90);      // drive left
+            mecanumDrive(0.5, 30, 0, -90);      // drive left 2x
         }
 
         // drive towards the wall (all modes)
         mecanumDrive(0.5,30,0,-90);      // drive towards wall
+        mecanumTurn(0.3, -45);
 
         // drive forward or backward based on crater starting position
 
