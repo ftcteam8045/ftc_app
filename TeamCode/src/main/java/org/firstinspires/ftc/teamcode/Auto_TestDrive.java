@@ -77,7 +77,7 @@ public class Auto_TestDrive extends LinearOpMode {
         final double FORWARD_SPEED = 0.3;
         final double TURN_SPEED = 0.3;
         final int cycletime = 500;
-        int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
+        int goldPosition = 99;   // 0 is on left, 1 in center, 2 on right
 
 
         /*
@@ -179,6 +179,9 @@ public class Auto_TestDrive extends LinearOpMode {
                                 telemetry.addData("Gold Mineral Position", "Center").addData(" ",goldPosition);
                             }
                         }
+                    }else {
+                        goldPosition = 99;
+                        telemetry.addData("Gold Mineral NOT found ",goldPosition);
                     }
                     //telemetry.update();
                 }

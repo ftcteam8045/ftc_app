@@ -126,18 +126,18 @@ public class Hardware8045testbot
         leftRear  = hwMap.get(DcMotor.class, "left_rear");
         rightRear = hwMap.get(DcMotor.class, "right_rear");
 //        liftmotor = hwMap.get(DcMotor.class, "lift_motor");
-//
-         leftFront.setDirection(DcMotor.Direction.FORWARD);
-         leftRear.setDirection(DcMotor.Direction.FORWARD);
-         rightFront.setDirection(DcMotor.Direction.REVERSE);
-         rightRear.setDirection(DcMotor.Direction.REVERSE);
+//// this is for neverrest.  yellow jacket?
+//         leftFront.setDirection(DcMotor.Direction.FORWARD);
+//         leftRear.setDirection(DcMotor.Direction.FORWARD);
+//         rightFront.setDirection(DcMotor.Direction.REVERSE);
+//         rightRear.setDirection(DcMotor.Direction.REVERSE);
 
-//this is for Tetrix
-//        leftFront.setDirection(DcMotor.Direction.REVERSE);
-//        leftRear.setDirection(DcMotor.Direction.REVERSE);
-//        rightFront.setDirection(DcMotor.Direction.FORWARD);
-//        rightRear.setDirection(DcMotor.Direction.FORWARD);
-////        liftmotor.setDirection (DcMotor.Direction.FORWARD);
+//   this is for Tetrix
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        rightRear.setDirection(DcMotor.Direction.FORWARD);
+//        liftmotor.setDirection (DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         leftFront.setPower(0);
