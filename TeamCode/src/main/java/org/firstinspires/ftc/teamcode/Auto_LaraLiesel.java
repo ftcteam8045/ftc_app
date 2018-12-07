@@ -48,12 +48,12 @@ public class Auto_LaraLiesel extends LinearOpMode {
     public boolean craterPosition = false;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 12;
+    public int driveDis1 = 15;
     public int driveDis2 = 15;
-    public int driveDis3 = 8;
-    public int driveDis4 = 0;
-    public int driveDis5 = 0;
-    public int driveDis6 = 0;
+    public int driveDis3 = 6;
+    public int driveDis4 = 50;
+    public int driveDis5 = 60;
+    public int driveDis6 = 65;
     public int driveDis7 = 0;
     public int driveDis8 = 0;
     public int driveDis9 = 0;
@@ -320,13 +320,16 @@ public class Auto_LaraLiesel extends LinearOpMode {
         telemetry.update();
 //
         // First task would be to deploy  here//
+//        mecanumDrive(0.5, 100, 0, 0);     // drive forward
+//       sleep(200000);
+
 
 //          goldposition 0 = left,1 = center, 2 = right
 
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumDrive(0.5, driveDis2, 0, -90);    // drive left
+            mecanumDrive(0.5, driveDis2, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
@@ -339,23 +342,25 @@ public class Auto_LaraLiesel extends LinearOpMode {
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.5, 15, 0, -90);      // drive left 1x
+            mecanumDrive(0.5, driveDis2, 0, 90);      // drive left 1x
 
         }
 
         if (goldPosition == 2) {
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumDrive(0.5, driveDis2, 0, 90);    // drive right
+            mecanumDrive(0.5, driveDis2, 0, -90);    // drive right
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.5, 30, 0, -90);      // drive left 2x
+            mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
         }
 
         // drive towards the wall (all modes)
-        mecanumDrive(0.5,30,0,-90);      // drive towards wall
-        mecanumTurn(0.3, -45);
+        mecanumDrive(0.8,driveDis4,0,90);      // drive towards wall
+        mecanumTurn(0.8, -43);
+        mecanumDrive(0.6, driveDis5, -43, 0);
+        mecanumDrive(0.6, -driveDis6, -44, 0);
 
         // drive forward or backward based on crater starting position
 

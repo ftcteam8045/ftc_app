@@ -269,9 +269,6 @@ public class MainAutoET extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-
-
-
         mecanumDrive(0.5, 18, 0, 0);
         mecanumDrive(0.5, 18, 0, 90);
         mecanumDrive(0.5, 18, 0, 180);
