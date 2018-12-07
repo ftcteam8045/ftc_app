@@ -738,9 +738,11 @@ public class Auto_LaraLiesel extends LinearOpMode {
                     if (colorIndex == 1) {
                         colorIndex = 0;
                         teamIsRed = false;
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE);
                     } else {
                         colorIndex = 1;
                         teamIsRed = true;
+                        Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED);
                     }
                 }
                 if (currentEdit == 2) {
