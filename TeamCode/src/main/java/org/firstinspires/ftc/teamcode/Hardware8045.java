@@ -134,11 +134,13 @@ public class Hardware8045
          rightFront.setDirection(DcMotor.Direction.REVERSE);
          rightRear.setDirection(DcMotor.Direction.REVERSE);
 
-//this is for Tetrix
+////this is for Tetrix
 //        leftFront.setDirection(DcMotor.Direction.REVERSE);
 //        leftRear.setDirection(DcMotor.Direction.REVERSE);
 //        rightFront.setDirection(DcMotor.Direction.FORWARD);
 //        rightRear.setDirection(DcMotor.Direction.FORWARD);
+
+
 //        liftmotor.setDirection (DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power

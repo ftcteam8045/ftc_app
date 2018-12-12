@@ -98,11 +98,17 @@ public class MainTeleET extends OpMode {
          drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y,  gamepad1.left_stick_x);
 
          /**    Raise and lower the lift    **/
-        if (gamepad1.right_trigger >= 0.01) {
+        if (gamepad1.right_trigger >= 0.001) {
             Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
         }
-        if (gamepad1.right_bumper)  {
-            Cosmo.liftmotor.setPower(0.5);
+        else {
+            Cosmo.liftmotor.setPower(0);
+        }
+        if (gamepad1.left_trigger >= 0.001)  {
+            Cosmo.liftmotor.setPower(gamepad1.left_trigger);
+        }
+        else {
+            Cosmo.liftmotor.setPower(0);
         }
 
         telemetry.addData("TimeLeft: ",timeLeft);

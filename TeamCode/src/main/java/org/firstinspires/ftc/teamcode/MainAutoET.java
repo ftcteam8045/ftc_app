@@ -58,7 +58,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 //Imports for front facing camera
 
-@Autonomous(name="editMethod", group="Pushbot")
+@Autonomous(name="Main Auto", group="Pushbot")
 //@Disabled
 public class MainAutoET extends LinearOpMode {
     Hardware8045 Cosmo = new Hardware8045();   // Use a Pushbot's hardware
@@ -130,7 +130,8 @@ public class MainAutoET extends LinearOpMode {
     public boolean leftsticky = false;
     public boolean rightstickbutton = false;
     public boolean leftstickbutton = false;
-
+    public boolean teamIsRed = true;
+    public boolean craterPosition = false;
 
 
     /**********************************************************************************************\
@@ -196,7 +197,8 @@ public class MainAutoET extends LinearOpMode {
         //Clamp Team Marker
         Cosmo.flagServo.setPosition(0.315);
 
-
+        // Climb up lander
+//        Cosmo.liftmotor.setPower();
 
 
 
@@ -213,14 +215,28 @@ public class MainAutoET extends LinearOpMode {
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
-                    telemetry.addData("Press left Joystick to edit ","");
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    if (teamIsRed) {
+                        telemetry.addData("", "RED");
+                    } else {
+                        telemetry.addData("", "BLUE");
+                    }
+                    if (craterPosition) {
+                        telemetry.addData("", "Crater");
+                    } else {
+                        telemetry.addData("", "Base");
+                    }
+                    telemetry.addLine(" Press Left Joystick for Edit");
+                    telemetry.addData("# Objects Detected", updatedRecognitions.size());
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addLine().addData("", "%.2f %s   X %.0f Y %.0f", recognition.getConfidence(), recognition.getLabel(), recognition.getLeft(), recognition.getBottom());
+                    }
+
                     if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
                         int silverMineral2X = -1;
                         for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            if (recognition.getLabel().equals("Gold")) {
                                 goldMineralX = (int) recognition.getLeft();
                             } else if (silverMineral1X == -1) {
                                 silverMineral1X = (int) recognition.getLeft();
@@ -230,18 +246,21 @@ public class MainAutoET extends LinearOpMode {
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Right");
-//                                goldPosition = 2;
+                                goldPosition = 0;
+                                telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
                             } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Left");
-//                                goldPosition = 0;
+                                goldPosition = 2;
+                                telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
                             } else {
-                                telemetry.addData("Gold Mineral Position", "Center");
-//                                goldPosition = 1;
+                                goldPosition = 1;
+                                telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
                             }
                         }
+                    } else {
+                        goldPosition = 99;
+                        telemetry.addData("Gold Mineral NOT FOUND ", goldPosition);
                     }
-                    telemetry.update();
+                    //telemetry.update();
                 }
             }
 
@@ -269,55 +288,80 @@ public class MainAutoET extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        mecanumDrive(0.5, 18, 0, 0);
-        mecanumDrive(0.5, 18, 0, 90);
-        mecanumDrive(0.5, 18, 0, 180);
         runtime.reset();
         if (opModeIsActive()) {
-                if(position[positionIndex] == position[0]) {
-                    if (goldPosition == 0) {        // left position
-                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-                        mecanumDrive(0.5, 15, 0, -90);    // drive left
-                        mecanumDrive(0.5, 8, 0, 0);     // drive forward
-                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-
-                    }
-
-                    if (goldPosition == 1) {
-
-                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-
-                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-                        mecanumDrive(0.5,30,0,-90);      // drive left
-
-                    }
-
-                    if (goldPosition == 2) {
-
-                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-                        mecanumDrive(0.5, 15, 0, 90);    // drive right
-                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-
-                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-                        mecanumDrive(0.5,30,0,-90);      // drive left
-                        //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
-                    }
-                }
-
-                if(position[positionIndex] == position[1]) {
-                    if (goldPosition == 0) {
-                        mecanumDrive(0.125, 1, 0, 0);
-                    }
-
-                    if (goldPosition == 1) {
-
-                    }
-
-                    if (goldPosition == 2) {
-
-                    }
-                }
+//            if (goldPosition == 0) {        // left position
+//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//                mecanumDrive(0.5, 15, 0, -90);    // drive left
+//                mecanumDrive(0.5, 8, 0, 0);     // drive forward
+//                mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+//
+//            }
+//
+//            if (goldPosition == 1) {
+//
+//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//
+//                mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+//                mecanumDrive(0.5,30,0,-90);      // drive left
+//
+//            }
+//
+//            if (goldPosition == 2) {
+//
+//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//                mecanumDrive(0.5, 15, 0, 90);    // drive right
+//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//
+//                mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+//                mecanumDrive(0.5,30,0,-90);      // drive left
+                //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
+            }
+//                if(position[positionIndex] == position[0]) {
+//                    if (goldPosition == 0) {        // left position
+//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//                        mecanumDrive(0.5, 15, 0, -90);    // drive left
+//                        mecanumDrive(0.5, 8, 0, 0);     // drive forward
+//                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+//
+//                    }
+//
+//                    if (goldPosition == 1) {
+//
+//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//
+//                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+//                        mecanumDrive(0.5,30,0,-90);      // drive left
+//
+//                    }
+//
+//                    if (goldPosition == 2) {
+//
+//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//                        mecanumDrive(0.5, 15, 0, 90);    // drive right
+//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
+//
+//                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
+//                        mecanumDrive(0.5,30,0,-90);      // drive left
+//                        //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
+//                    }
+//                }
+//
+//                if(position[positionIndex] == position[1]) {
+//                    if (goldPosition == 0) {
+//                        mecanumDrive(0.125, 1, 0, 0);
+//                    }
+//
+//                    if (goldPosition == 1) {
+//
+//                    }
+//
+//                    if (goldPosition == 2) {
+//
+//                    }
+//                }
 
             }
             if (tfod != null) {
@@ -329,7 +373,7 @@ public class MainAutoET extends LinearOpMode {
     public void editParameters() {
 
         while (!gamepad1.right_stick_button && !opModeIsActive() && !isStopRequested()) {   // while haven't presse exit button, not in play mode, and not in stop
-            telemetry.addLine("===> Press Right Joystick to exit EDIT mode <===");
+            telemetry.addLine("===> Press Both Joysticks to exit EDIT mode <===");
             // Send telemetry message to signify robot waiting;
 
 

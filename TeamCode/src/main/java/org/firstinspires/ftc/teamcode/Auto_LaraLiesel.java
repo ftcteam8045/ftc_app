@@ -362,6 +362,11 @@ public class Auto_LaraLiesel extends LinearOpMode {
         mecanumDrive(0.6, driveDis5, -43, 0);
         mecanumDrive(0.6, -driveDis6, -44, 0);
 
+        // drive to square (all modes)
+        mecanumDrive(0.8,driveDis4,0,90);
+
+
+
         // drive forward or backward based on crater starting position
 
         if (craterPosition){            // crater side drive
