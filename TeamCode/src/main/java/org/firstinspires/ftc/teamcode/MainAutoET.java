@@ -149,7 +149,7 @@ public class MainAutoET extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CameraDirection.BACK;
+        parameters.cameraDirection = CameraDirection.FRONT;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -260,29 +260,31 @@ public class MainAutoET extends LinearOpMode {
                         goldPosition = 99;
                         telemetry.addData("Gold Mineral NOT FOUND ", goldPosition);
                     }
-                    //telemetry.update();
+//                    telemetry.update();
                 }
             }
-
-            // edit Menu params
-            if (gamepad1.start || gamepad1.back || gamepad1.left_stick_button) {             // edit parameters  & write the new file
+/** Eli's edit Menu params  **/
+            if (gamepad1.back || gamepad1.left_stick_button) {             // edit parameters  & write the new file
                 // change the background color to yellow
-                relativeLayout.post(new Runnable() {
-                    public void run() {
-                        relativeLayout.setBackgroundColor(Color.YELLOW);
-                    }
-                });
-
+//                relativeLayout.post(new Runnable() {
+//                    public void run() { relativeLayout.setBackgroundColor(Color.YELLOW); }
+//                });
 
                 editParameters();
 
-                relativeLayout.post(new Runnable() {    // change back to black
-                    public void run() {
-                        relativeLayout.setBackgroundColor(Color.BLACK);
-                    }
-                });
-
+//                if (teamIsRed) {
+//                    relativeLayout.post(new Runnable() {
+//                        public void run() { relativeLayout.setBackgroundColor(Color.RED); }
+//                    });
+//                } else {
+//                    relativeLayout.post(new Runnable() {
+//                        public void run() { relativeLayout.setBackgroundColor(Color.BLUE); }
+//                    });
+//                }
             }
+
+            telemetry.update();
+
         }
 
         // Wait for the game to start (driver presses PLAY)
@@ -290,78 +292,50 @@ public class MainAutoET extends LinearOpMode {
 
         runtime.reset();
         if (opModeIsActive()) {
-//            if (goldPosition == 0) {        // left position
-//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//                mecanumDrive(0.5, 15, 0, -90);    // drive left
-//                mecanumDrive(0.5, 8, 0, 0);     // drive forward
-//                mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-//
-//            }
-//
-//            if (goldPosition == 1) {
-//
-//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//
-//                mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-//                mecanumDrive(0.5,30,0,-90);      // drive left
-//
-//            }
-//
-//            if (goldPosition == 2) {
-//
-//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//                mecanumDrive(0.5, 15, 0, 90);    // drive right
-//                mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//
-//                mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-//                mecanumDrive(0.5,30,0,-90);      // drive left
-                //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
+
+
+
+            if (goldPosition == 0) {        // left position
+
+                mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+                mecanumDrive(0.5, driveDis2, 0, 90);    // drive left
+                mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+
+                mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+
             }
-//                if(position[positionIndex] == position[0]) {
-//                    if (goldPosition == 0) {        // left position
-//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//                        mecanumDrive(0.5, 15, 0, -90);    // drive left
-//                        mecanumDrive(0.5, 8, 0, 0);     // drive forward
-//                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-//
-//                    }
-//
-//                    if (goldPosition == 1) {
-//
-//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//
-//                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-//                        mecanumDrive(0.5,30,0,-90);      // drive left
-//
-//                    }
-//
-//                    if (goldPosition == 2) {
-//
-//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//                        mecanumDrive(0.5, 15, 0, 90);    // drive right
-//                        mecanumDrive(0.5, 12, 0, 0);     // drive forward
-//
-//                        mecanumDrive(0.5, -8, 0, 0);     // drive backwards
-//                        mecanumDrive(0.5,30,0,-90);      // drive left
-//                        //mecanumDrive(0.5, 15, 0, 90);    // drive right backwards
-//                    }
-//                }
-//
-//                if(position[positionIndex] == position[1]) {
-//                    if (goldPosition == 0) {
-//                        mecanumDrive(0.125, 1, 0, 0);
-//                    }
-//
-//                    if (goldPosition == 1) {
-//
-//                    }
-//
-//                    if (goldPosition == 2) {
-//
-//                    }
-//                }
+
+            if (goldPosition == 1) {
+
+                mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+                mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+
+                mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+                mecanumDrive(0.5, driveDis2, 0, 90);      // drive left 1x
+
+            }
+
+            if (goldPosition == 2) {
+
+                mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+                mecanumDrive(0.5, driveDis2, 0, -90);    // drive right
+                mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+
+                mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+                mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
+            }
+
+            // drive towards the wall (all modes)
+            mecanumDrive(0.8,driveDis4,0,90);      // drive towards wall
+            mecanumTurn(0.8, -43);
+            mecanumDrive(0.6, driveDis5, -43, 0);
+            mecanumDrive(0.6, -driveDis6, -44, 0);
+
+            // drive to square (all modes)
+            mecanumDrive(0.8,driveDis4,0,90);
+
+
+
 
             }
             if (tfod != null) {
