@@ -326,10 +326,10 @@ public class Auto_LaraLiesel extends LinearOpMode {
 //        mecanumDrive(0.5, 100, 0, 0);     // drive forward
 //       sleep(200000);
 
-        if (goldPosition == 99) {
+//          goldposition 0 = left,1 = center, 2 = right
+        if (goldPosition == 99) {                         // default to the left.
             goldPosition = 0;
         }
-//          goldposition 0 = left,1 = center, 2 = right
 
         if (goldPosition == 0) {        // left position
 
