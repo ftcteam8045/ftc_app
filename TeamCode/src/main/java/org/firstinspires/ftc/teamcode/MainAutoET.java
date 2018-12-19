@@ -328,11 +328,11 @@ public class MainAutoET extends LinearOpMode {
             // drive towards the wall (all modes)
             mecanumDrive(0.8,driveDis4,0,90);      // drive towards wall
             mecanumTurn(0.8, -43);
-            mecanumDrive(0.6, driveDis5, -43, 0);
-            mecanumDrive(0.6, -driveDis6, -44, 0);
+            mecanumDrive(0.6, driveDis5, -45, 0);   // dive to base
+            mecanumDrive(0.6, -driveDis6, -45, 0);  // drive to crater
 
             // drive to square (all modes)
-            mecanumDrive(0.8,driveDis4,0,90);
+//            mecanumDrive(0.8,driveDis4,0,90);
 
 
 

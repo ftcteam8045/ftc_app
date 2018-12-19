@@ -50,10 +50,10 @@ public class Auto_LaraLiesel extends LinearOpMode {
     public int waitTime1 = 0;
     public int driveDis1 = 15;
     public int driveDis2 = 15;
-    public int driveDis3 = 6;
-    public int driveDis4 = 50;
-    public int driveDis5 = 60;
-    public int driveDis6 = 65;
+    public int driveDis3 = 7; //forward+backward
+    public int driveDis4 = 50; //drive to wall
+    public int driveDis5 = 55; //drive to base
+    public int driveDis6 = 60; //drive to crater
     public int driveDis7 = 0;
     public int driveDis8 = 0;
     public int driveDis9 = 0;
@@ -162,6 +162,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
+
+        //Clamp Team Marker
+        Cosmo.flagServo.setPosition(0.315);
 
         /**************************************************************
          // Actual Init loop
@@ -323,7 +326,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
 //        mecanumDrive(0.5, 100, 0, 0);     // drive forward
 //       sleep(200000);
 
-
+        if (goldPosition == 99) {
+            goldPosition = 0;
+        }
 //          goldposition 0 = left,1 = center, 2 = right
 
         if (goldPosition == 0) {        // left position
@@ -359,12 +364,14 @@ public class Auto_LaraLiesel extends LinearOpMode {
         // drive towards the wall (all modes)
         mecanumDrive(0.8,driveDis4,0,90);      // drive towards wall
         mecanumTurn(0.8, -43);
-        mecanumDrive(0.6, driveDis5, -43, 0);
-        mecanumDrive(0.6, -driveDis6, -44, 0);
-
-        // drive to square (all modes)
-        mecanumDrive(0.8,driveDis4,0,90);
-
+        mecanumDrive(0.5,4,-45,90);
+        mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
+        //Unclamp Team Marker
+        Cosmo.flagServo.setPosition(0.9);
+        sleep(2000);
+        mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
+        //Reclamp Team Marker
+        Cosmo.flagServo.setPosition(0.315);
 
 
         // drive forward or backward based on crater starting position
