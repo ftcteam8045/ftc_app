@@ -45,7 +45,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
      * Menu Parameter Initialization
      **/
     public boolean teamIsRed = true;
-    public boolean craterPosition = false;
+    public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
     public int driveDis1 = 15;
@@ -54,10 +54,12 @@ public class Auto_LaraLiesel extends LinearOpMode {
     public int driveDis4 = 50; //drive to wall
     public int driveDis5 = 55; //drive to base
     public int driveDis6 = 60; //drive to crater
-    public int driveDis7 = 0;
-    public int driveDis8 = 0;
+    public int driveDis7 = 25;  // DRIVE TO BASE ON CRATER START
+    public int driveDis8 = 60;  //DRIVE TO CRATER
     public int driveDis9 = 0;
     public int driveDis10 = 0;
+    public double HookClear = 2.0;
+
 
 
     // State used for updating telemetry
@@ -165,6 +167,10 @@ public class Auto_LaraLiesel extends LinearOpMode {
 
         //Clamp Team Marker
         Cosmo.flagServo.setPosition(0.315);
+
+
+
+
 
         /**************************************************************
          // Actual Init loop
@@ -326,6 +332,36 @@ public class Auto_LaraLiesel extends LinearOpMode {
 //        mecanumDrive(0.5, 100, 0, 0);     // drive forward
 //       sleep(200000);
 
+
+        // Unhook from lift holder
+        Cosmo.liftmotor.setPower(-1);
+        sleep(200);
+        Cosmo.liftmotor.setPower(0);
+        //Drift down from lander
+        sleep(1000);
+        //Raise lift slightly
+//        Cosmo.liftmotor.setPower(1);
+//        sleep(100);
+//        Cosmo.liftmotor.setPower(0);
+        //Move away from hook before rest of auto
+
+        if (craterPosition){            /** crater side drive  **/
+            HookClear = HookClear+3;
+        }
+
+        mecanumDrive(0.5, HookClear, 0, -90); //Drive right
+
+
+//        mecanumDrive(0.5, 1.5, 0, 180); //Drive right
+
+//        mecanumDrive(0.5, 3, 0, 0);  //Drive forward
+//        mecanumDrive(0.5, 2.5, 0, 90);  //Drive left
+//        // Lower Lift
+//        Cosmo.liftmotor.setPower(-1);
+//        mecanumDrive(0.5, 3, 0, 180); //Drive back to center robot
+//        sleep(750);
+//        Cosmo.liftmotor.setPower(0);
+
 //          goldposition 0 = left,1 = center, 2 = right
         if (goldPosition == 99) {                         // default to the left.
             goldPosition = 0;
@@ -334,7 +370,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumDrive(0.5, driveDis2, 0, 90);    // drive left
+            mecanumDrive(0.5, driveDis2+HookClear, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
@@ -344,8 +380,8 @@ public class Auto_LaraLiesel extends LinearOpMode {
         if (goldPosition == 1) {
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            mecanumDrive(0.5, HookClear, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
             mecanumDrive(0.5, driveDis2, 0, 90);      // drive left 1x
 
@@ -354,37 +390,55 @@ public class Auto_LaraLiesel extends LinearOpMode {
         if (goldPosition == 2) {
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumDrive(0.5, driveDis2, 0, -90);    // drive right
+            mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
 
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
             mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
         }
+        sleep(10);
 
         // drive towards the wall (all modes)
         mecanumDrive(0.8,driveDis4,0,90);      // drive towards wall
-        mecanumTurn(0.8, -43);
-        mecanumDrive(0.5,4,-45,90);
-        mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
-        //Unclamp Team Marker
-        Cosmo.flagServo.setPosition(0.9);
-        sleep(2000);
-        mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
-        //Reclamp Team Marker
-        Cosmo.flagServo.setPosition(0.315);
 
+
+        sleep(10);
 
         // drive forward or backward based on crater starting position
 
-        if (craterPosition){            // crater side drive
+        if (craterPosition){            /** crater side drive  **/
+            mecanumTurn(0.8, 135);
+            mecanumDrive(0.5,8,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.6, driveDis7, 135, 0);  //drive towards base
+            //Unclamp Team Marker
+            sleep(750);
+            Cosmo.flagServo.setPosition(0.9);
+            sleep(2000);
+            mecanumDrive(0.6, -driveDis8, 135, 0); //drive back to crater
 
-        }else {                         // base side drive
 
+       }else {                         /** base side drive  **/
+            mecanumTurn(0.8, -43);
+            mecanumDrive(0.5,8,-45,90);
+            mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
+            //Unclamp Team Marker
+            sleep(750);
+            Cosmo.flagServo.setPosition(0.9);
+            sleep(2000);
+            mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
         }
         Cosmo.leftFront.setPower(0);
         Cosmo.rightFront.setPower(0);
         Cosmo.leftRear.setPower(0);
         Cosmo.rightRear.setPower(0);
+
+
+        //reset lift at end of auto
+        Cosmo.liftmotor.setPower(-1);
+        sleep(1000);
+        Cosmo.liftmotor.setPower(0);
+
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
