@@ -442,10 +442,12 @@ public class Auto_LaraLiesel extends LinearOpMode {
         Cosmo.liftmotor.setPower(0);
 
 
-
+        if (tfod != null) {
+            tfod.shutdown();
+        }
         telemetry.addData("Path", "Complete");
         telemetry.update();
-        sleep(20000);
+        sleep(2000);
         //       }
     }
 
