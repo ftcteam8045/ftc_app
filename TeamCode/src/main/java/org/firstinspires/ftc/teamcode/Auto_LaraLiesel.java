@@ -149,7 +149,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfodParameters.minimumConfidence  = 0.75;
+            tfodParameters.minimumConfidence  = 0.65;
             tfodParameters.useObjectTracker = false;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
             tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
