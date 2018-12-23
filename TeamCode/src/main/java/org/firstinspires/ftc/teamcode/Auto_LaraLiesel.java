@@ -149,6 +149,8 @@ public class Auto_LaraLiesel extends LinearOpMode {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+            tfodParameters.minimumConfidence  = 0.75;
+            tfodParameters.useObjectTracker = false;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
             tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
 
@@ -160,14 +162,12 @@ public class Auto_LaraLiesel extends LinearOpMode {
             tfod.activate();
         }
 
-
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
         //Clamp Team Marker
         Cosmo.flagServo.setPosition(0.315);
-
 
 
 
@@ -324,6 +324,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
         /**************************************************************
          // Actual RUN instructions
          *************************************************************/
+
+        tfod.deactivate();     // turn off the tensorflow detector.
+
 //        while (opModeIsActive() && !isStopRequested() {
         telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.milliseconds());
         telemetry.update();
