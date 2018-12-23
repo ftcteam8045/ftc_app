@@ -52,10 +52,10 @@ public class Auto_LaraLiesel extends LinearOpMode {
     public int driveDis2 = 15;
     public int driveDis3 = 7; //forward+backward
     public int driveDis4 = 50; //drive to wall
-    public int driveDis5 = 55; //drive to base
-    public int driveDis6 = 60; //drive to crater
+    public int driveDis5 = 55; //drive to base  on base side
+    public int driveDis6 = 60; //drive to crater  used for crater and base starts
     public int driveDis7 = 25;  // DRIVE TO BASE ON CRATER START
-    public int driveDis8 = 60;  //DRIVE TO CRATER
+    public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
     public double HookClear = 2.0;
@@ -417,7 +417,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
             sleep(750);
             Cosmo.flagServo.setPosition(0.9);
             sleep(2000);
-            mecanumDrive(0.6, -driveDis8, 135, 0); //drive back to crater
+            mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
 
 
        }else {                         /** base side drive  **/
