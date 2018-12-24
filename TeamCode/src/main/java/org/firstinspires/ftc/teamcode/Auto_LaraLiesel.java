@@ -139,7 +139,8 @@ public class Auto_LaraLiesel extends LinearOpMode {
 
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+//        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
@@ -150,7 +151,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
             tfodParameters.minimumConfidence  = 0.65;
-            tfodParameters.useObjectTracker = false;
+            tfodParameters.useObjectTracker = true;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
             tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
 
