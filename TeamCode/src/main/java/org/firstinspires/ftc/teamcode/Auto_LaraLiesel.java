@@ -145,7 +145,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
 
-        /** Initialize the Tensor Flow Object Detection engine. */
+       // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
+
+        //        /** Initialize the Tensor Flow Object Detection engine. */
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
