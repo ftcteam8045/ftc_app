@@ -199,7 +199,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
                     for (Recognition recognition : updatedRecognitions) {
                         telemetry.addLine().addData("", "%.2f %s   X %.0f Y %.0f", recognition.getConfidence(), recognition.getLabel(), recognition.getLeft(), recognition.getBottom());
                     }
-
+                    // ELI V
                     if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
@@ -225,10 +225,62 @@ public class Auto_LaraLiesel extends LinearOpMode {
                                 telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
                             }
                         }
-                    } else {
-                        goldPosition = 99;
-                        telemetry.addData("Gold Mineral NOT FOUND ", goldPosition);
+
+                    } else if (updatedRecognitions.size() != 3) {
+                        int goldMineralX = -1;
+                        float goldMineralConf = -1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals("Gold")) {
+                                if (recognition.getConfidence() >= goldMineralConf) {
+                                    goldMineralConf = recognition.getConfidence();
+                                    goldMineralX = (int) recognition.getLeft();
+                                }
+                            }
+                        }
+                        if (goldMineralX < 400) {
+                            goldPosition = 0;
+                            telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
+                        } else if (goldMineralX < 850) {
+                            goldPosition = 1;
+                            telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
+                        } else{
+                            goldPosition = 0;
+                            telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+                        }
                     }
+                    // ELI ^
+
+//                    if (updatedRecognitions.size() == 3) {
+//                        int goldMineralX = -1;
+//                        int silverMineral1X = -1;
+//                        int silverMineral2X = -1;
+//                        for (Recognition recognition : updatedRecognitions) {
+//                            if (recognition.getLabel().equals("Gold")) {
+//                                goldMineralX = (int) recognition.getLeft();
+//                            } else if (silverMineral1X == -1) {
+//                                silverMineral1X = (int) recognition.getLeft();
+//                            } else {
+//                                silverMineral2X = (int) recognition.getLeft();
+//                            }
+//                        }
+//                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+//                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+//                                goldPosition = 0;
+//                                telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
+//                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+//                                goldPosition = 2;
+//                                telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+//                            } else {
+//                                goldPosition = 1;
+//                                telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
+//                            }
+//                        }
+//                    }
+//                    else {
+//                        goldPosition = 69;
+//                        telemetry.addData("Gold Mineral NOT FOUND ", goldPosition);
+//                    }
+
                     //telemetry.update();
                 }
             }
@@ -340,9 +392,9 @@ public class Auto_LaraLiesel extends LinearOpMode {
 
 
         // Unhook from lift holder
-        Cosmo.liftmotor.setPower(-1);
+//        Cosmo.liftmotor.setPower(-1);
         sleep(200);
-        Cosmo.liftmotor.setPower(0);
+//        Cosmo.liftmotor.setPower(0);
         //Drift down from lander
         sleep(1000);
         //Raise lift slightly
@@ -378,7 +430,6 @@ public class Auto_LaraLiesel extends LinearOpMode {
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
             mecanumDrive(0.5, driveDis2+HookClear, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
 
         }
