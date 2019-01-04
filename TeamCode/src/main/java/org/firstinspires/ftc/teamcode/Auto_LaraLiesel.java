@@ -244,7 +244,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
                             goldPosition = 1;
                             telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
                         } else{
-                            goldPosition = 0;
+                            goldPosition = 2;
                             telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
                         }
                     }
@@ -396,7 +396,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
         sleep(200);
         Cosmo.liftmotor.setPower(0);
 //        Drift down from lander
-        sleep(1000);
+        sleep(1750);
         //Raise lift slightly
         Cosmo.liftmotor.setPower(1);
         sleep(100);
@@ -404,7 +404,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
         //Move away from hook before rest of auto
 
         if (craterPosition){            /** crater side drive  **/
-            HookClear = HookClear+3;
+            HookClear = HookClear+2.0;
         }
 
         mecanumDrive(0.5, HookClear, 0, -90); //Drive right

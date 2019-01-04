@@ -72,18 +72,6 @@ public class MainTeleET extends OpMode {
         telemetry.addData("Right Button Is Released", rightbtnIsReleased);
         telemetry.addData("Front Is Forward", frontIsForward);
 
-
-        if(gamepad1.y) {
-            // move to 0 degrees.
-            Cosmo.flagServo.setPosition(0.4);
-        } else if (gamepad1.x) {
-            // move to 90 degrees.
-            Cosmo.flagServo.setPosition(0.3);
-        } else if (gamepad1.a) {
-            // move to 180 degrees.
-            Cosmo.flagServo.setPosition(0.6);
-        }
-
         /**  set drive speed  **/
         if (gamepad1.left_bumper) {
             topSpeed = 1.0;
@@ -99,13 +87,13 @@ public class MainTeleET extends OpMode {
 
          /**    Raise and lower the lift    **/
         if (gamepad1.right_trigger >= 0.1 || gamepad2.right_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
+            Cosmo.liftmotor.setPower(-gamepad1.right_trigger-gamepad2.right_trigger);
         }
         else {
             Cosmo.liftmotor.setPower(0);
         }
         if (gamepad1.left_trigger >= 0.1 || gamepad2.left_trigger >= 0.1)  {
-            Cosmo.liftmotor.setPower(gamepad1.left_trigger);
+            Cosmo.liftmotor.setPower(gamepad1.left_trigger+gamepad2.left_trigger);
         }
         else {
             Cosmo.liftmotor.setPower(0);
