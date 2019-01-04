@@ -392,15 +392,15 @@ public class Auto_LaraLiesel extends LinearOpMode {
 
 
         // Unhook from lift holder
-//        Cosmo.liftmotor.setPower(-1);
+        Cosmo.liftmotor.setPower(-1);
         sleep(200);
-//        Cosmo.liftmotor.setPower(0);
-        //Drift down from lander
+        Cosmo.liftmotor.setPower(0);
+//        Drift down from lander
         sleep(1000);
         //Raise lift slightly
-//        Cosmo.liftmotor.setPower(1);
-//        sleep(100);
-//        Cosmo.liftmotor.setPower(0);
+        Cosmo.liftmotor.setPower(1);
+        sleep(100);
+        Cosmo.liftmotor.setPower(0);
         //Move away from hook before rest of auto
 
         if (craterPosition){            /** crater side drive  **/
