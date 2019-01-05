@@ -73,12 +73,12 @@ public class MainTeleET extends OpMode {
         }
 
         if (gamepad1.left_stick_button) {
-            if (driveType == 0) {
-                driveType = 1;
-            } else if(driveType == 1){
-                driveType = 2;
-            } else {
+            if (gamepad1.dpad_up) {
                 driveType = 0;
+            } else if (gamepad1.dpad_left) {
+                driveType = 1;
+            } else if (gamepad1.dpad_right) {
+                driveType = 2;
             }
         }
 
@@ -116,6 +116,31 @@ public class MainTeleET extends OpMode {
         else {
             Cosmo.liftmotor.setPower(0);
         }
+
+
+        //ONE HIT LIFT
+        if (gamepad2.right_bumper) {
+            //move lift up
+            Cosmo.liftmotor.setPower(1);
+            sleep(500);
+            Cosmo.liftmotor.setPower(0);
+            //strafe right
+            drivesmart(1, 0, 0);
+            sleep(200);
+            drivesmart(0, 0, 0);
+            //pull up and hang
+            Cosmo.liftmotor.setPower(-1);
+            sleep(500);
+            Cosmo.liftmotor.setPower(0);
+            if (true) {
+                Cosmo.liftmotor.setPower(-1);
+                sleep(25);
+                Cosmo.liftmotor.setPower(0);
+                sleep(25);
+            }
+        }
+
+
 
         telemetry.addLine().addData("Drive Mode", driveMode);
         telemetry.addData("TimeLeft: ",timeLeft);

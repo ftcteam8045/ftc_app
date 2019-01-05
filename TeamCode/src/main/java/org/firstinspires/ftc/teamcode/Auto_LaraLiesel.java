@@ -421,9 +421,6 @@ public class Auto_LaraLiesel extends LinearOpMode {
 //        Cosmo.liftmotor.setPower(0);
 
 //          goldposition 0 = left,1 = center, 2 = right
-        if (goldPosition == 99) {                         // default to the left.
-            goldPosition = 0;
-        }
 
         if (goldPosition == 0) {        // left position
 
