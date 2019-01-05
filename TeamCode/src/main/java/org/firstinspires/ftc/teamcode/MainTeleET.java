@@ -32,6 +32,10 @@ public class MainTeleET extends OpMode {
     public boolean frontIsForward = true;
     public boolean rightbtnIsReleased = true;
 
+    //Drive type
+    public double driveType = 0;
+    public String driveMode = "Normal";
+
     @Override
     public void init() {
         Cosmo = new Hardware8045();
@@ -63,14 +67,20 @@ public class MainTeleET extends OpMode {
             if (rightbtnIsReleased) {
                 rightbtnIsReleased = false;
                 frontIsForward = !frontIsForward;
-
             }
         } else {
             rightbtnIsReleased = true;
         }
 
-        telemetry.addData("Right Button Is Released", rightbtnIsReleased);
-        telemetry.addData("Front Is Forward", frontIsForward);
+        if (gamepad1.left_stick_button) {
+            if (driveType == 0) {
+                driveType = 1;
+            } else if(driveType == 1){
+                driveType = 2;
+            } else {
+                driveType = 0;
+            }
+        }
 
         /**  set drive speed  **/
         if (gamepad1.left_bumper) {
@@ -82,10 +92,18 @@ public class MainTeleET extends OpMode {
         }
 
         /** DRIVE  HERE   */
+        if (driveType == 0) {
+            drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y, gamepad1.left_stick_x);
+            driveMode = "Normal";
+        } else if(driveType == 1) {
+            drivesmart(-gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            driveMode = "Gamer";
+        } else {
+            drivesmart(-gamepad1.left_stick_x, -gamepad1.right_stick_y, gamepad1.right_stick_x);
+            driveMode = "South Paw";
+        }
 
-         drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y,  gamepad1.left_stick_x);
-
-         /**    Raise and lower the lift    **/
+        /**    Raise and lower the lift    **/
         if (gamepad1.right_trigger >= 0.1 || gamepad2.right_trigger >= 0.1) {
             Cosmo.liftmotor.setPower(-gamepad1.right_trigger-gamepad2.right_trigger);
         }
@@ -99,10 +117,13 @@ public class MainTeleET extends OpMode {
             Cosmo.liftmotor.setPower(0);
         }
 
+        telemetry.addLine().addData("Drive Mode", driveMode);
         telemetry.addData("TimeLeft: ",timeLeft);
         telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
         telemetry.addData("Right -Y: ", -gamepad1.right_stick_y);
         telemetry.addData(" Left -X: ", -gamepad1.left_stick_x);
+        telemetry.addData("Right Button Is Released", rightbtnIsReleased);
+        telemetry.addData("Front Is Forward", frontIsForward);
         telemetry.update();
 
     }
@@ -129,7 +150,6 @@ public class MainTeleET extends OpMode {
 
 
     public void drivesmart(double x, double y, double turn) {
-
 
         if (frontIsForward) {             // driving with the front facing forward
 

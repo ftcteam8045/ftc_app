@@ -30,7 +30,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "AutoL&L", group = "Cosmo")
+@Autonomous(name = "Main Auto", group = "Cosmo")
 //@Disabled
 public class Auto_LaraLiesel extends LinearOpMode {
 
@@ -170,7 +170,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
         telemetry.update();
 
         //Clamp Team Marker
-        Cosmo.flagServo.setPosition(0.315);
+        Cosmo.flagServo.setPosition(0.45);
 
 
 
@@ -469,18 +469,16 @@ public class Auto_LaraLiesel extends LinearOpMode {
             mecanumDrive(0.6, driveDis7, 135, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
-            Cosmo.flagServo.setPosition(0.9);
+            Cosmo.flagServo.setPosition(0.0);
             sleep(2000);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
-
-
        }else {                         /** base side drive  **/
             mecanumTurn(0.8, -43);
             mecanumDrive(0.5,8,-45,90);
             mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
-            Cosmo.flagServo.setPosition(0.9);
+            Cosmo.flagServo.setPosition(0.0);
             sleep(2000);
             mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
         }
