@@ -84,9 +84,10 @@ public class MainTeleET extends OpMode {
         }
 
         /**  set drive speed  **/
+//        if (gamepad1.left_bumper) {
+//            topSpeed = 1.0;
+//        } else
         if (gamepad1.left_bumper) {
-            topSpeed = 1.0;
-        } else if (gamepad1.left_trigger > 0.1) {
             topSpeed = 0.4;
         } else {
             topSpeed = 1.0;
@@ -104,39 +105,44 @@ public class MainTeleET extends OpMode {
             driveMode = "South Paw";
         }
 
-        /**    Raise and lower the lift    **/
-        if (gamepad2.right_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(-gamepad2.right_trigger);
+        /** Lift Controls for Controller 1 **/
+
+        if (gamepad1.right_trigger >= 0.1) {
+            Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
         }
         else {
             Cosmo.liftmotor.setPower(0);
         }
-        if (gamepad2.left_trigger >= 0.1)  {
-            Cosmo.liftmotor.setPower(gamepad2.left_trigger);
+        if (gamepad1.left_trigger >= 0.1)  {
+            Cosmo.liftmotor.setPower(gamepad1.left_trigger);
         }
         else {
             Cosmo.liftmotor.setPower(0);
         }
 
-        /**ONE HIT LIFT **/
+        /**ONE HIT LIFT HEIGHT**/
         if (gamepad2.right_bumper && run == false) {
             frontIsForward = frontIsForward;
             //move lift up
             Cosmo.liftmotor.setPower(1);
-            sleep(1400);
+            sleep(1420);
             Cosmo.liftmotor.setPower(0);
             sleep(100);
-            //strafe right
-            drivesmart(1, 0, 0);
-            sleep(1000);
-            drivesmart(0, 0, 0);
-            sleep(100);
-            //pull up and hang
-            Cosmo.liftmotor.setPower(-1);
-            sleep(1600);
-            Cosmo.liftmotor.setPower(0);
+//            //strafe right
+//            drivesmart(1, 0, 0);
+//            sleep(1000);
+//            drivesmart(0, 0, 0);
+//            sleep(100);
+//            //pull up and hang
+//            Cosmo.liftmotor.setPower(-1);
+//            sleep(1600);
+//            Cosmo.liftmotor.setPower(0);
             run = true;
         }
+
+
+
+
 
 //        if (run == true) {
 //            Cosmo.liftmotor.setPower(0);
