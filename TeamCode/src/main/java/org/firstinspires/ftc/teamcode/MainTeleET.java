@@ -35,6 +35,7 @@ public class MainTeleET extends OpMode {
     //Drive type
     public double driveType = 0;
     public String driveMode = "Normal";
+    public boolean run = false;
 
     @Override
     public void init() {
@@ -86,9 +87,9 @@ public class MainTeleET extends OpMode {
         if (gamepad1.left_bumper) {
             topSpeed = 1.0;
         } else if (gamepad1.left_trigger > 0.1) {
-            topSpeed = 0.2;
+            topSpeed = 0.4;
         } else {
-            topSpeed = 0.5;
+            topSpeed = 1.0;
         }
 
         /** DRIVE  HERE   */
@@ -104,45 +105,48 @@ public class MainTeleET extends OpMode {
         }
 
         /**    Raise and lower the lift    **/
-        if (gamepad1.right_trigger >= 0.1 || gamepad2.right_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(-gamepad1.right_trigger-gamepad2.right_trigger);
+        if (gamepad2.right_trigger >= 0.1) {
+            Cosmo.liftmotor.setPower(-gamepad2.right_trigger);
         }
         else {
             Cosmo.liftmotor.setPower(0);
         }
-        if (gamepad1.left_trigger >= 0.1 || gamepad2.left_trigger >= 0.1)  {
-            Cosmo.liftmotor.setPower(gamepad1.left_trigger+gamepad2.left_trigger);
+        if (gamepad2.left_trigger >= 0.1)  {
+            Cosmo.liftmotor.setPower(gamepad2.left_trigger);
         }
         else {
             Cosmo.liftmotor.setPower(0);
         }
 
-
-        //ONE HIT LIFT
-        if (gamepad2.right_bumper) {
+        /**ONE HIT LIFT **/
+        if (gamepad2.right_bumper && run == false) {
+            frontIsForward = frontIsForward;
             //move lift up
             Cosmo.liftmotor.setPower(1);
-            sleep(500);
+            sleep(1400);
             Cosmo.liftmotor.setPower(0);
+            sleep(100);
             //strafe right
             drivesmart(1, 0, 0);
-            sleep(200);
+            sleep(1000);
             drivesmart(0, 0, 0);
+            sleep(100);
             //pull up and hang
             Cosmo.liftmotor.setPower(-1);
-            sleep(500);
+            sleep(1600);
             Cosmo.liftmotor.setPower(0);
-            if (true) {
-                Cosmo.liftmotor.setPower(-1);
-                sleep(25);
-                Cosmo.liftmotor.setPower(0);
-                sleep(25);
-            }
+            run = true;
         }
 
+//        if (run == true) {
+//            Cosmo.liftmotor.setPower(0);
+//            sleep(50);
+//            Cosmo.liftmotor.setPower(-1);
+//            sleep(10);
+//        }
 
-
-        telemetry.addLine().addData("Drive Mode", driveMode);
+        telemetry.addLine().addData
+("Drive Mode", driveMode);
         telemetry.addData("TimeLeft: ",timeLeft);
         telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
         telemetry.addData("Right -Y: ", -gamepad1.right_stick_y);

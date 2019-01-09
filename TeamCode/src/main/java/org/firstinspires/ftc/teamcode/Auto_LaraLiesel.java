@@ -45,7 +45,7 @@ public class Auto_LaraLiesel extends LinearOpMode {
      * Menu Parameter Initialization
      **/
     public boolean teamIsRed = true;
-    public boolean craterPosition = true;
+    public boolean craterPosition = false;
     public boolean testBot = true;
     public int waitTime1 = 0;
     public int driveDis1 = 15;
@@ -372,9 +372,16 @@ public class Auto_LaraLiesel extends LinearOpMode {
 
             telemetry.update();
         }
-
+        /**************************************************************
+         // End Init loop
+         *************************************************************/
         // Wait for the game to start (driver presses PLAY) replaced by init loop
         //       waitForStart();
+
+
+
+
+
 
         /**************************************************************
          // Actual RUN instructions
@@ -499,6 +506,12 @@ public class Auto_LaraLiesel extends LinearOpMode {
         sleep(2000);
         //       }
     }
+    /**************************************************************
+     // End Actual Program Run
+     *************************************************************/
+
+
+
 
     //  Drive routine using the IMU and Mecanum wheels
     //  Robot Orientation is to the field
