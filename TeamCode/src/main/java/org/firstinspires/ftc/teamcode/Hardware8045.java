@@ -141,14 +141,14 @@ public class Hardware8045
 //        rightRear.setDirection(DcMotor.Direction.FORWARD);
 
 
-//        liftmotor.setDirection (DcMotor.Direction.FORWARD);
+        liftmotor.setDirection (DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftRear.setPower(0);
         rightRear.setPower(0);
-//        liftmotor.setPower(0);
+        liftmotor.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -156,7 +156,7 @@ public class Hardware8045
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and Initialize Motors
 

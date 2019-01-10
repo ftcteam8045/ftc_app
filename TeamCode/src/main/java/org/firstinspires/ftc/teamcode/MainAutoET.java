@@ -169,9 +169,6 @@ public class MainAutoET extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
-        //Clamp Team Marker
-        Cosmo.flagServo.setPosition(0.45);
-
 
 
 
@@ -370,7 +367,35 @@ public class MainAutoET extends LinearOpMode {
             /** End of Signal the position of the gold mineral  here **/
 
 
-            telemetry.update();
+            //Clamp Team Marker
+            if (gamepad1.a) {
+                Cosmo.flagServo.setPosition(0.45);
+            }
+            if (gamepad1.b) {
+                Cosmo.flagServo.setPosition(0.0);
+            }
+
+
+            /** Lift Controls for Controller 1 **/
+
+            if (gamepad1.right_trigger >= 0.1) {
+                Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
+            }
+            else {
+                Cosmo.liftmotor.setPower(0);
+            }
+            if (gamepad1.left_trigger >= 0.1)  {
+                Cosmo.liftmotor.setPower(gamepad1.left_trigger);
+            }
+            else {
+                Cosmo.liftmotor.setPower(0);
+            }
+
+
+
+
+
+                telemetry.update();
         }
         /**************************************************************
          // End Init loop
@@ -397,17 +422,27 @@ public class MainAutoET extends LinearOpMode {
 //        mecanumDrive(0.5, 100, 0, 0);     // drive forward
 //       sleep(200000);
 
+        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
+        int liftAmount = 7358;
 
-        // Unhook from lift holder
-        Cosmo.liftmotor.setPower(-1);
-        sleep(200);
+        while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftAmount){
+
+            Cosmo.liftmotor.setPower(1);
+
+        }
         Cosmo.liftmotor.setPower(0);
-//        Drift down from lander
-        sleep(1750);
-        //Raise lift slightly
-        Cosmo.liftmotor.setPower(1);
-        sleep(100);
-        Cosmo.liftmotor.setPower(0);
+
+
+        // Unhook from lift holder with high torque motor
+//        Cosmo.liftmotor.setPower(1);
+//        sleep(3100);
+//        Cosmo.liftmotor.setPower(0);
+////        Drift down from lander
+//        sleep(1750);
+//        //Raise lift slightly
+//        Cosmo.liftmotor.setPower(1);
+//        sleep(100);
+//        Cosmo.liftmotor.setPower(0);
         //Move away from hook before rest of auto
 
         if (craterPosition){            /** crater side drive  **/

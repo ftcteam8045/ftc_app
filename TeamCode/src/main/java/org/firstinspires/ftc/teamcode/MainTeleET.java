@@ -159,6 +159,7 @@ public class MainTeleET extends OpMode {
         telemetry.addData(" Left -X: ", -gamepad1.left_stick_x);
         telemetry.addData("Right Button Is Released", rightbtnIsReleased);
         telemetry.addData("Front Is Forward", frontIsForward);
+        telemetry.addData("LiftCounts", Cosmo.liftmotor.getCurrentPosition());
         telemetry.update();
 
     }
