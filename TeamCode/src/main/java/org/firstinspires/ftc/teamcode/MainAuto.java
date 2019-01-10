@@ -32,7 +32,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 @Autonomous(name = "Main Auto", group = "Cosmo")
 //@Disabled
-public class MainAutoET extends LinearOpMode {
+public class MainAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware

@@ -12,7 +12,7 @@ import static java.lang.Math.sqrt;
 
 @TeleOp(name = "MainTele", group = "8045")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class MainTeleET extends OpMode {
+public class MainTele extends OpMode {
 
     Hardware8045 Cosmo;
 
