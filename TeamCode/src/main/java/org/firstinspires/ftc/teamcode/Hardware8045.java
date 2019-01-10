@@ -143,6 +143,12 @@ public class Hardware8045
 
         liftmotor.setDirection (DcMotor.Direction.FORWARD);
 
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         // Set all motors to zero power
         leftFront.setPower(0);
         rightFront.setPower(0);
