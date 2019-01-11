@@ -45,7 +45,7 @@ public class MainAuto extends LinearOpMode {
      * Menu Parameter Initialization
      **/
     public boolean teamIsRed = true;
-    public boolean craterPosition = false;
+    public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
     public int driveDis1 = 15;
@@ -59,6 +59,8 @@ public class MainAuto extends LinearOpMode {
     public int driveDis9 = 0;
     public int driveDis10 = 0;
     public double HookClear = 2.0;
+    public double open = 0.0;
+    public double closed = 0.45;
 
 
 
@@ -368,11 +370,11 @@ public class MainAuto extends LinearOpMode {
 
 
             //Clamp Team Marker
-            if (gamepad1.a) {
-                Cosmo.flagServo.setPosition(0.45);
-            }
             if (gamepad1.b) {
-                Cosmo.flagServo.setPosition(0.0);
+                Cosmo.flagServo.setPosition(closed);
+            }
+            if (gamepad1.a) {
+                Cosmo.flagServo.setPosition(open);
             }
 
 
@@ -419,11 +421,13 @@ public class MainAuto extends LinearOpMode {
         telemetry.update();
 //
         // First task would be to deploy  here//
-//        mecanumDrive(0.5, 100, 0, 0);     // drive forward
-//       sleep(200000);
+
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         int liftAmount = 7358;
+
+        // Unhook from lift holder with high torque motor
+
 
         while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftAmount){
 
@@ -433,34 +437,12 @@ public class MainAuto extends LinearOpMode {
         Cosmo.liftmotor.setPower(0);
 
 
-        // Unhook from lift holder with high torque motor
-//        Cosmo.liftmotor.setPower(1);
-//        sleep(3100);
-//        Cosmo.liftmotor.setPower(0);
-////        Drift down from lander
-//        sleep(1750);
-//        //Raise lift slightly
-//        Cosmo.liftmotor.setPower(1);
-//        sleep(100);
-//        Cosmo.liftmotor.setPower(0);
-        //Move away from hook before rest of auto
 
         if (craterPosition){            /** crater side drive  **/
             HookClear = HookClear+2.0;
         }
 
         mecanumDrive(0.5, HookClear, 0, -90); //Drive right
-
-
-//        mecanumDrive(0.5, 1.5, 0, 180); //Drive right
-
-//        mecanumDrive(0.5, 3, 0, 0);  //Drive forward
-//        mecanumDrive(0.5, 2.5, 0, 90);  //Drive left
-//        // Lower Lift
-//        Cosmo.liftmotor.setPower(-1);
-//        mecanumDrive(0.5, 3, 0, 180); //Drive back to center robot
-//        sleep(750);
-//        Cosmo.liftmotor.setPower(0);
 
 //          goldposition 0 = left,1 = center, 2 = right
 
@@ -473,7 +455,7 @@ public class MainAuto extends LinearOpMode {
 
         }
 
-        if (goldPosition == 1) {
+        if (goldPosition == 1) {       //center pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
             mecanumDrive(0.5, HookClear, 0, 90);    // drive left
@@ -483,12 +465,11 @@ public class MainAuto extends LinearOpMode {
 
         }
 
-        if (goldPosition == 2) {
+        if (goldPosition == 2) {      //right pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
             mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
             mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
         }
@@ -508,18 +489,20 @@ public class MainAuto extends LinearOpMode {
             mecanumDrive(0.6, driveDis7, 135, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
-            Cosmo.flagServo.setPosition(0.0);
-            sleep(2000);
+            Cosmo.flagServo.setPosition(open);
+            sleep(800);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
-       }else {                         /** base side drive  **/
+            Cosmo.flagServo.setPosition(closed);
+        }else {                         /** base side drive  **/
             mecanumTurn(0.8, -43);
             mecanumDrive(0.5,8,-45,90);
             mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
-            Cosmo.flagServo.setPosition(0.0);
-            sleep(2000);
+            Cosmo.flagServo.setPosition(open);
+            sleep(800);
             mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
+            Cosmo.flagServo.setPosition(closed);
         }
         Cosmo.leftFront.setPower(0);
         Cosmo.rightFront.setPower(0);
@@ -528,9 +511,14 @@ public class MainAuto extends LinearOpMode {
 
 
         //reset lift at end of auto
-        Cosmo.liftmotor.setPower(-1);
-        sleep(1000);
+        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos){
+
+            Cosmo.liftmotor.setPower(-1);
+
+        }
         Cosmo.liftmotor.setPower(0);
+
+
 
 
         if (tfod != null) {

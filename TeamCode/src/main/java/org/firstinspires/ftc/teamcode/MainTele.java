@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -88,7 +89,7 @@ public class MainTele extends OpMode {
 //            topSpeed = 1.0;
 //        } else
         if (gamepad1.left_bumper) {
-            topSpeed = 0.4;
+            topSpeed = 0.25;
         } else {
             topSpeed = 1.0;
         }
@@ -109,6 +110,7 @@ public class MainTele extends OpMode {
 
         if (gamepad1.right_trigger >= 0.1) {
             Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
         }
         else {
             Cosmo.liftmotor.setPower(0);
@@ -121,24 +123,30 @@ public class MainTele extends OpMode {
         }
 
         /**ONE HIT LIFT HEIGHT**/
-        if (gamepad2.right_bumper && run == false) {
-            frontIsForward = frontIsForward;
-            //move lift up
-            Cosmo.liftmotor.setPower(1);
-            sleep(1420);
-            Cosmo.liftmotor.setPower(0);
-            sleep(100);
-//            //strafe right
-//            drivesmart(1, 0, 0);
-//            sleep(1000);
-//            drivesmart(0, 0, 0);
-//            sleep(100);
-//            //pull up and hang
-//            Cosmo.liftmotor.setPower(-1);
-//            sleep(1600);
+
+        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
+        int liftAmount = 7358;
+
+//        if (gamepad1.right_bumper ) {
+//
+//            //move lift up
+//            while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftAmount){
+//
+//                Cosmo.liftmotor.setPower(1);
+//
+//            }
 //            Cosmo.liftmotor.setPower(0);
-            run = true;
-        }
+////            //strafe right
+////            drivesmart(1, 0, 0);
+////            sleep(1000);
+////            drivesmart(0, 0, 0);
+////            sleep(100);
+////            //pull up and hang
+////            Cosmo.liftmotor.setPower(-1);
+////            sleep(1600);
+////            Cosmo.liftmotor.setPower(0);
+//            run = true;
+//        }
 
 
 
@@ -199,7 +207,7 @@ public class MainTele extends OpMode {
         double rfpower;
         double rrpower;
 
-        double rotation = turn*0.75;  // knock down the turn power
+        double rotation = turn;  // knock down the turn power -- NOT ANYMORE
 
         //Determine largest power being applied in either direction
 
