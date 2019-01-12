@@ -171,9 +171,6 @@ public class MainAuto extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
-
-
-
         /**************************************************************
          // Actual Init loop
          *************************************************************/
@@ -424,7 +421,7 @@ public class MainAuto extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftAmount = 7358;
+        int liftAmount = 7858;
 
         // Unhook from lift holder with high torque motor
 
@@ -441,7 +438,7 @@ public class MainAuto extends LinearOpMode {
         if (craterPosition){            /** crater side drive  **/
             HookClear = HookClear+2.0;
         }
-
+        sleep(700);
         mecanumDrive(0.5, HookClear, 0, -90); //Drive right
 
 //          goldposition 0 = left,1 = center, 2 = right
@@ -490,6 +487,9 @@ public class MainAuto extends LinearOpMode {
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
             sleep(800);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
             Cosmo.flagServo.setPosition(closed);

@@ -93,6 +93,12 @@ public class MainTele extends OpMode {
         } else {
             topSpeed = 1.0;
         }
+        /** set driving colors **/
+        if (topSpeed == 0.25) {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE);
+        } else {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+        }
 
         /** DRIVE  HERE   */
         if (driveType == 0) {
