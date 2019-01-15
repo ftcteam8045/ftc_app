@@ -145,13 +145,14 @@ public class MainTele extends OpMode {
 
         /**ONE HIT LIFT HEIGHT**/
 
-        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftAmount = 10600;
+//      assume it's zeroed from Auto???  not the best solution
+//        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
+        int liftMax = 10600;
 
         if (gamepad1.right_bumper ) {
 
             //move lift up
-            while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftAmount){
+            while(Cosmo.liftmotor.getCurrentPosition() < liftMax){
 
                 Cosmo.liftmotor.setPower(1);
 
