@@ -56,7 +56,7 @@ public class Hardware8045
     public DcMotor  leftRear    = null;
     public DcMotor  rightRear   = null;
     public DcMotor  liftmotor   = null;
-    public DcMotor  liftDown   = null;
+    public DcMotor  armmotor   = null;
     public Servo    flagServo  = null;
 
 
@@ -128,6 +128,7 @@ public class Hardware8045
         leftRear  = hwMap.get(DcMotor.class, "left_rear");
         rightRear = hwMap.get(DcMotor.class, "right_rear");
         liftmotor = hwMap.get(DcMotor.class, "lift_motor");
+        armmotor = hwMap.get(DcMotor.class, "arm_motor");
 // this should be for neverest  & using it for Matrix/yellowjackets as well.
          leftFront.setDirection(DcMotor.Direction.FORWARD);
          leftRear.setDirection(DcMotor.Direction.FORWARD);
@@ -148,6 +149,8 @@ public class Hardware8045
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         // Set all motors to zero power
         leftFront.setPower(0);
@@ -155,6 +158,8 @@ public class Hardware8045
         leftRear.setPower(0);
         rightRear.setPower(0);
         liftmotor.setPower(0);
+        armmotor.setPower(0);
+
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -163,6 +168,8 @@ public class Hardware8045
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
         // Define and Initialize Motors
 

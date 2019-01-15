@@ -128,19 +128,34 @@ public class MainTele extends OpMode {
             Cosmo.liftmotor.setPower(0);
         }
 
+        /** Vertical Intake Controls for Controller 2 **/
+        if (gamepad2.right_trigger >= 0.1) {
+            Cosmo.armmotor.setPower(-gamepad2.right_trigger);
+        }
+        else {
+            Cosmo.liftmotor.setPower(0);
+        }
+        if (gamepad2.left_trigger >= 0.1)  {
+            Cosmo.armmotor.setPower(gamepad2.left_trigger);
+        }
+        else {
+            Cosmo.armmotor.setPower(0);
+        }
+
+
         /**ONE HIT LIFT HEIGHT**/
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftAmount = 7358;
+        int liftAmount = 10600;
 
-//        if (gamepad1.right_bumper ) {
-//
-//            //move lift up
-//            while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftAmount){
-//
-//                Cosmo.liftmotor.setPower(1);
-//
-//            }
+        if (gamepad1.right_bumper ) {
+
+            //move lift up
+            while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftAmount){
+
+                Cosmo.liftmotor.setPower(1);
+
+            }
 //            Cosmo.liftmotor.setPower(0);
 ////            //strafe right
 ////            drivesmart(1, 0, 0);
@@ -152,7 +167,7 @@ public class MainTele extends OpMode {
 ////            sleep(1600);
 ////            Cosmo.liftmotor.setPower(0);
 //            run = true;
-//        }
+        }
 
 
 

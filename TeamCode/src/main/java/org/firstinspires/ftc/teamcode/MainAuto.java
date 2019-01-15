@@ -61,7 +61,7 @@ public class MainAuto extends LinearOpMode {
     public double HookClear = 2.0;
     public double open = 0.0;
     public double closed = 0.45;
-
+    public int liftmax=10600;
 
 
     // State used for updating telemetry
@@ -421,12 +421,12 @@ public class MainAuto extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftAmount = 7858;
+        int liftmax = 10600;
 
         // Unhook from lift holder with high torque motor
 
 
-        while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftAmount){
+        while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
 
             Cosmo.liftmotor.setPower(1);
 
