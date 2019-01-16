@@ -114,17 +114,15 @@ public class MainTele extends OpMode {
 
         /** Lift Controls for Controller 1 **/
 
-        if (gamepad1.right_trigger >= 0.1) {
-            Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
+        if (gamepad1.right_trigger >= 0.1 || gamepad2.right_bumper) {
+            Cosmo.liftmotor.setPower(-1.0);
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-        }
-        else {
+        } else {
             Cosmo.liftmotor.setPower(0);
         }
-        if (gamepad1.left_trigger >= 0.1)  {
-            Cosmo.liftmotor.setPower(gamepad1.left_trigger);
-        }
-        else {
+        if (gamepad1.left_trigger >= 0.1 || gamepad2.left_bumper)  {
+            Cosmo.liftmotor.setPower(1.0);
+        } else {
             Cosmo.liftmotor.setPower(0);
         }
 
