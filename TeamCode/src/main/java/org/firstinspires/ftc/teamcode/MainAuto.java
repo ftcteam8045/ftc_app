@@ -421,7 +421,7 @@ public class MainAuto extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftmax = 10600;
+        int liftmax = 10800;
 
         // Unhook from lift holder with high torque motor
 
@@ -458,7 +458,7 @@ public class MainAuto extends LinearOpMode {
             mecanumDrive(0.5, HookClear, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.5, driveDis2, 0, 90);      // drive left 1x
+            mecanumDrive(0.8, driveDis2, 0, 90);      // drive left 1x
 
         }
 
@@ -468,7 +468,7 @@ public class MainAuto extends LinearOpMode {
             mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
+            mecanumDrive(0.8, 2*driveDis2, 0, 90);      // drive left 2x
         }
         sleep(10);
 
@@ -481,7 +481,7 @@ public class MainAuto extends LinearOpMode {
         // drive forward or backward based on crater starting position
 
         if (craterPosition){            /** crater side drive  **/
-            mecanumTurn(0.8, 135);
+            mecanumTurn(1, 135);
             mecanumDrive(0.5,8,135,-90);  // DRIVE TO WALL
             mecanumDrive(0.6, driveDis7, 135, 0);  //drive towards base
             //Unclamp Team Marker
@@ -494,7 +494,7 @@ public class MainAuto extends LinearOpMode {
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
             Cosmo.flagServo.setPosition(closed);
         }else {                         /** base side drive  **/
-            mecanumTurn(0.8, -43);
+            mecanumTurn(1, -43);
             mecanumDrive(0.5,8,-45,90);
             mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
@@ -511,7 +511,7 @@ public class MainAuto extends LinearOpMode {
 
 
         //reset lift at end of auto
-        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos){
+        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos && !isStopRequested()){
 
             Cosmo.liftmotor.setPower(-1);
 
@@ -563,7 +563,7 @@ public class MainAuto extends LinearOpMode {
         lrbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
         rfbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
         rrbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
-        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive() /* ENCODERS*/) {//Should we average all four motors?
+        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive()  /* ENCODERS*/) {//Should we average all four motors?
             //Determine correction
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
