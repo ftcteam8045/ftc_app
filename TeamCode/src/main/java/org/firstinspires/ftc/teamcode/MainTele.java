@@ -30,13 +30,16 @@ public class MainTele extends OpMode {
     public boolean aIsReleased = true;
 
     //Back mode
-    public boolean frontIsForward = true;
+    public boolean frontIsForward = false;
     public boolean rightbtnIsReleased = true;
 
     //Drive type
     public double driveType = 0;
     public String driveMode = "Normal";
     public boolean run = false;
+
+    public double armUp = 1850;
+
 
     @Override
     public void init() {
@@ -89,7 +92,7 @@ public class MainTele extends OpMode {
 //            topSpeed = 1.0;
 //        } else
         if (gamepad1.left_bumper) {
-            topSpeed = 0.20;
+            topSpeed = 0.4;
         } else {
             topSpeed = 1.0;
         }
@@ -127,6 +130,9 @@ public class MainTele extends OpMode {
         }
 
         /** Vertical Intake Controls for Controller 2 **/
+
+
+
         if (gamepad2.right_trigger >= 0.1) {
             Cosmo.armmotor.setPower(-gamepad2.right_trigger);
         }
@@ -139,6 +145,21 @@ public class MainTele extends OpMode {
         else {
             Cosmo.armmotor.setPower(0);
         }
+
+
+        //intake arm up one hit
+
+
+        if (gamepad2.left_bumper){
+
+            while (Cosmo.armmotor.getCurrentPosition() < armUp){
+
+                Cosmo.armmotor.setPower(0.75);
+
+            }
+
+        }
+
 
 
         /**ONE HIT LIFT HEIGHT**/
@@ -188,8 +209,9 @@ public class MainTele extends OpMode {
         telemetry.addData("Right Button Is Released", rightbtnIsReleased);
         telemetry.addData("Front Is Forward", frontIsForward);
         telemetry.addData("LiftCounts", Cosmo.liftmotor.getCurrentPosition());
-        telemetry.update();
+        telemetry.addData("ArmEncoderCounts", Cosmo.armmotor.getCurrentPosition());
 
+        telemetry.update();
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
