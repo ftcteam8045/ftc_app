@@ -60,7 +60,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="Auto Drive By Time", group="Pushbot")
-//@Disabled
+@Disabled
 public class AutoDriveByTime_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */

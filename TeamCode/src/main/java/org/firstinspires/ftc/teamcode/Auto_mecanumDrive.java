@@ -33,7 +33,7 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 
 
 @Autonomous(name = "Auto MEc", group = "Cosmo")
-//@Disabled
+@Disabled
 public class Auto_mecanumDrive extends LinearOpMode {
 
     /* Declare OpMode members. */
