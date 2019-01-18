@@ -49,10 +49,10 @@ public class MainAuto extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 15;
-    public int driveDis2 = 15;
+    public int driveDis1 = 12;
+    public int driveDis2 = 20;
     public int driveDis3 = 7; //forward+backward
-    public int driveDis4 = 50; //drive to wall
+    public int driveDis4 = 45; //drive to wall
     public int driveDis5 = 55; //drive to base  on base side
     public int driveDis6 = 60; //drive to crater  used for crater and base starts
     public int driveDis7 = 25;  // DRIVE TO BASE ON CRATER START
@@ -155,7 +155,7 @@ public class MainAuto extends LinearOpMode {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfodParameters.minimumConfidence  = 0.65;
+            tfodParameters.minimumConfidence  = 0.40;
             tfodParameters.useObjectTracker = true;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
             tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
@@ -446,34 +446,39 @@ public class MainAuto extends LinearOpMode {
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(100);
             mecanumDrive(1, driveDis2+HookClear, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+            sleep(200);
+            mecanumDrive(0.5, -driveDis3 + 2, 0, 0);     // drive backwards
 
         }
 
         if (goldPosition == 1) {       //center pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(200);
             mecanumDrive(1, HookClear, 0, 90);    // drive left
+            sleep(200);
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(1, driveDis2, 0, 90);      // drive left 1x
+            mecanumDrive(1, driveDis2, 0, 85);      // drive left 1x
 
         }
 
         if (goldPosition == 2) {      //right pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(100);
             mecanumDrive(1, driveDis2-HookClear, 0, -90);    // drive right
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(1, 2*driveDis2, 0, 90);      // drive left 2x
+            mecanumDrive(1, 2*driveDis2, 0, 85);      // drive left 2x
         }
         sleep(10);
 
         // drive towards the wall (all modes)
-        mecanumDrive(1,driveDis4,0,90);      // drive towards wall
+        mecanumDrive(1,driveDis4,0,85);      // drive towards wall
 
 
         sleep(10);
@@ -482,8 +487,8 @@ public class MainAuto extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(1, 135);
-            mecanumDrive(0.5,8,135,-90);  // DRIVE TO WALL
-            mecanumDrive(0.6, driveDis7, 135, 0);  //drive towards base
+            mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.6, driveDis7 + 4, 135, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
@@ -492,16 +497,22 @@ public class MainAuto extends LinearOpMode {
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
             sleep(800);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
+            sleep(300);
+            mecanumDrive(0.2, -5, 135, 0); //drive back to crater slowly
+
             Cosmo.flagServo.setPosition(closed);
         }else {                         /** base side drive  **/
             mecanumTurn(1, -43);
-            mecanumDrive(0.5,8,-45,90);
+            mecanumDrive(0.5,10,-45,90);
             mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
             sleep(800);
             mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
+            sleep(300);
+            mecanumDrive(0.2, -5, -45, 0); //drive back to crater slowly
+
             Cosmo.flagServo.setPosition(closed);
         }
         Cosmo.leftFront.setPower(0);
