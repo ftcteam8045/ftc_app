@@ -20,6 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.oldcode.AutoTransitioner;
 
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class MainAuto extends LinearOpMode {
         final double FORWARD_SPEED = 0.3;
         final double TURN_SPEED = 0.3;
         final int cycletime = 500;
-        int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
+        int goldPosition = 2;   // 0 is on left, 1 in center, 2 on right
 
 
         /*
@@ -170,7 +171,8 @@ public class MainAuto extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-
+        // AutoTransitioner used before waitForStart()
+        AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
         /**************************************************************
          // Actual Init loop
          *************************************************************/
@@ -368,10 +370,10 @@ public class MainAuto extends LinearOpMode {
 
             //Clamp Team Marker
             if (gamepad1.b) {
-                Cosmo.flagServo.setPosition(closed);
+                Cosmo.flagServo.setPosition(open);
             }
             if (gamepad1.a) {
-                Cosmo.flagServo.setPosition(open);
+                Cosmo.flagServo.setPosition(closed);
             }
 
 
@@ -389,8 +391,6 @@ public class MainAuto extends LinearOpMode {
             else {
                 Cosmo.liftmotor.setPower(0);
             }
-
-
 
 
 
@@ -446,7 +446,7 @@ public class MainAuto extends LinearOpMode {
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumDrive(0.5, driveDis2+HookClear, 0, 90);    // drive left
+            mecanumDrive(1, driveDis2+HookClear, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
 
@@ -455,25 +455,25 @@ public class MainAuto extends LinearOpMode {
         if (goldPosition == 1) {       //center pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumDrive(0.5, HookClear, 0, 90);    // drive left
+            mecanumDrive(1, HookClear, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.8, driveDis2, 0, 90);      // drive left 1x
+            mecanumDrive(1, driveDis2, 0, 90);      // drive left 1x
 
         }
 
         if (goldPosition == 2) {      //right pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
+            mecanumDrive(1, driveDis2-HookClear, 0, -90);    // drive right
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            mecanumDrive(0.8, 2*driveDis2, 0, 90);      // drive left 2x
+            mecanumDrive(1, 2*driveDis2, 0, 90);      // drive left 2x
         }
         sleep(10);
 
         // drive towards the wall (all modes)
-        mecanumDrive(0.8,driveDis4,0,90);      // drive towards wall
+        mecanumDrive(1,driveDis4,0,90);      // drive towards wall
 
 
         sleep(10);

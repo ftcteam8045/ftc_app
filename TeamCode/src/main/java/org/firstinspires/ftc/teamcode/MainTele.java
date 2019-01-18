@@ -40,6 +40,11 @@ public class MainTele extends OpMode {
 
     public double armUp = 1850;
 
+    public double closed = 0.0;
+    public double open = 0.45;
+
+    public boolean liftMovingUp = false;
+
 
     @Override
     public void init() {
@@ -117,30 +122,24 @@ public class MainTele extends OpMode {
 
         /** Lift Controls for Controller 1 **/
 
-        if (gamepad1.right_trigger >= 0.1 || gamepad2.right_bumper) {
+            if (gamepad1.right_trigger >= 0.1 || gamepad2.dpad_up) {
             Cosmo.liftmotor.setPower(-1.0);
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
         } else {
             Cosmo.liftmotor.setPower(0);
         }
-        if (gamepad1.left_trigger >= 0.1 || gamepad2.left_bumper)  {
+            if (gamepad1.left_trigger >= 0.1 || gamepad2.dpad_down)  {
             Cosmo.liftmotor.setPower(1.0);
         } else {
             Cosmo.liftmotor.setPower(0);
         }
 
-        /** Vertical Intake Controls for Controller 2 **/
+        /** Vertical Arm Controls for Controller 2 **/
 
 
 
-        if (gamepad2.right_trigger >= 0.1) {
-            Cosmo.armmotor.setPower(-gamepad2.right_trigger);
-        }
-        else {
-            Cosmo.liftmotor.setPower(0);
-        }
-        if (gamepad2.left_trigger >= 0.1)  {
-            Cosmo.armmotor.setPower(gamepad2.left_trigger);
+        if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
+            Cosmo.armmotor.setPower(-gamepad2.left_stick_y * 0.75);
         }
         else {
             Cosmo.armmotor.setPower(0);
@@ -150,7 +149,7 @@ public class MainTele extends OpMode {
         //intake arm up one hit
 
 
-        if (gamepad2.left_bumper){
+        if (gamepad2.x){
 
             while (Cosmo.armmotor.getCurrentPosition() < armUp){
 
@@ -160,6 +159,47 @@ public class MainTele extends OpMode {
 
         }
 
+        /** Sweeper Motor Controls for Controller 2 **/
+
+//        if (gamepad2.right_trigger > 0.1){
+//
+//            Cosmo.sweepermotor.setPower(1);
+//
+//        }
+//
+//        if (gamepad2.left_trigger > 0.1){
+//
+//            Cosmo.sweepermotor.setPower(-0.25);
+//
+//        }
+//
+//        if (gamepad2.right_bumper || gamepad2.left_bumper){
+//
+//            Cosmo.sweepermotor.setPower(0);
+//
+//        }
+
+
+        /** Extension Motor Controls for Controller 2 **/
+
+//        if (gamepad2.right_stick_y > 0.01 || gamepad2.right_stick_y < 0.01) {
+//            Cosmo.exmotor.setPower(-gamepad2.right_stick_y * 0.75);
+//        }
+//        else {
+//            Cosmo.exmotor.setPower(0);
+//        }
+
+        /** Dump Servo Controls for Controller 2 **/
+
+
+//        if (gamepad2.a) {
+//            Cosmo.dumpServo.setPosition(open);
+//        }
+//        if (gamepad2.b) {
+//            Cosmo.dumpServo.setPosition(closed);
+//        }
+
+
 
 
         /**ONE HIT LIFT HEIGHT**/
@@ -168,14 +208,22 @@ public class MainTele extends OpMode {
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         int liftMax = 10600;
 
-        if (gamepad1.right_bumper ) {
+//        if (gamepad1.right_bumper || gamepad2.left_bumper) {
+            if (gamepad2.dpad_left || gamepad1.right_bumper) {
 
+            liftMovingUp = true;
             //move lift up
-            while(Cosmo.liftmotor.getCurrentPosition() < liftMax){
-
-                Cosmo.liftmotor.setPower(1);
-
             }
+
+        if(liftMovingUp && Cosmo.liftmotor.getCurrentPosition() < liftMax){
+
+            Cosmo.liftmotor.setPower(1);
+
+        }
+        else {
+            Cosmo.liftmotor.setPower(0);
+            liftMovingUp = false;
+        }
 //            Cosmo.liftmotor.setPower(0);
 ////            //strafe right
 ////            drivesmart(1, 0, 0);
@@ -187,7 +235,7 @@ public class MainTele extends OpMode {
 ////            sleep(1600);
 ////            Cosmo.liftmotor.setPower(0);
 //            run = true;
-        }
+//        }
 
 
 
@@ -200,8 +248,7 @@ public class MainTele extends OpMode {
 //            sleep(10);
 //        }
 
-        telemetry.addLine().addData
-("Drive Mode", driveMode);
+        telemetry.addLine().addData("Drive Mode", driveMode);
         telemetry.addData("TimeLeft: ",timeLeft);
         telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
         telemetry.addData("Right -Y: ", -gamepad1.right_stick_y);
@@ -209,7 +256,11 @@ public class MainTele extends OpMode {
         telemetry.addData("Right Button Is Released", rightbtnIsReleased);
         telemetry.addData("Front Is Forward", frontIsForward);
         telemetry.addData("LiftCounts", Cosmo.liftmotor.getCurrentPosition());
-        telemetry.addData("ArmEncoderCounts", Cosmo.armmotor.getCurrentPosition());
+        telemetry.addData("ArmMotorCounts", Cosmo.armmotor.getCurrentPosition());
+//        telemetry.addData("IntakeMotorCounts", Cosmo.intakemotor.getCurrentPosition());
+//        telemetry.addData("ExMotorCounts", Cosmo.exmotor.getCurrentPosition());
+
+
 
         telemetry.update();
     }

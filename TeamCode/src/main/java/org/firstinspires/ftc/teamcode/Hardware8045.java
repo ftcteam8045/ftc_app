@@ -57,7 +57,11 @@ public class Hardware8045
     public DcMotor  rightRear   = null;
     public DcMotor  liftmotor   = null;
     public DcMotor  armmotor   = null;
+    public DcMotor  sweepermotor   = null;
+    public DcMotor  exmotor   = null;
     public Servo    flagServo  = null;
+    public Servo    dumpServo  = null;
+
 
 
     //    public Servo    rightClaw   = null;
@@ -129,7 +133,11 @@ public class Hardware8045
         rightRear = hwMap.get(DcMotor.class, "right_rear");
         liftmotor = hwMap.get(DcMotor.class, "lift_motor");
         armmotor = hwMap.get(DcMotor.class, "arm_motor");
-// this should be for neverest  & using it for Matrix/yellowjackets as well.
+//        sweepermotor = hwMap.get(DcMotor.class, "sweeper_motor");
+//        exmotor = hwMap.get(DcMotor.class, "ex_motor");
+
+
+        // this should be for neverest  & using it for Matrix/yellowjackets as well.
          leftFront.setDirection(DcMotor.Direction.FORWARD);
          leftRear.setDirection(DcMotor.Direction.FORWARD);
          rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -150,6 +158,9 @@ public class Hardware8045
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        sweepermotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        exmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
 
         // Set all motors to zero power
@@ -159,8 +170,11 @@ public class Hardware8045
         rightRear.setPower(0);
         liftmotor.setPower(0);
         armmotor.setPower(0);
+//        sweepermotor.setPower(0);
+//        exmotor.setPower(0);
 
 
+        // Define and Initialize Motors
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -169,16 +183,17 @@ public class Hardware8045
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        sweepermotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        exmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
-        // Define and Initialize Motors
+
 
         // Define and initialize ALL installed servos.
-//        leftClaw  = hwMap.get(Servo.class, "left_hand");
-//        rightClaw = hwMap.get(Servo.class, "right_hand");
-//        leftClaw.setPosition(MID_SERVO);
-//        rightClaw.setPosition(MID_SERVO);
+
         flagServo = hwMap.get(Servo.class, "flag_servo");
+//        dumpServo = hwMap.get(Servo.class, "dump_servo");
+
 
         /**
          * IMU SETUP
