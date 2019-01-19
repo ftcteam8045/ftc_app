@@ -182,12 +182,12 @@ public class MainTele extends OpMode {
 
         /** Extension Motor Controls for Controller 2 **/
 
-//        if (gamepad2.right_stick_y > 0.01 || gamepad2.right_stick_y < 0.01) {
-//            Cosmo.exmotor.setPower(-gamepad2.right_stick_y * 0.75);
-//        }
-//        else {
-//            Cosmo.exmotor.setPower(0);
-//        }
+        if (gamepad2.right_stick_y > 0.01 || gamepad2.right_stick_y < 0.01) {
+            Cosmo.exmotor.setPower(-gamepad2.right_stick_y * 0.75);
+        }
+        else {
+            Cosmo.exmotor.setPower(0);
+        }
 
         /** Dump Servo Controls for Controller 2 **/
 

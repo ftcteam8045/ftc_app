@@ -134,7 +134,7 @@ public class Hardware8045
         liftmotor = hwMap.get(DcMotor.class, "lift_motor");
         armmotor = hwMap.get(DcMotor.class, "arm_motor");
 //        sweepermotor = hwMap.get(DcMotor.class, "sweeper_motor");
-//        exmotor = hwMap.get(DcMotor.class, "ex_motor");
+        exmotor = hwMap.get(DcMotor.class, "ex_motor");
 
 
         // this should be for neverest  & using it for Matrix/yellowjackets as well.
@@ -159,7 +159,7 @@ public class Hardware8045
         liftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        sweepermotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        exmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        exmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
 
@@ -171,7 +171,7 @@ public class Hardware8045
         liftmotor.setPower(0);
         armmotor.setPower(0);
 //        sweepermotor.setPower(0);
-//        exmotor.setPower(0);
+        exmotor.setPower(0);
 
 
         // Define and Initialize Motors
@@ -184,7 +184,7 @@ public class Hardware8045
         liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        sweepermotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        exmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        exmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
