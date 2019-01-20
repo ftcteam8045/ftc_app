@@ -133,7 +133,7 @@ public class Hardware8045
         rightRear = hwMap.get(DcMotor.class, "right_rear");
         liftmotor = hwMap.get(DcMotor.class, "lift_motor");
         armmotor = hwMap.get(DcMotor.class, "arm_motor");
-//        sweepermotor = hwMap.get(DcMotor.class, "sweeper_motor");
+        sweepermotor = hwMap.get(DcMotor.class, "sweeper_motor");
         exmotor = hwMap.get(DcMotor.class, "ex_motor");
 
 
@@ -170,7 +170,7 @@ public class Hardware8045
         rightRear.setPower(0);
         liftmotor.setPower(0);
         armmotor.setPower(0);
-//        sweepermotor.setPower(0);
+        sweepermotor.setPower(0);
         exmotor.setPower(0);
 
 
@@ -192,7 +192,7 @@ public class Hardware8045
         // Define and initialize ALL installed servos.
 
         flagServo = hwMap.get(Servo.class, "flag_servo");
-//        dumpServo = hwMap.get(Servo.class, "dump_servo");
+        dumpServo = hwMap.get(Servo.class, "dump_servo");
 
 
         /**

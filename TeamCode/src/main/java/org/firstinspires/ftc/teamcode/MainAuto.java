@@ -446,22 +446,23 @@ public class MainAuto extends LinearOpMode {
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(1, driveDis2+HookClear, 0, 90);    // drive left
+            sleep(200);
+            mecanumDrive(1, driveDis2+HookClear+1, 0, 85);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             sleep(200);
-            mecanumDrive(0.5, -driveDis3 + 2, 0, 0);     // drive backwards
+            mecanumDrive(0.5, -driveDis3 + 5, 0, 0);     // drive backwards
 
         }
 
         if (goldPosition == 1) {       //center pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(200);
+            sleep(300);
             mecanumDrive(1, HookClear, 0, 90);    // drive left
             sleep(200);
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+            mecanumDrive(0.5, -driveDis3 +4, 0, 0);     // drive backwards
+            sleep(300);
             mecanumDrive(1, driveDis2, 0, 85);      // drive left 1x
 
         }
@@ -469,26 +470,27 @@ public class MainAuto extends LinearOpMode {
         if (goldPosition == 2) {      //right pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(100);
+            sleep(500);
             mecanumDrive(1, driveDis2-HookClear, 0, -90);    // drive right
+            sleep(200);
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+            sleep(400);
             mecanumDrive(1, 2*driveDis2, 0, 85);      // drive left 2x
         }
-        sleep(10);
 
         // drive towards the wall (all modes)
         mecanumDrive(1,driveDis4,0,85);      // drive towards wall
 
 
-        sleep(10);
+        sleep(200);
 
         // drive forward or backward based on crater starting position
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(1, 135);
             mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
-            mecanumDrive(0.6, driveDis7 + 4, 135, 0);  //drive towards base
+            mecanumDrive(0.6, driveDis7 + 5, 135, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
@@ -498,12 +500,12 @@ public class MainAuto extends LinearOpMode {
             sleep(800);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.2, -5, 135, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -1, 135, 0); //drive back to crater slowly
 
             Cosmo.flagServo.setPosition(closed);
         }else {                         /** base side drive  **/
             mecanumTurn(1, -43);
-            mecanumDrive(0.5,10,-45,90);
+            mecanumDrive(0.5,12,-45,90);
             mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
@@ -511,7 +513,7 @@ public class MainAuto extends LinearOpMode {
             sleep(800);
             mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.2, -5, -45, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -1, -45, 0); //drive back to crater slowly
 
             Cosmo.flagServo.setPosition(closed);
         }
