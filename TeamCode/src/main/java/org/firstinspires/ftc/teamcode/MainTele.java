@@ -44,6 +44,10 @@ public class MainTele extends OpMode {
     public double open = 0.55;
 
     public boolean liftMovingUp = false;
+    public boolean readyToDump = false;
+    public boolean dumpNow = false;
+    public boolean moveUp = false;
+
 
 
     @Override
@@ -123,13 +127,13 @@ public class MainTele extends OpMode {
 
         /** Lift Controls for Controller 1 **/
 
-            if (gamepad1.dpad_down || gamepad2.dpad_down) {
+            if (gamepad1.dpad_down) {
             Cosmo.liftmotor.setPower(-1.0);
             Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
         } else {
             Cosmo.liftmotor.setPower(0);
         }
-            if (gamepad1.dpad_up || gamepad2.dpad_up)  {
+            if (gamepad1.dpad_up)  {
             Cosmo.liftmotor.setPower(1.0);
         } else {
             Cosmo.liftmotor.setPower(0);
@@ -137,7 +141,7 @@ public class MainTele extends OpMode {
 
         /** Vertical Arm Controls for Controller 2 **/
 
-        int armSlowSpeedPos = 600;
+        int armSlowSpeedPos = 1300;
 
         if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
             Cosmo.armmotor.setPower(-gamepad2.left_stick_y );
@@ -147,7 +151,92 @@ public class MainTele extends OpMode {
         }
 
         if (gamepad2.left_trigger > 0.1 && Cosmo.armmotor.getCurrentPosition() < armSlowSpeedPos){
-            Cosmo.armmotor.setPower(0.2);
+            Cosmo.armmotor.setPower(0.12);
+        }
+
+
+
+        /** Sweeper Motor Controls for Controller 2 **/
+
+        if (gamepad2.right_trigger > 0.1){
+
+            Cosmo.sweepermotor.setPower(1);
+
+        }
+
+        if (gamepad2.left_bumper){
+
+            Cosmo.sweepermotor.setPower(-0.8);
+
+        }
+
+        if (gamepad2.right_bumper){
+
+            Cosmo.sweepermotor.setPower(0);
+
+        }
+
+
+        /** Extension Motor Controls for Controller 2 **/
+
+        int exMax = 4740;
+
+        if (gamepad2.right_stick_y != 0 && Cosmo.exmotor.getCurrentPosition() < exMax) {
+            Cosmo.exmotor.setPower(-gamepad2.right_stick_y);
+        }
+        else {
+            Cosmo.exmotor.setPower(0);
+        }
+
+
+        //extension arm one hit align
+
+        int dumpLength = 3154;
+        int moveLength = 1400;
+
+        if (gamepad2.x) {
+            dumpNow = true;
+
+        }
+
+        if (dumpNow) {
+
+            if (Cosmo.exmotor.getCurrentPosition() > moveLength) {
+                Cosmo.exmotor.setPower(-1);
+            }
+            else {
+                Cosmo.exmotor.setPower(0);
+                readyToDump = true;
+                dumpNow = false;
+            }
+
+
+        }
+
+
+        if (readyToDump){
+
+            if (Cosmo.armmotor.getCurrentPosition() < armUp){
+
+                Cosmo.armmotor.setPower(1);
+
+            }
+            else {
+                Cosmo.armmotor.setPower(0);
+                moveUp = true;
+            }
+
+        }
+
+        if (moveUp) {
+
+            if (Cosmo.exmotor.getCurrentPosition() < moveLength) {
+                Cosmo.exmotor.setPower(1);
+            }
+            else {
+                Cosmo.exmotor.setPower(0);
+                moveUp = false;
+            }
         }
 
         //intake arm up one hit
@@ -162,38 +251,6 @@ public class MainTele extends OpMode {
 //            }
 //
 //        }
-
-        /** Sweeper Motor Controls for Controller 2 **/
-
-        if (gamepad2.right_trigger > 0.1){
-
-            Cosmo.sweepermotor.setPower(1);
-
-        }
-
-        if (gamepad2.left_trigger > 0.1){
-
-            Cosmo.sweepermotor.setPower(-0.6);
-
-        }
-
-        if (gamepad2.right_bumper || gamepad2.left_bumper){
-
-            Cosmo.sweepermotor.setPower(0);
-
-        }
-
-
-        /** Extension Motor Controls for Controller 2 **/
-
-        int exMax = 5895;
-
-        if (gamepad2.right_stick_y > 0.01 || gamepad2.right_stick_y < 0.01 && Cosmo.exmotor.getCurrentPosition() < exMax) {
-            Cosmo.exmotor.setPower(-gamepad2.right_stick_y);
-        }
-        else {
-            Cosmo.exmotor.setPower(0);
-        }
 
         /** Dump Servo Controls for Controller 2 **/
 
@@ -215,7 +272,7 @@ public class MainTele extends OpMode {
         int liftMax = 12000;
 
 //        if (gamepad1.right_bumper || gamepad2.left_bumper) {
-            if (gamepad2.dpad_left || gamepad1.right_bumper) {
+            if (gamepad1.right_bumper) {
 
             liftMovingUp = true;
             //move lift up
