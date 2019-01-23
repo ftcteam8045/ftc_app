@@ -194,10 +194,11 @@ public class MainAuto extends LinearOpMode {
                     }
                     telemetry.addLine(" Press Left Joystick for Edit");
                     telemetry.addData("# Objects Detected", updatedRecognitions.size());
+
                     for (Recognition recognition : updatedRecognitions) {
                         telemetry.addLine().addData("", "%.2f %s   X %.0f Y %.0f", recognition.getConfidence(), recognition.getLabel(), recognition.getLeft(), recognition.getBottom());
                     }
-                    // ELI V
+                    // ELI V    case for seeing exactly three objects (hope 1 gold and two silver)?!
                     if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
@@ -227,6 +228,7 @@ public class MainAuto extends LinearOpMode {
                     } else if (updatedRecognitions.size() != 3) {
                         int goldMineralX = -1;
                         float goldMineralConf = -1;
+
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals("Gold")) {
                                 if (recognition.getConfidence() >= goldMineralConf) {
