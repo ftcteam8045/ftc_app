@@ -100,6 +100,12 @@ public class MainAuto extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         Cosmo.init(hardwareMap);
+        Cosmo.sensorColor.enableLed(true);
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
 
         /** TURN ON LIGHTS */
         if (teamIsRed) {
@@ -193,6 +199,18 @@ public class MainAuto extends LinearOpMode {
                         telemetry.addData("", "Base");
                     }
                     telemetry.addLine(" Press Left Joystick for Edit");
+
+                    Color.RGBToHSV((int) (Cosmo.sensorColor.red() * 255),
+                            (int) (Cosmo.sensorColor.green() * 255),
+                            (int) (Cosmo.sensorColor.blue() * 255),
+                            hsvValues);
+                    //  Color sensor test
+                    telemetry.addData("Alpha", Cosmo.sensorColor.alpha());
+                    telemetry.addData("Red  ", Cosmo.sensorColor.red());
+                    telemetry.addData("Green", Cosmo.sensorColor.green());
+                    telemetry.addData("Blue ", Cosmo.sensorColor.blue());
+                    telemetry.addData("Hue", hsvValues[0]);
+
                     telemetry.addData("# Objects Detected", updatedRecognitions.size());
 
                     for (Recognition recognition : updatedRecognitions) {
@@ -368,6 +386,8 @@ public class MainAuto extends LinearOpMode {
             /**   End of  LED Light signalling  **/
 
             /** End of Signal the position of the gold mineral  here **/
+
+
 
 
             //Clamp Team Marker

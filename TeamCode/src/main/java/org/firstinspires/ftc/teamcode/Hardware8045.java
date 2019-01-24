@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -105,6 +106,10 @@ public class Hardware8045
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
+
+    ColorSensor sensorColor;
+
+
 
     /* Constructor */
     public Hardware8045(){
@@ -215,8 +220,12 @@ public class Hardware8045
         imu.initialize(parameters);
 
 
+        // get a reference to the color sensor.
+//        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
+        sensorColor = hwMap.get(ColorSensor.class, "revcolorsensor");
 
- }
+
+    }
 
 
 }
