@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<Robot type="FirstInspires-FTC">
+    <LynxUsbDevice name="Expansion Hub Portal 1" serialNumber="DQ1761WI" parentModuleAddress="1">
+        <LynxModule name="Expansion Hub 1" port="1">
+            <Matrix12vMotor name="left_front" port="0" />
+            <Matrix12vMotor name="left_rear" port="1" />
+            <Matrix12vMotor name="right_front" port="2" />
+            <Matrix12vMotor name="right_rear" port="3" />
+            <RevBlinkinLedDriver name="ledlights" port="0" />
+            <Servo name="flag_servo" port="1" />
+            <Servo name="dump_servo" port="2" />
+            <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+        </LynxModule>
+        <LynxModule name="Expansion Hub 2" port="2">
+            <Matrix12vMotor name="lift_motor" port="0" />
+            <Matrix12vMotor name="arm_motor" port="1" />
+            <Matrix12vMotor name="ex_motor" port="2" />
+            <Matrix12vMotor name="sweeper_motor" port="3" />
+            <LynxEmbeddedIMU name="imu 1" port="0" bus="0" />
+        </LynxModule>
+    </LynxUsbDevice>
+</Robot>

@@ -218,7 +218,34 @@ public class MainAuto_TF2 extends LinearOpMode {
                     }
                     // ELI V    case for seeing exactly three objects (hope 1 gold and two silver)?!
 
-                    int goldMineralX = -1;
+                    if (updatedRecognitions.size() != 0) {
+                        int goldMineralX = -1;
+                        float goldMineralConf = -1;
+
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals("Gold")) {
+                                if (recognition.getConfidence() >= goldMineralConf) {
+                                    goldMineralConf = recognition.getConfidence();
+                                    goldMineralX = (int) recognition.getLeft();
+                                }
+                            }
+                        }
+                        if (goldMineralX < 400 && goldMineralX > 0) {
+                            goldPosition = 0;
+                            telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
+                        } else if (goldMineralX > 400) {
+                            goldPosition = 1;
+                            telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
+                        } else {
+                            goldPosition = 2;
+                            telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+                        }
+
+                    } else {
+
+                    }
+
+                        int goldMineralX = -1;
                     int goldMineralY = -1;
                     float goldMineralConf = -1;
 
