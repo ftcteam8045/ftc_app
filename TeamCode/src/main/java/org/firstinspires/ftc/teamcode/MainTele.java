@@ -22,6 +22,8 @@ public class MainTele extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     double timeLeft;
 
+    public boolean teamIsRed = true;
+
 //    double turnDirection;
     public double topSpeed = 0.5 ;
     public boolean reverseDrive = false;
@@ -63,6 +65,15 @@ public class MainTele extends OpMode {
 
         telemetry.addData("Finished", "Initializing");
         telemetry.update();
+
+        //Create variable thing for light colors  based on team color
+        RevBlinkinLedDriver.BlinkinPattern teamColor;
+        if (teamIsRed) {
+            teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+        } else {
+            teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
+        }
+        Cosmo.LEDDriver.setPattern(teamColor);
     }
 
     @Override
