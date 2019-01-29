@@ -63,8 +63,8 @@ public class MainAuto_TF2 extends LinearOpMode {
     public double open = 0.0;
     public double closed = 0.45;
     public int liftmax=10600;
-
-
+    public double errorAllowed = 50;
+    public double mineralYZone = 530;
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -174,6 +174,9 @@ public class MainAuto_TF2 extends LinearOpMode {
             tfod.activate();
         }
 
+        int goldMineralX = -1;
+        float goldMineralConf = -1;
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
@@ -219,49 +222,44 @@ public class MainAuto_TF2 extends LinearOpMode {
                     // ELI V    case for seeing exactly three objects (hope 1 gold and two silver)?!
 
                     if (updatedRecognitions.size() != 0) {
-                        int goldMineralX = -1;
-                        float goldMineralConf = -1;
+
+
+                        //Origin for coordinates is upper left, x goes from left to right and y goes from top to bottom
+                        //Crater rim is about 300 on Y axis
+                        //X cood were 8 for left mineral and 436-ish for right
+
+
+                        //Set to right by default, if we see gold as lef tor center, set accordingly
+                        goldPosition = 2;
 
                         for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals("Gold")) {
-                                if (recognition.getConfidence() >= goldMineralConf) {
-                                    goldMineralConf = recognition.getConfidence();
-                                    goldMineralX = (int) recognition.getLeft();
+                            if (abs((recognition.getBottom() + recognition.getTop()) / 2 - mineralYZone) < errorAllowed) {   //This mineral is in the allowed Y zone
+
+                                if (abs((recognition.getLeft() + recognition.getRight()) / 2) < 220) {   //This mineral is in the allowed Y zone
+
+                                    if (recognition.getLabel().equals("Gold")) {
+                                        goldPosition = 0;    //Its gold, and it is on the left
+                                    }
+
+                                } else {
+                                    if (recognition.getLabel().equals("Gold")) {
+                                        goldPosition = 1;    //Its gold, and it is on the right (center)
+                                    }
                                 }
+
                             }
                         }
-                        if (goldMineralX < 400 && goldMineralX > 0) {
-                            goldPosition = 0;
+
+
+                        if (goldPosition == 0) {
                             telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
-                        } else if (goldMineralX > 400) {
-                            goldPosition = 1;
-                            telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
-                        } else {
-                            goldPosition = 2;
+                        } else if (goldPosition == 2) {
                             telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+                        } else if (goldPosition == 1) {
+                            telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
                         }
 
-                    } else {
-
                     }
-
-                        int goldMineralX = -1;
-                    int goldMineralY = -1;
-                    float goldMineralConf = -1;
-
-                    for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals("Gold")) {
-                                if (recognition.getConfidence() >= goldMineralConf) {
-                                    goldMineralConf = recognition.getConfidence();
-                                    goldMineralX = (int) (recognition.getLeft()+recognition.getRight()) / 2;
-                                    goldMineralY = (int) (recognition.getBottom()+recognition.getTop()) / 2;
-                                }
-                        }
-                    }
-                    telemetry.addLine().addData("Top Gold ", "%.2f %s   X %.0f Y %.0f", goldMineralConf,goldMineralX, goldMineralY);
-
-
-
                 }
             }
             /** Eli's edit Menu params  **/
