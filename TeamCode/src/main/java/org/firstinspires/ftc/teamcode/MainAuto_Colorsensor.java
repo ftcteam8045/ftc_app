@@ -65,8 +65,12 @@ public class MainAuto_Colorsensor extends LinearOpMode {
     public double grayHueValue = 120.0;
     public double redHueValue  =  60.0;
     public double blueHueValue = 140.0;
-    public double grayRedTransition  = (grayHueValue + redHueValue  )/ 2;
-    public double grayBlueTransition = (grayHueValue + blueHueValue )/ 2;
+    public double grayRedBorder  = (grayHueValue + redHueValue  ) / 2;
+    public double grayBlueBorder = (grayHueValue + blueHueValue ) / 2;
+    // hsvValues is an array that will hold the hue, saturation, and value information.
+    public float hsvValues[] = {0F, 0F, 0F};
+    // values is a reference to the hsvValues array.
+    public float values[] = hsvValues;
 
     public int liftmax=10600;
 
@@ -107,10 +111,6 @@ public class MainAuto_Colorsensor extends LinearOpMode {
          */
         Cosmo.init(hardwareMap);
         Cosmo.sensorColor.enableLed(true);
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
 
 
         /** TURN ON LIGHTS */
@@ -216,6 +216,8 @@ public class MainAuto_Colorsensor extends LinearOpMode {
                     telemetry.addData("Green", Cosmo.sensorColor.green());
                     telemetry.addData("Blue ", Cosmo.sensorColor.blue());
                     telemetry.addData("Hue", hsvValues[0]);
+                    telemetry.addData("Sat", hsvValues[1]);
+                    telemetry.addData("Val", hsvValues[2]);
 
                     telemetry.addData("# Objects Detected", updatedRecognitions.size());
 
@@ -607,8 +609,11 @@ public class MainAuto_Colorsensor extends LinearOpMode {
          *  could also say  'while it's not withing a little bit of the gray reading'
          *
          * **/
+        Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
 
-        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive()  /* ENCODERS*/) {//Should we average all four motors?
+        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts))
+                && opModeIsActive() &&    // opmode has to be active
+                (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) ) {         //  stop if the hue goes outside of the gray range
             //Determine correction
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
@@ -649,6 +654,8 @@ public class MainAuto_Colorsensor extends LinearOpMode {
             Cosmo.rightRear.setPower(rrpower);
 
 //            RobotLog.ii("[GromitIR] ", Double.toString(18.7754*Math.pow(sharpIRSensor.getVoltage(),-1.51)), Integer.toString(left_front.getCurrentPosition()));
+            // update the Hue
+            Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
 
         }
         //gromit.driveTrain.stopMotors();
