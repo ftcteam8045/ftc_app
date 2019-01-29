@@ -164,7 +164,8 @@ public class MainAuto_TF2 extends LinearOpMode {
             tfodParameters.minimumConfidence  = 0.40;
             tfodParameters.useObjectTracker = true;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
+//            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
+            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold");    // lets try only looking for gold
 
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
@@ -229,13 +230,13 @@ public class MainAuto_TF2 extends LinearOpMode {
                         //X cood were 8 for left mineral and 436-ish for right
 
 
-                        //Set to right by default, if we see gold as lef tor center, set accordingly
+                        //Set to right by default, if we see gold as left or center, set accordingly
                         goldPosition = 2;
 
                         for (Recognition recognition : updatedRecognitions) {
-                            if (abs((recognition.getBottom() + recognition.getTop()) / 2 - mineralYZone) < errorAllowed) {   //This mineral is in the allowed Y zone
+                            if (abs((recognition.getBottom() + recognition.getTop()) / 2 - mineralYZone) < errorAllowed ) {   //This mineral is in the allowed Y zone
 
-                                if (abs((recognition.getLeft() + recognition.getRight()) / 2) < 220) {   //This mineral is in the allowed Y zone
+                                if (abs((recognition.getLeft() + recognition.getRight()) / 2) < 220) {
 
                                     if (recognition.getLabel().equals("Gold")) {
                                         goldPosition = 0;    //Its gold, and it is on the left
