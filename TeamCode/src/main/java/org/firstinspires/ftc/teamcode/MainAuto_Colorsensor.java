@@ -62,6 +62,12 @@ public class MainAuto_Colorsensor extends LinearOpMode {
     public double HookClear = 2.0;
     public double open = 0.0;
     public double closed = 0.45;
+    public double grayHueValue = 120.0;
+    public double redHueValue  =  60.0;
+    public double blueHueValue = 140.0;
+    public double grayRedTransition  = (grayHueValue + redHueValue  )/ 2;
+    public double grayBlueTransition = (grayHueValue + blueHueValue )/ 2;
+
     public int liftmax=10600;
 
 
@@ -568,6 +574,89 @@ public class MainAuto_Colorsensor extends LinearOpMode {
      // End Actual Program Run
      *************************************************************/
 
+    //  Drive routine using the IMU and Mecanum wheels
+    //  Robot Orientation is to the field
+    //  Drive direction is from the robot
+    //
+    public void mecanumDrivetoTape(double speed, double distance, double robot_orientation, double drive_direction) {
+        double max;
+        double multiplier;
+        int right_start;
+        int left_start;
+        int moveCounts;
+        //int drive_direction = -90;
+        moveCounts = (int) (distance * Cosmo.COUNTS_PER_INCH);
+        right_start = Cosmo.rightRear.getCurrentPosition();
+        left_start = Cosmo.leftRear.getCurrentPosition();
+        double lfpower;
+        double lrpower;
+        double rfpower;
+        double rrpower;
+
+        double lfbase;
+        double lrbase;
+        double rfbase;
+        double rrbase;
+        lfbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
+        lrbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
+        rfbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
+        rrbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
+        /** this is the main test to see if you've gone far enough,  add the color tape in here!
+         *  so you need a || (hue is less than so much || hue is > so much)
+         *
+         *  could also say  'while it's not withing a little bit of the gray reading'
+         *
+         * **/
+
+        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive()  /* ENCODERS*/) {//Should we average all four motors?
+            //Determine correction
+            double correction = robot_orientation - getheading();
+            if (correction <= -180) {
+                correction += 360;
+            } else if (correction >= 180) {                      // correction should be +/- 180 (to the left negative, right positive)
+                correction -= 360;
+            }
+            lrpower = lrbase; //MIGHT BE MORE EFFECIENT TO COMBINE THESE WITHT HE ADJUSTMENT PART AND SET ADJUSTMENT TO ZERO IF NOT NEEDED
+            lfpower = lfbase;
+            rrpower = rrbase;
+            rfpower = rfbase;
+            if (abs(correction) > drive_THRESHOLD) {//If you are off
+                //Apply power to one side of the robot to turn the robot back to the right heading
+                double right_adjustment = Range.clip((drive_COEF * correction / 45), -1, 1);
+                lrpower -= right_adjustment;
+                lfpower -= right_adjustment;
+                rrpower = rrbase + right_adjustment;
+                rfpower = rfbase + right_adjustment;
+
+            }//Otherwise you Are at the right orientation
+
+            //Determine largest power being applied in either direction
+            max = abs(lfpower);
+            if (abs(lrpower) > max) max = abs(lrpower);
+            if (abs(rfpower) > max) max = abs(rfpower);
+            if (abs(rrpower) > max) max = abs(rrpower);
+
+            multiplier = speed / max; //multiplier to adjust speeds of each wheel so you can have a max power of 1 on atleast 1 wheel
+
+            lfpower *= multiplier;
+            lrpower *= multiplier;
+            rfpower *= multiplier;
+            rrpower *= multiplier;
+
+            Cosmo.leftFront.setPower(lfpower);
+            Cosmo.leftRear.setPower(lrpower);
+            Cosmo.rightFront.setPower(rfpower);
+            Cosmo.rightRear.setPower(rrpower);
+
+//            RobotLog.ii("[GromitIR] ", Double.toString(18.7754*Math.pow(sharpIRSensor.getVoltage(),-1.51)), Integer.toString(left_front.getCurrentPosition()));
+
+        }
+        //gromit.driveTrain.stopMotors();
+        Cosmo.leftFront.setPower(0.0);
+        Cosmo.rightFront.setPower(0.0);
+        Cosmo.rightRear.setPower(0.0);
+        Cosmo.leftRear.setPower(0.0);
+    }
 
 
 
