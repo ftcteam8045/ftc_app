@@ -448,7 +448,8 @@ public class MainAuto_Colorsensor extends LinearOpMode {
         telemetry.update();
 //
         // First task would be to deploy  here//
-
+        mecanumDrivetoTape(0.5, 48, 0, 0);     // drive forward
+        sleep(30000);
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         int liftmax = 10800;
