@@ -40,7 +40,7 @@ public class MainTele extends OpMode {
     public String driveMode = "Normal";
     public boolean run = false;
 
-    public double armUp = 1850;
+    public double armUp = 2100;
 
     public double closed = 0.0;
     public double open = 0.55;
@@ -49,9 +49,12 @@ public class MainTele extends OpMode {
     public boolean readyToDump = false;
     public boolean dumpNow = false;
     public boolean moveUp = false;
+    public boolean readyToObtain = true;
+    public boolean tweakingArm = true;
 
 
-
+    public int dumpLength = 3154;
+    public int moveLength = 1400;
     @Override
     public void init() {
         Cosmo = new Hardware8045();
@@ -152,7 +155,7 @@ public class MainTele extends OpMode {
 
         /** Vertical Arm Controls for Controller 2 **/
 
-        int armSlowSpeedPos = 1300;
+        int armSlowSpeedPos = 1400;
 
         if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
             Cosmo.armmotor.setPower(-gamepad2.left_stick_y );
@@ -161,11 +164,15 @@ public class MainTele extends OpMode {
             Cosmo.armmotor.setPower(0);
         }
 
-        if (gamepad2.left_trigger > 0.1 && Cosmo.armmotor.getCurrentPosition() < armSlowSpeedPos){
-            Cosmo.armmotor.setPower(0.12);
+        if (gamepad2.left_trigger > 0.1) {
+            if (Cosmo.armmotor.getCurrentPosition() < armSlowSpeedPos) {
+                Cosmo.armmotor.setPower(0.09);
+            }
+
+            if (Cosmo.armmotor.getCurrentPosition() > armSlowSpeedPos) {
+                Cosmo.armmotor.setPower(-0.5);
+            }
         }
-
-
 
         /** Sweeper Motor Controls for Controller 2 **/
 
@@ -192,7 +199,7 @@ public class MainTele extends OpMode {
 
         int exMax = 4740;
 
-        if (gamepad2.right_stick_y != 0 && Cosmo.exmotor.getCurrentPosition() < exMax) {
+        if (gamepad2.right_stick_y != 0) {
             Cosmo.exmotor.setPower(-gamepad2.right_stick_y);
         }
         else {
@@ -202,10 +209,25 @@ public class MainTele extends OpMode {
 
         //extension arm one hit align
 
-        int dumpLength = 3154;
-        int moveLength = 1400;
 
-        if (gamepad2.x) {
+        if(gamepad2.x && readyToObtain){
+
+            Cosmo.exmotor.setPower(0.18);
+            Cosmo.armmotor.setPower(0.5);
+            sleep(920);
+            Cosmo.armmotor.setPower(0.2);
+            Cosmo.exmotor.setPower(1);
+            sleep(1500);
+            Cosmo.armmotor.setPower(0);
+            Cosmo.exmotor.setPower(0);
+            Cosmo.dumpServo.setPosition(open);
+            readyToObtain = false;
+
+        }
+
+
+
+        if (gamepad2.y) {
             dumpNow = true;
 
         }
@@ -235,22 +257,22 @@ public class MainTele extends OpMode {
             else {
                 Cosmo.armmotor.setPower(0);
                 moveUp = true;
+                readyToDump = false;
             }
 
         }
 
         if (moveUp) {
 
-            if (Cosmo.exmotor.getCurrentPosition() < moveLength) {
+            while (Cosmo.exmotor.getCurrentPosition() < dumpLength) {
                 Cosmo.exmotor.setPower(1);
+
             }
-            else {
                 Cosmo.exmotor.setPower(0);
                 moveUp = false;
-            }
         }
 
-        //intake arm up one hit
+       //intake arm up one hit
 
 
 //        if (gamepad2.x){

@@ -473,6 +473,7 @@ public class MainAuto_TF2 extends LinearOpMode {
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(1, 135);
             mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
+            sleep(waitTime1);
             mecanumDrive(0.6, driveDis7 + 5, 135, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
@@ -489,6 +490,7 @@ public class MainAuto_TF2 extends LinearOpMode {
         }else {                         /** base side drive  **/
             mecanumTurn(1, -43);
             mecanumDrive(0.5,12,-45,90);
+            sleep(waitTime1);
             mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
@@ -815,7 +817,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
                 dpadPressedLeft = false;
                 if (currentEdit == 0) {
-                    waitTime1 -= 1;
+                    waitTime1 -= 1000;
                 }
                 if (currentEdit == 1) {
                     if (colorIndex == 1) {
@@ -884,7 +886,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             } else if (gamepad1.dpad_right == false && dpadPressedRight) {
                 dpadPressedRight = false;
                 if (currentEdit == 0) {
-                    waitTime1 += 1;
+                    waitTime1 += 1000;
                 }
                 if (currentEdit == 1) {
                     if (colorIndex == 1) {

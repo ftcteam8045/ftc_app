@@ -20,7 +20,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.oldcode.AutoTransitioner;
 
 import java.util.List;
 
@@ -28,10 +27,12 @@ import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
+//Lara + Liesel positioning code
 
-@Autonomous(name = "Main Auto", group = "Cosmo")
+
+@Autonomous(name = "AutoL&L", group = "Cosmo")
 //@Disabled
-public class MainAuto_QT extends LinearOpMode {
+public class EliSampling extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
@@ -44,23 +45,19 @@ public class MainAuto_QT extends LinearOpMode {
      * Menu Parameter Initialization
      **/
     public boolean teamIsRed = true;
-    public boolean craterPosition = true;
+    public boolean craterPosition = false;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 12;
-    public int driveDis2 = 20;
+    public int driveDis1 = 15;
+    public int driveDis2 = 15;
     public int driveDis3 = 7; //forward+backward
-    public int driveDis4 = 45; //drive to wall
-    public int driveDis5 = 55; //drive to base  on base side
-    public int driveDis6 = 60; //drive to crater  used for crater and base starts
-    public int driveDis7 = 25;  // DRIVE TO BASE ON CRATER START
+    public int driveDis4 = 50; //drive to wall
+    public int driveDis5 = 55; //drive to base
+    public int driveDis6 = 60; //drive to crater
+    public int driveDis7 = 0;
     public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
-    public double HookClear = 2.0;
-    public double open = 0.0;
-    public double closed = 0.45;
-    public int liftmax=10600;
 
 
     // State used for updating telemetry
@@ -90,7 +87,7 @@ public class MainAuto_QT extends LinearOpMode {
         final double FORWARD_SPEED = 0.3;
         final double TURN_SPEED = 0.3;
         final int cycletime = 500;
-        int goldPosition = 2;   // 0 is on left, 1 in center, 2 on right
+        int goldPosition = 0;   // 0 is on left, 1 in center, 2 on right
 
 
         /*
@@ -98,12 +95,6 @@ public class MainAuto_QT extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         Cosmo.init(hardwareMap);
-        Cosmo.sensorColor.enableLed(true);
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
-
 
         /** TURN ON LIGHTS */
         if (teamIsRed) {
@@ -146,21 +137,16 @@ public class MainAuto_QT extends LinearOpMode {
 
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-//        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
 
-       // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
-
-        //        /** Initialize the Tensor Flow Object Detection engine. */
+        /** Initialize the Tensor Flow Object Detection engine. */
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfodParameters.minimumConfidence  = 0.40;
-            tfodParameters.useObjectTracker = true;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
             tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
 
@@ -172,11 +158,14 @@ public class MainAuto_QT extends LinearOpMode {
             tfod.activate();
         }
 
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-        // AutoTransitioner used before waitForStart()
-        AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
+
+        //Clamp Team Marker
+        Cosmo.flagServo.setPosition(0.315);
+
         /**************************************************************
          // Actual Init loop
          *************************************************************/
@@ -197,24 +186,12 @@ public class MainAuto_QT extends LinearOpMode {
                         telemetry.addData("", "Base");
                     }
                     telemetry.addLine(" Press Left Joystick for Edit");
-
-                    Color.RGBToHSV((int) (Cosmo.sensorColor.red() * 255),
-                            (int) (Cosmo.sensorColor.green() * 255),
-                            (int) (Cosmo.sensorColor.blue() * 255),
-                            hsvValues);
-                    //  Color sensor test
-                    telemetry.addData("Alpha", Cosmo.sensorColor.alpha());
-                    telemetry.addData("Red  ", Cosmo.sensorColor.red());
-                    telemetry.addData("Green", Cosmo.sensorColor.green());
-                    telemetry.addData("Blue ", Cosmo.sensorColor.blue());
-                    telemetry.addData("Hue", hsvValues[0]);
-
                     telemetry.addData("# Objects Detected", updatedRecognitions.size());
-
                     for (Recognition recognition : updatedRecognitions) {
                         telemetry.addLine().addData("", "%.2f %s   X %.0f Y %.0f", recognition.getConfidence(), recognition.getLabel(), recognition.getLeft(), recognition.getBottom());
                     }
-                    // ELI V    case for seeing exactly three objects (hope 1 gold and two silver)?!
+
+
                     if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
@@ -228,6 +205,15 @@ public class MainAuto_QT extends LinearOpMode {
                                 silverMineral2X = (int) recognition.getLeft();
                             }
                         }
+                        //Eli Edit V
+                        if (goldMineralX <= .3) {
+                            goldPosition = 0;
+                        } else if (goldMineralX > .3 && goldMineralX < .7) {
+                            goldPosition = 1;
+                        } else {
+                            goldPosition = 2;
+                        }
+                        //Eli Edit ^^
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                 goldPosition = 0;
@@ -240,63 +226,10 @@ public class MainAuto_QT extends LinearOpMode {
                                 telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
                             }
                         }
-
-                    } else if (updatedRecognitions.size() != 3) {
-                        int goldMineralX = -1;
-                        float goldMineralConf = -1;
-
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals("Gold")) {
-                                if (recognition.getConfidence() >= goldMineralConf) {
-                                    goldMineralConf = recognition.getConfidence();
-                                    goldMineralX = (int) recognition.getLeft();
-                                }
-                            }
-                        }
-                        if (goldMineralX < 400) {
-                            goldPosition = 0;
-                            telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
-                        } else if (goldMineralX < 850) {
-                            goldPosition = 1;
-                            telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
-                        } else{
-                            goldPosition = 2;
-                            telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
-                        }
+                    } else {
+                        goldPosition = 99;
+                        telemetry.addData("Gold Mineral NOT FOUND ", goldPosition);
                     }
-                    // ELI ^
-
-//                    if (updatedRecognitions.size() == 3) {
-//                        int goldMineralX = -1;
-//                        int silverMineral1X = -1;
-//                        int silverMineral2X = -1;
-//                        for (Recognition recognition : updatedRecognitions) {
-//                            if (recognition.getLabel().equals("Gold")) {
-//                                goldMineralX = (int) recognition.getLeft();
-//                            } else if (silverMineral1X == -1) {
-//                                silverMineral1X = (int) recognition.getLeft();
-//                            } else {
-//                                silverMineral2X = (int) recognition.getLeft();
-//                            }
-//                        }
-//                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-//                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-//                                goldPosition = 0;
-//                                telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
-//                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-//                                goldPosition = 2;
-//                                telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
-//                            } else {
-//                                goldPosition = 1;
-//                                telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        goldPosition = 69;
-//                        telemetry.addData("Gold Mineral NOT FOUND ", goldPosition);
-//                    }
-
                     //telemetry.update();
                 }
             }
@@ -386,193 +319,88 @@ public class MainAuto_QT extends LinearOpMode {
             /** End of Signal the position of the gold mineral  here **/
 
 
-
-
-            //Clamp Team Marker
-            if (gamepad1.b) {
-                Cosmo.flagServo.setPosition(open);
-            }
-            if (gamepad1.a) {
-                Cosmo.flagServo.setPosition(closed);
-            }
-
-
-            /** Lift Controls for Controller 1 **/
-
-            if (gamepad1.right_trigger >= 0.1) {
-                Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
-            }
-            else {
-                Cosmo.liftmotor.setPower(0);
-            }
-            if (gamepad1.left_trigger >= 0.1)  {
-                Cosmo.liftmotor.setPower(gamepad1.left_trigger);
-            }
-            else {
-                Cosmo.liftmotor.setPower(0);
-            }
-
-
-
-                telemetry.update();
+            telemetry.update();
         }
-        /**************************************************************
-         // End Init loop
-         *************************************************************/
+
         // Wait for the game to start (driver presses PLAY) replaced by init loop
         //       waitForStart();
-
-
-
-
-
 
         /**************************************************************
          // Actual RUN instructions
          *************************************************************/
-
-        tfod.deactivate();     // turn off the tensorflow detector.
-
 //        while (opModeIsActive() && !isStopRequested() {
         telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.milliseconds());
         telemetry.update();
 //
         // First task would be to deploy  here//
-
-
-        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftmax = 10800;
-
-        // Unhook from lift holder with high torque motor
-
-
-        while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
-
-            Cosmo.liftmotor.setPower(1);
-
-        }
-        Cosmo.liftmotor.setPower(0);
-
-
-
-        if (craterPosition){            /** crater side drive  **/
-            HookClear = HookClear+2.0;
-        }
-        sleep(700);
-        mecanumDrive(0.5, HookClear, 0, -90); //Drive right
+//        mecanumDrive(0.5, 100, 0, 0);     // drive forward
+//       sleep(200000);
 
 //          goldposition 0 = left,1 = center, 2 = right
+        if (goldPosition == 99) {                         // default to the left.
+            goldPosition = 0;
+        }
 
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(200);
-            mecanumDrive(1, driveDis2+HookClear+1, 0, 85);    // drive left
+            mecanumDrive(0.5, driveDis2, 0, 90);    // drive left
             mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-            sleep(200);
-            mecanumDrive(0.5, -driveDis3 + 5, 0, 0);     // drive backwards
 
-        }
-
-        if (goldPosition == 1) {       //center pos
-
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(300);
-            mecanumDrive(1, HookClear, 0, 90);    // drive left
-            sleep(200);
-            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.5, -driveDis3 +4, 0, 0);     // drive backwards
-            sleep(300);
-            mecanumDrive(1, driveDis2, 0, 85);      // drive left 1x
-
-        }
-
-        if (goldPosition == 2) {      //right pos
-
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(500);
-            mecanumDrive(1, driveDis2-HookClear, 0, -90);    // drive right
-            sleep(200);
-            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
-            sleep(400);
-            mecanumDrive(1, 2*driveDis2, 0, 85);      // drive left 2x
+
+        }
+
+        if (goldPosition == 1) {
+
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+
+            mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+            mecanumDrive(0.5, driveDis2, 0, 90);      // drive left 1x
+
+        }
+
+        if (goldPosition == 2) {
+
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            mecanumDrive(0.5, driveDis2, 0, -90);    // drive right
+            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+
+            mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+            mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
         }
 
         // drive towards the wall (all modes)
-        mecanumDrive(1,driveDis4,0,85);      // drive towards wall
+        mecanumDrive(0.8,driveDis4,0,90);      // drive towards wall
+        mecanumTurn(0.8, -43);
+        mecanumDrive(0.5,4,-45,90);
+        mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
+        //Unclamp Team Marker
+        Cosmo.flagServo.setPosition(0.9);
+        sleep(2000);
+        mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
+        //Reclamp Team Marker
+        Cosmo.flagServo.setPosition(0.315);
 
-        //TEST
-        mecanumDrive(1,driveDis4,0,40);      // drive towards wall
-        mecanumTurn(1, 135);                                // turn
-        mecanumDrive(1,driveDis4,0,45);      // drive towards wall
-        //TEST
-
-        sleep(200);
 
         // drive forward or backward based on crater starting position
 
-        if (craterPosition){            /** crater side drive  **/
-            mecanumTurn(1, 135);
-            mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
-            mecanumDrive(0.6, driveDis7 + 5, 135, 0);  //drive towards base
-            //Unclamp Team Marker
-            sleep(750);
-            Cosmo.flagServo.setPosition(open);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-            sleep(800);
-            mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
-            sleep(300);
-            mecanumDrive(0.4, -1, 135, 0); //drive back to crater slowly
+        if (craterPosition){            // crater side drive
 
-            Cosmo.flagServo.setPosition(closed);
-        }else {                         /** base side drive  **/
-            mecanumTurn(1, -43);
-            mecanumDrive(0.5,12,-45,90);
-            mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
-            //Unclamp Team Marker
-            sleep(750);
-            Cosmo.flagServo.setPosition(open);
-            sleep(800);
-            mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
-            sleep(300);
-            mecanumDrive(0.4, -1, -45, 0); //drive back to crater slowly
+        }else {                         // base side drive
 
-            Cosmo.flagServo.setPosition(closed);
         }
         Cosmo.leftFront.setPower(0);
         Cosmo.rightFront.setPower(0);
         Cosmo.leftRear.setPower(0);
         Cosmo.rightRear.setPower(0);
 
-
-        //reset lift at end of auto
-        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos && !isStopRequested()){
-
-            Cosmo.liftmotor.setPower(-1);
-
-        }
-        Cosmo.liftmotor.setPower(0);
-
-
-
-
-        if (tfod != null) {
-            tfod.shutdown();
-        }
         telemetry.addData("Path", "Complete");
         telemetry.update();
-        sleep(2000);
+        sleep(20000);
         //       }
     }
-    /**************************************************************
-     // End Actual Program Run
-     *************************************************************/
-
-
-
 
     //  Drive routine using the IMU and Mecanum wheels
     //  Robot Orientation is to the field
@@ -601,7 +429,7 @@ public class MainAuto_QT extends LinearOpMode {
         lrbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
         rfbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
         rrbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
-        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive()  /* ENCODERS*/) {//Should we average all four motors?
+        while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive() /* ENCODERS*/) {//Should we average all four motors?
             //Determine correction
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
