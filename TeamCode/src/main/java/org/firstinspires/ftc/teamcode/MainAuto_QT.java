@@ -28,8 +28,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
-//Lara + Liesel positioning code
-
 
 @Autonomous(name = "Main Auto", group = "Cosmo")
 //@Disabled
@@ -504,6 +502,11 @@ public class MainAuto_QT extends LinearOpMode {
         // drive towards the wall (all modes)
         mecanumDrive(1,driveDis4,0,85);      // drive towards wall
 
+        //TEST
+        mecanumDrive(1,driveDis4,0,40);      // drive towards wall
+        mecanumTurn(1, 135);                                // turn
+        mecanumDrive(1,driveDis4,0,45);      // drive towards wall
+        //TEST
 
         sleep(200);
 
