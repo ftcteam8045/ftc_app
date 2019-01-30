@@ -52,7 +52,8 @@ public class MainAuto_TF2 extends LinearOpMode {
     public int driveDis1 = 12;
     public int driveDis2 = 20;
     public int driveDis3 = 7; //forward+backward
-    public int driveDis4 = 45; //drive to wall
+    //public int driveDis4 = 45; //drive to wall
+    public int driveDis4 = 28; //new distance
     public int driveDis5 = 55; //drive to base  on base side
     public int driveDis6 = 60; //drive to crater  used for crater and base starts
     public int driveDis7 = 25;  // DRIVE TO BASE ON CRATER START
@@ -363,20 +364,16 @@ public class MainAuto_TF2 extends LinearOpMode {
             /** Lift Controls for Controller 1 **/
 
             if (gamepad1.right_trigger >= 0.1) {
-                Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
+                Cosmo.liftmotor.setPower(gamepad1.right_trigger);
+            } else if (gamepad1.left_trigger >= 0.1)  {
+                Cosmo.liftmotor.setPower(-gamepad1.left_trigger);
             }
             else {
                 Cosmo.liftmotor.setPower(0);
             }
-            if (gamepad1.left_trigger >= 0.1)  {
-                Cosmo.liftmotor.setPower(gamepad1.left_trigger);
-            }
-            else {
-                Cosmo.liftmotor.setPower(0);
-            }
 
 
-
+                telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
                 telemetry.update();
         }
         /**************************************************************
@@ -404,7 +401,9 @@ public class MainAuto_TF2 extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftmax = 10800;
+        //int liftmax = 10800;
+        int liftmax = 7100;
+
 
         // Unhook from lift holder with high torque motor
 

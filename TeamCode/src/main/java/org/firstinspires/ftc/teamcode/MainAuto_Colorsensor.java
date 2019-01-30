@@ -63,8 +63,8 @@ public class MainAuto_Colorsensor extends LinearOpMode {
     public double open = 0.0;
     public double closed = 0.45;
     public double grayHueValue = 120.0;
-    public double redHueValue  =  60.0;
-    public double blueHueValue = 140.0;
+    public double redHueValue  =  5;
+    public double blueHueValue = 189;
     public double grayRedBorder  = (grayHueValue + redHueValue  ) / 2;
     public double grayBlueBorder = (grayHueValue + blueHueValue ) / 2;
     // hsvValues is an array that will hold the hue, saturation, and value information.

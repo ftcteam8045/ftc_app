@@ -155,7 +155,8 @@ public class Hardware8045
 //        rightRear.setDirection(DcMotor.Direction.FORWARD);
 
 
-        liftmotor.setDirection (DcMotor.Direction.FORWARD);
+//        liftmotor.setDirection (DcMotor.Direction.FORWARD);  //   old configuration
+        liftmotor.setDirection (DcMotor.Direction.REVERSE);   // new config
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

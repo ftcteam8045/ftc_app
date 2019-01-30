@@ -136,19 +136,7 @@ public class MainTele extends OpMode {
             driveMode = "South Paw";
         }
 
-        /** Lift Controls for Controller 1 **/
 
-            if (gamepad1.dpad_down) {
-            Cosmo.liftmotor.setPower(-1.0);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-        } else {
-            Cosmo.liftmotor.setPower(0);
-        }
-            if (gamepad1.dpad_up)  {
-            Cosmo.liftmotor.setPower(1.0);
-        } else {
-            Cosmo.liftmotor.setPower(0);
-        }
 
         /** Vertical Arm Controls for Controller 2 **/
 
@@ -274,30 +262,39 @@ public class MainTele extends OpMode {
         }
 
 
+        /** Lift Controls for Controller 1 **/
 
+        if (gamepad1.dpad_down) {
+            Cosmo.liftmotor.setPower(-1.0);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+        } else if (gamepad1.dpad_up)  {
+            Cosmo.liftmotor.setPower(1.0);
+        } else {
+            Cosmo.liftmotor.setPower(0);
+        }
 
         /**ONE HIT LIFT HEIGHT**/
 
 //      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftMax = 12000;
+        int liftMax = 7100;
 
-//        if (gamepad1.right_bumper || gamepad2.left_bumper) {
-            if (gamepad1.right_bumper) {
-
-            liftMovingUp = true;
-            //move lift up
-            }
-
-        if(liftMovingUp && Cosmo.liftmotor.getCurrentPosition() < liftMax){
-
-            Cosmo.liftmotor.setPower(1);
-
-        }
-        else {
-            Cosmo.liftmotor.setPower(0);
-            liftMovingUp = false;
-        }
+////        if (gamepad1.right_bumper || gamepad2.left_bumper) {
+//            if (gamepad1.right_bumper) {
+//
+//            liftMovingUp = true;
+//            //move lift up
+//            }
+//
+//        if(liftMovingUp && Cosmo.liftmotor.getCurrentPosition() < liftMax){
+//
+//            Cosmo.liftmotor.setPower(1);
+//
+//        }
+//        else {
+//            Cosmo.liftmotor.setPower(0);
+//            liftMovingUp = false;
+//        }
 //            Cosmo.liftmotor.setPower(0);
 ////            //strafe right
 ////            drivesmart(1, 0, 0);
