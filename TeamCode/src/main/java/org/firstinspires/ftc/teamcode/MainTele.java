@@ -307,12 +307,15 @@ public class MainTele extends OpMode {
 
         if (gamepad1.dpad_down) {
             Cosmo.liftmotor.setPower(-1.0);
-//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-            liftMovingUp = false;
-        } else if (gamepad1.dpad_up)  {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+        }
+        else {                    // don't turn off power if the lift is raising
+            Cosmo.liftmotor.setPower(0);
+        }
+        if (gamepad1.dpad_up)  {
             Cosmo.liftmotor.setPower(1.0);
-            liftMovingUp = false;
-        } else if (!liftMovingUp){                    // don't turn off power if the lift is raising
+
+        } else {                    // don't turn off power if the lift is raising
             Cosmo.liftmotor.setPower(0);
         }
 
@@ -322,8 +325,7 @@ public class MainTele extends OpMode {
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         int liftMax = 7100;
 
-        if (gamepad1.right_bumper || gamepad2.left_bumper) {                  //set logical that the lift is moving up.
-            //          if (gamepad1.right_bumper) {
+        if (gamepad1.right_bumper) {                  //set logical that the lift is moving up.
             liftMovingUp = true;
         }
 
