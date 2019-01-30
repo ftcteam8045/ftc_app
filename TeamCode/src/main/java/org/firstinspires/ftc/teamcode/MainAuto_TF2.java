@@ -63,7 +63,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     public double HookClear = 2.0;
     public double open = 0.0;
     public double closed = 0.45;
-    public int liftmax=10600;
+    public int liftmax=7100;
     public double errorAllowed = 50;
     public double mineralYZone = 530;
     // State used for updating telemetry
@@ -384,9 +384,6 @@ public class MainAuto_TF2 extends LinearOpMode {
 
 
 
-
-
-
         /**************************************************************
          // Actual RUN instructions
          *************************************************************/
@@ -401,12 +398,8 @@ public class MainAuto_TF2 extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        //int liftmax = 10800;
-        int liftmax = 7100;
-
 
         // Unhook from lift holder with high torque motor
-
 
         while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
 
