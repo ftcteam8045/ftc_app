@@ -217,67 +217,67 @@ public class MainTele extends OpMode {
         //extension arm one hit align
 
 
-        if(gamepad2.x && readyToObtain){
-
-            Cosmo.exmotor.setPower(0.18);
-            Cosmo.armmotor.setPower(0.5);
-            sleep(920);
-            Cosmo.armmotor.setPower(0.2);
-            Cosmo.exmotor.setPower(1);
-            sleep(1500);
-            Cosmo.armmotor.setPower(0);
-            Cosmo.exmotor.setPower(0);
-            Cosmo.dumpServo.setPosition(open);
-            readyToObtain = false;
-
-        }
-
-
-
-        if (gamepad2.y) {
-            dumpNow = true;
-
-        }
-
-        if (dumpNow) {
-
-            if (Cosmo.exmotor.getCurrentPosition() > moveLength) {
-                Cosmo.exmotor.setPower(-1);
-            }
-            else {
-                Cosmo.exmotor.setPower(0);
-                readyToDump = true;
-                dumpNow = false;
-            }
+//        if(gamepad2.x && readyToObtain){
+//
+//            Cosmo.exmotor.setPower(0.18);
+//            Cosmo.armmotor.setPower(0.5);
+//            sleep(920);
+//            Cosmo.armmotor.setPower(0.2);
+//            Cosmo.exmotor.setPower(1);
+//            sleep(1500);
+//            Cosmo.armmotor.setPower(0);
+//            Cosmo.exmotor.setPower(0);
+//            Cosmo.dumpServo.setPosition(open);
+//            readyToObtain = false;
+//
+//        }
 
 
-        }
 
-
-        if (readyToDump){
-
-            if (Cosmo.armmotor.getCurrentPosition() < armUp){
-
-                Cosmo.armmotor.setPower(1);
-
-            }
-            else {
-                Cosmo.armmotor.setPower(0);
-                moveUp = true;
-                readyToDump = false;
-            }
-
-        }
-
-        if (moveUp) {
-
-            while (Cosmo.exmotor.getCurrentPosition() < dumpLength) {
-                Cosmo.exmotor.setPower(1);
-
-            }
-                Cosmo.exmotor.setPower(0);
-                moveUp = false;
-        }
+//        if (gamepad2.y) {
+//            dumpNow = true;
+//
+//        }
+//
+//        if (dumpNow) {
+//
+//            if (Cosmo.exmotor.getCurrentPosition() > moveLength) {
+//                Cosmo.exmotor.setPower(-1);
+//            }
+//            else {
+//                Cosmo.exmotor.setPower(0);
+//                readyToDump = true;
+//                dumpNow = false;
+//            }
+//
+//
+//        }
+//
+//
+//        if (readyToDump){
+//
+//            if (Cosmo.armmotor.getCurrentPosition() < armUp){
+//
+//                Cosmo.armmotor.setPower(1);
+//
+//            }
+//            else {
+//                Cosmo.armmotor.setPower(0);
+//                moveUp = true;
+//                readyToDump = false;
+//            }
+//
+//        }
+//
+//        if (moveUp) {
+//
+//            while (Cosmo.exmotor.getCurrentPosition() < dumpLength) {
+//                Cosmo.exmotor.setPower(1);
+//
+//            }
+//                Cosmo.exmotor.setPower(0);
+//                moveUp = false;
+//        }
 
        //intake arm up one hit
 
@@ -305,19 +305,15 @@ public class MainTele extends OpMode {
 
         /** Lift Controls for Controller 1 **/
 
-        if (gamepad1.dpad_down) {
+        while (gamepad1.dpad_down) {
             Cosmo.liftmotor.setPower(-1.0);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
         }
-        else {                    // don't turn off power if the lift is raising
-            Cosmo.liftmotor.setPower(0);
-        }
-        if (gamepad1.dpad_up)  {
+        while (gamepad1.dpad_up){                    // don't turn off power if the lift is raising
             Cosmo.liftmotor.setPower(1.0);
-
-        } else {                    // don't turn off power if the lift is raising
-            Cosmo.liftmotor.setPower(0);
         }
+                // don't turn off power if the lift is raising
+        Cosmo.liftmotor.setPower(0);
 
         /**ONE HIT LIFT HEIGHT**/
 

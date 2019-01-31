@@ -49,7 +49,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 12;
+    public int driveDis1 = 9;
     public int driveDis2 = 20;
     public int driveDis3 = 7; //forward+backward
     //public int driveDis4 = 45; //drive to wall
@@ -798,7 +798,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             telemetry.addLine().addData(arrow1, colorIndex).addData(color[colorIndex], arrow1);
             telemetry.addLine().addData(arrow2, positionIndex).addData(position[positionIndex], arrow2);
             telemetry.addLine().addData(arrow3, botIndex).addData(botName[botIndex], arrow3);
-            telemetry.addLine().addData(arrow4, driveDis1).addData("Distance 1", arrow4);
+            telemetry.addLine().addData(arrow4, driveDis1).addData("First drive foreward", arrow4);
             telemetry.addLine().addData(arrow5, driveDis2).addData("Distance 2", arrow5);
             telemetry.addLine().addData(arrow6, driveDis3).addData("Distance 3", arrow6);
             telemetry.addLine().addData(arrow7, driveDis4).addData("Distance 4", arrow7);
