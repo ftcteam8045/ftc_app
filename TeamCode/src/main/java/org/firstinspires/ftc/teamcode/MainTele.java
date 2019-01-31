@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -23,6 +25,8 @@ public class MainTele extends OpMode {
     double timeLeft;
 
     public boolean teamIsRed = true;
+    public RevBlinkinLedDriver.BlinkinPattern teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+//    public RevBlinkinLedDriver.BlinkinPattern teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
 
 //    double turnDirection;
     public double topSpeed = 0.5 ;
@@ -45,6 +49,16 @@ public class MainTele extends OpMode {
     public double closed = 0.0;
     public double open = 0.55;
 
+    public double grayHueValue = 120.0;
+    public double redHueValue  =  5;
+    public double blueHueValue = 189;
+    public double grayRedBorder  = (grayHueValue + redHueValue  ) / 2;
+    public double grayBlueBorder = (grayHueValue + blueHueValue ) / 2;
+    // hsvValues is an array that will hold the hue, saturation, and value information.
+    public float hsvValues[] = {0F, 0F, 0F};
+    // values is a reference to the hsvValues array.
+    public float values[] = hsvValues;
+
     public boolean liftMovingUp = false;
     public boolean readyToDump = false;
     public boolean dumpNow = false;
@@ -55,28 +69,24 @@ public class MainTele extends OpMode {
 
     public int dumpLength = 3154;
     public int moveLength = 1400;
+
+
+
     @Override
     public void init() {
         Cosmo = new Hardware8045();
         Cosmo.init(hardwareMap);
+        Cosmo.sensorColor.enableLed(true);
+
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
         timeLeft = 120;
 
-
+        Cosmo.LEDDriver.setPattern(teamColor);
 
         telemetry.addData("Finished", "Initializing");
         telemetry.update();
-
-        //Create variable thing for light colors  based on team color
-        RevBlinkinLedDriver.BlinkinPattern teamColor;
-        if (teamIsRed) {
-            teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
-        } else {
-            teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
-        }
-        Cosmo.LEDDriver.setPattern(teamColor);
     }
 
     @Override
@@ -89,7 +99,6 @@ public class MainTele extends OpMode {
         timeLeft = 120 - runtime.seconds();
 
 //        // BACK mode
-
 
         if (gamepad1.right_stick_button) {
             if (rightbtnIsReleased) {
@@ -110,6 +119,16 @@ public class MainTele extends OpMode {
             }
         }
 
+        /**  set lights color  **/
+
+        Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
+        if (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) {
+            Cosmo.LEDDriver.setPattern(teamColor);
+        } else {
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+        }
+
+
         /**  set drive speed  **/
 
         if (gamepad1.left_bumper) {
@@ -120,12 +139,12 @@ public class MainTele extends OpMode {
         else {
             topSpeed = 0.6;
         }
-        /** set driving colors **/
-        if (topSpeed == 0.4) {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE);
-        } else {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-        }
+//        /** set driving colors **/
+//        if (topSpeed == 0.4) {
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE);
+//        } else {
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+//        }
 
         /** DRIVE  HERE   */
         if (driveType == 0) {
@@ -139,19 +158,7 @@ public class MainTele extends OpMode {
             driveMode = "South Paw";
         }
 
-        /** Lift Controls for Controller 1 **/
 
-            if (gamepad1.dpad_down) {
-            Cosmo.liftmotor.setPower(-1.0);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-        } else {
-            Cosmo.liftmotor.setPower(0);
-        }
-            if (gamepad1.dpad_up)  {
-            Cosmo.liftmotor.setPower(1.0);
-        } else {
-            Cosmo.liftmotor.setPower(0);
-        }
 
         /** Vertical Arm Controls for Controller 2 **/
 
@@ -210,67 +217,67 @@ public class MainTele extends OpMode {
         //extension arm one hit align
 
 
-        if(gamepad2.x && readyToObtain){
-
-            Cosmo.exmotor.setPower(0.18);
-            Cosmo.armmotor.setPower(0.5);
-            sleep(920);
-            Cosmo.armmotor.setPower(0.2);
-            Cosmo.exmotor.setPower(1);
-            sleep(1500);
-            Cosmo.armmotor.setPower(0);
-            Cosmo.exmotor.setPower(0);
-            Cosmo.dumpServo.setPosition(open);
-            readyToObtain = false;
-
-        }
-
-
-
-        if (gamepad2.y) {
-            dumpNow = true;
-
-        }
-
-        if (dumpNow) {
-
-            if (Cosmo.exmotor.getCurrentPosition() > moveLength) {
-                Cosmo.exmotor.setPower(-1);
-            }
-            else {
-                Cosmo.exmotor.setPower(0);
-                readyToDump = true;
-                dumpNow = false;
-            }
+//        if(gamepad2.x && readyToObtain){
+//
+//            Cosmo.exmotor.setPower(0.18);
+//            Cosmo.armmotor.setPower(0.5);
+//            sleep(920);
+//            Cosmo.armmotor.setPower(0.2);
+//            Cosmo.exmotor.setPower(1);
+//            sleep(1500);
+//            Cosmo.armmotor.setPower(0);
+//            Cosmo.exmotor.setPower(0);
+//            Cosmo.dumpServo.setPosition(open);
+//            readyToObtain = false;
+//
+//        }
 
 
-        }
 
-
-        if (readyToDump){
-
-            if (Cosmo.armmotor.getCurrentPosition() < armUp){
-
-                Cosmo.armmotor.setPower(1);
-
-            }
-            else {
-                Cosmo.armmotor.setPower(0);
-                moveUp = true;
-                readyToDump = false;
-            }
-
-        }
-
-        if (moveUp) {
-
-            while (Cosmo.exmotor.getCurrentPosition() < dumpLength) {
-                Cosmo.exmotor.setPower(1);
-
-            }
-                Cosmo.exmotor.setPower(0);
-                moveUp = false;
-        }
+//        if (gamepad2.y) {
+//            dumpNow = true;
+//
+//        }
+//
+//        if (dumpNow) {
+//
+//            if (Cosmo.exmotor.getCurrentPosition() > moveLength) {
+//                Cosmo.exmotor.setPower(-1);
+//            }
+//            else {
+//                Cosmo.exmotor.setPower(0);
+//                readyToDump = true;
+//                dumpNow = false;
+//            }
+//
+//
+//        }
+//
+//
+//        if (readyToDump){
+//
+//            if (Cosmo.armmotor.getCurrentPosition() < armUp){
+//
+//                Cosmo.armmotor.setPower(1);
+//
+//            }
+//            else {
+//                Cosmo.armmotor.setPower(0);
+//                moveUp = true;
+//                readyToDump = false;
+//            }
+//
+//        }
+//
+//        if (moveUp) {
+//
+//            while (Cosmo.exmotor.getCurrentPosition() < dumpLength) {
+//                Cosmo.exmotor.setPower(1);
+//
+//            }
+//                Cosmo.exmotor.setPower(0);
+//                moveUp = false;
+//        }
 
        //intake arm up one hit
 
@@ -296,60 +303,42 @@ public class MainTele extends OpMode {
         }
 
 
+        /** Lift Controls for Controller 1 **/
 
+        while (gamepad1.dpad_down) {
+            Cosmo.liftmotor.setPower(-1.0);
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+        }
+        while (gamepad1.dpad_up){                    // don't turn off power if the lift is raising
+            Cosmo.liftmotor.setPower(1.0);
+        }
+                // don't turn off power if the lift is raising
+        Cosmo.liftmotor.setPower(0);
 
         /**ONE HIT LIFT HEIGHT**/
 
 //      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftMax = 12000;
+        int liftMax = 7100;
 
-//        if (gamepad1.right_bumper || gamepad2.left_bumper) {
-            if (gamepad1.right_bumper) {
-
+        if (gamepad1.right_bumper) {                  //set logical that the lift is moving up.
             liftMovingUp = true;
-            //move lift up
-            }
+        }
 
         if(liftMovingUp && Cosmo.liftmotor.getCurrentPosition() < liftMax){
-
             Cosmo.liftmotor.setPower(1);
-
-        }
-        else {
+        } else {
             Cosmo.liftmotor.setPower(0);
             liftMovingUp = false;
         }
-//            Cosmo.liftmotor.setPower(0);
-////            //strafe right
-////            drivesmart(1, 0, 0);
-////            sleep(1000);
-////            drivesmart(0, 0, 0);
-////            sleep(100);
-////            //pull up and hang
-////            Cosmo.liftmotor.setPower(-1);
-////            sleep(1600);
-////            Cosmo.liftmotor.setPower(0);
-//            run = true;
-//        }
 
-
-
-
-
-//        if (run == true) {
-//            Cosmo.liftmotor.setPower(0);
-//            sleep(50);
-//            Cosmo.liftmotor.setPower(-1);
-//            sleep(10);
-//        }
 
         telemetry.addLine().addData("Drive Mode", driveMode);
         telemetry.addData("TimeLeft: ",timeLeft);
-        telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
-        telemetry.addData("Right -Y: ", -gamepad1.right_stick_y);
-        telemetry.addData(" Left -X: ", -gamepad1.left_stick_x);
-        telemetry.addData("Right Button Is Released", rightbtnIsReleased);
+//        telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
+//        telemetry.addData("Right -Y: ", -gamepad1.right_stick_y);
+//        telemetry.addData(" Left -X: ", -gamepad1.left_stick_x);
+//        telemetry.addData("Right Button Is Released", rightbtnIsReleased);
         telemetry.addData("Front Is Forward", frontIsForward);
         telemetry.addData("LiftCounts", Cosmo.liftmotor.getCurrentPosition());
         telemetry.addData("ArmMotorCounts", Cosmo.armmotor.getCurrentPosition());
