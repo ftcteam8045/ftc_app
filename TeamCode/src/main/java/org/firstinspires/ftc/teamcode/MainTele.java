@@ -167,19 +167,19 @@ public class MainTele extends OpMode {
         if (gamepad2.left_trigger > 0.1) {
             if (Cosmo.armmotor.getCurrentPosition() < armSlowSpeedPos) {
                 Cosmo.armmotor.setPower(0.09);
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
             }
 
             if (Cosmo.armmotor.getCurrentPosition() > armSlowSpeedPos) {
                 Cosmo.armmotor.setPower(-0.5);
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
             }
         }
 
         /** Sweeper Motor Controls for Controller 2 **/
 
         if (gamepad2.right_trigger > 0.1){
-
             Cosmo.sweepermotor.setPower(1);
-
         }
 
         if (gamepad2.left_bumper){

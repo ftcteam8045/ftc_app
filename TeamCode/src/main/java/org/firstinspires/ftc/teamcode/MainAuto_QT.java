@@ -322,18 +322,21 @@ public class MainAuto_QT extends LinearOpMode {
 
 
             /** Signal the position of the gold mineral  here. From POV of driver**/
-
+            int lightWaitTime = 3000;
             if (goldPosition == 0) {
                 if ((LEDcycletime.milliseconds() < blinktime)) {                 // blink pattern white white gold
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else {                                      // reset timer, repeat cycle
@@ -343,14 +346,17 @@ public class MainAuto_QT extends LinearOpMode {
             } else if (goldPosition == 1) {     // insert blink pattern for white gold white  here
                 if ((LEDcycletime.milliseconds() < blinktime)) {                 // blink pattern white white gold
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else {                                      // reset timer, repeat cycle
@@ -359,14 +365,17 @@ public class MainAuto_QT extends LinearOpMode {
             } else if (goldPosition == 2) {     // insert blink pattern for gold white white  here
                 if ((LEDcycletime.milliseconds() < blinktime)) {                 // blink pattern white white gold
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 2 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else if ((LEDcycletime.milliseconds() < 3 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 4 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else if ((LEDcycletime.milliseconds() < 5 * blinktime)) {
                     Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                    sleep(lightWaitTime);
                 } else if ((LEDcycletime.milliseconds() < 12 * blinktime)) {                                       // back to team color
                     Cosmo.LEDDriver.setPattern(teamColor);
                 } else {                                      // reset timer, repeat cycle
