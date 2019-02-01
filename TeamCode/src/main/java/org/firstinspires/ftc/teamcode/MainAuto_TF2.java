@@ -477,16 +477,15 @@ public class MainAuto_TF2 extends LinearOpMode {
         // drive forward or backward based on crater starting position
 
         if (craterPosition){            /** crater side drive  **/
-            mecanumTurn(1, 135);
+            mecanumTurn(0.8, 135);
             mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.5,-1,135,-90);  // DRIVE away from WALL
+
             sleep(waitTime1);
             mecanumDrivetoTape(0.3, driveDis7 + 15, 135, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
             sleep(800);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
             sleep(300);
@@ -494,8 +493,10 @@ public class MainAuto_TF2 extends LinearOpMode {
 
             Cosmo.flagServo.setPosition(closed);
         }else {                         /** base side drive  **/
-            mecanumTurn(1, -43);
-            mecanumDrive(0.5,12,-45,90);
+            mecanumTurn(0.8, -43);
+            mecanumDrive(0.5,12,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,-1,-45,90);  // Drive away from Wall
+
             sleep(waitTime1);
             mecanumDrivetoTape(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
