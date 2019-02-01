@@ -49,9 +49,9 @@ public class MainAuto_TF2 extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 9;
+    public int driveDis1 = 10;
     public int driveDis2 = 20;
-    public int driveDis3 = 7; //forward+backward
+    public int driveDis3 = 9; //forward+backward
     //public int driveDis4 = 45; //drive to wall
     public int driveDis4 = 28; //new distance
     public int driveDis5 = 55; //drive to base  on base side
@@ -65,7 +65,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     public double closed = 0.45;      // servo for team marker
     public double errorAllowed = 50;  // Tensorflow mineral detection
     public double mineralYZone = 530;  // Tensorflow mineral detection
-    public double grayHueValue = 120.0;  // color sensor values
+    public double grayHueValue = 90.0;  // color sensor values
     public double redHueValue  =  5;
     public double blueHueValue = 189;
     public double grayRedBorder  = (grayHueValue + redHueValue  ) / 2;
@@ -75,7 +75,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     // values is a reference to the hsvValues array.
     public float values[] = hsvValues;
 
-    public int liftmax=7100;
+    public int liftmax=7200;
 
 
     // State used for updating telemetry
@@ -234,6 +234,8 @@ public class MainAuto_TF2 extends LinearOpMode {
                         telemetry.addLine().addData("", "%.2f %s   X %.0f Y %.0f", recognition.getConfidence(), recognition.getLabel(), (recognition.getLeft()+recognition.getRight())/2, (recognition.getBottom()+recognition.getTop())/2);
                     }
                     // ELI V    case for seeing exactly three objects (hope 1 gold and two silver)?!
+                    goldPosition = 2;  //If i see nothing assum it is on the right
+
 
                     if (updatedRecognitions.size() != 0) {
 
@@ -244,7 +246,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
 
                         //Set to right by default, if we see gold as left or center, set accordingly
-                        goldPosition = 2;
+
 
                         for (Recognition recognition : updatedRecognitions) {
                             if (abs((recognition.getBottom() + recognition.getTop()) / 2 - mineralYZone) < errorAllowed ) {   //This mineral is in the allowed Y zone
@@ -423,10 +425,10 @@ public class MainAuto_TF2 extends LinearOpMode {
 
 
         if (craterPosition){            /** crater side drive  **/
-            HookClear = HookClear+2.0;
+            HookClear = HookClear+1.7;
         }
         sleep(700);
-        mecanumDrive(0.5, HookClear, 0, -90); //Drive right
+        mecanumDrive(0.3, HookClear, 0, -90); //Drive right
 
 //          goldposition 0 = left,1 = center, 2 = right
 
@@ -434,10 +436,10 @@ public class MainAuto_TF2 extends LinearOpMode {
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
             sleep(200);
-            mecanumDrive(1, driveDis2+HookClear+1, 0, 85);    // drive left
-            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.5, driveDis2+HookClear, 0, 90);    // drive left
+            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
             sleep(200);
-            mecanumDrive(0.5, -driveDis3 + 5, 0, 0);     // drive backwards
+            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
 
         }
 
@@ -445,12 +447,12 @@ public class MainAuto_TF2 extends LinearOpMode {
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
             sleep(300);
-            mecanumDrive(1, HookClear, 0, 90);    // drive left
+            mecanumDrive(0.5, HookClear, 0, 90);    // drive left
             sleep(200);
-            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.5, -driveDis3 +4, 0, 0);     // drive backwards
+            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
             sleep(300);
-            mecanumDrive(1, driveDis2, 0, 85);      // drive left 1x
+            mecanumDrive(0.5, driveDis2, 0, 90);      // drive left 1x
 
         }
 
@@ -458,16 +460,16 @@ public class MainAuto_TF2 extends LinearOpMode {
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
             sleep(500);
-            mecanumDrive(1, driveDis2-HookClear, 0, -90);    // drive right
+            mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
             sleep(200);
-            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.2, -driveDis3, 0, 0);     // drive backwards
             sleep(400);
-            mecanumDrive(1, 2*driveDis2, 0, 85);      // drive left 2x
+            mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
         }
 
         // drive towards the wall (all modes)
-        mecanumDrive(1,driveDis4,0,85);      // drive towards wall
+        mecanumDrive(0.6,driveDis4,0,90);      // drive towards wall
 
 
         sleep(200);
@@ -478,7 +480,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumTurn(1, 135);
             mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
             sleep(waitTime1);
-            mecanumDrive(0.6, driveDis7 + 5, 135, 0);  //drive towards base
+            mecanumDrivetoTape(0.3, driveDis7 + 15, 135, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
@@ -495,7 +497,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumTurn(1, -43);
             mecanumDrive(0.5,12,-45,90);
             sleep(waitTime1);
-            mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
+            mecanumDrivetoTape(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
@@ -513,7 +515,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
 
         //reset lift at end of auto
-        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos && !isStopRequested()){
+        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
 
             Cosmo.liftmotor.setPower(-1);
 

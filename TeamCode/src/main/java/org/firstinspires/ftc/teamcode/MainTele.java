@@ -46,8 +46,8 @@ public class MainTele extends OpMode {
 
     public double armUp = 2100;
 
-    public double closed = 0.0;
-    public double open = 0.55;
+    public double dump = 0.5;
+    public double transport = 0.60;
 
     public double grayHueValue = 120.0;
     public double redHueValue  =  5;
@@ -279,43 +279,19 @@ public class MainTele extends OpMode {
 //                moveUp = false;
 //        }
 
-       //intake arm up one hit
 
-
-//        if (gamepad2.x){
-//
-//            while (Cosmo.armmotor.getCurrentPosition() < armUp){
-//
-//                Cosmo.armmotor.setPower(0.75);
-//
-//            }
-//
-//        }
 
         /** Dump Servo Controls for Controller 2 **/
 
 
         if (gamepad2.a) {
-            Cosmo.dumpServo.setPosition(closed);
+            Cosmo.dumpServo.setPosition(dump);
         }
         if (gamepad2.b) {
-            Cosmo.dumpServo.setPosition(open);
+            Cosmo.dumpServo.setPosition(transport);
         }
 
-
-        /** Lift Controls for Controller 1 **/
-
-        while (gamepad1.dpad_down) {
-            Cosmo.liftmotor.setPower(-1.0);
-//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-        }
-        while (gamepad1.dpad_up){                    // don't turn off power if the lift is raising
-            Cosmo.liftmotor.setPower(1.0);
-        }
-                // don't turn off power if the lift is raising
-        Cosmo.liftmotor.setPower(0);
-
-        /**ONE HIT LIFT HEIGHT**/
+/**ONE HIT LIFT HEIGHT**/
 
 //      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
@@ -325,12 +301,34 @@ public class MainTele extends OpMode {
             liftMovingUp = true;
         }
 
-        if(liftMovingUp && Cosmo.liftmotor.getCurrentPosition() < liftMax){
+
+
+
+        /** Lift Controls for Controller 1 **/
+
+        if (gamepad1.dpad_down) {
+            Cosmo.liftmotor.setPower(-1.0);
+            liftMovingUp = false;
+
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+        }else if (gamepad1.dpad_up){                    // don't turn off power if the lift is raising
+            Cosmo.liftmotor.setPower(1.0);
+            liftMovingUp = false;
+
+        }else if(liftMovingUp && Cosmo.liftmotor.getCurrentPosition() < liftMax){
             Cosmo.liftmotor.setPower(1);
         } else {
             Cosmo.liftmotor.setPower(0);
+        }
+
+        if (Cosmo.liftmotor.getCurrentPosition() > liftMax){
             liftMovingUp = false;
         }
+                // don't turn off power if the lift is raising
+
+
+        /**ONE HIT LIFT HEIGHT**/
+
 
 
         telemetry.addLine().addData("Drive Mode", driveMode);
