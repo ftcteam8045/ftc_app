@@ -148,6 +148,13 @@ public class Hardware8045
          rightFront.setDirection(DcMotor.Direction.REVERSE);
          rightRear.setDirection(DcMotor.Direction.REVERSE);
 
+//        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
 ////this is for Tetrix
 //        leftFront.setDirection(DcMotor.Direction.REVERSE);
 //        leftRear.setDirection(DcMotor.Direction.REVERSE);
@@ -157,6 +164,7 @@ public class Hardware8045
 
 //        liftmotor.setDirection (DcMotor.Direction.FORWARD);  //   old configuration
         liftmotor.setDirection (DcMotor.Direction.REVERSE);   // new config
+        liftmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
