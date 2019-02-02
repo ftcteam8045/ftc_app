@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -62,6 +63,7 @@ public class Hardware8045
     public DcMotor  exmotor   = null;
     public Servo    flagServo  = null;
     public Servo    dumpServo  = null;
+    public CRServo  sweepServo  = null;
 
 
 
@@ -207,7 +209,7 @@ public class Hardware8045
 
         flagServo = hwMap.get(Servo.class, "flag_servo");
         dumpServo = hwMap.get(Servo.class, "dump_servo");
-
+        sweepServo = hwMap.get(CRServo.class, "sweeper"  );
 
         /**
          * IMU SETUP

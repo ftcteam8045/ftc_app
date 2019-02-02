@@ -49,7 +49,8 @@ public class DriveTrain {
     //Iniatalize motors
     public DcMotor left_front = null;
     public DcMotor right_front = null;
-b    public DcMotor left_rear = null;
+    public DcMotor left_rear = null;
+    public DcMotor right_rear = null;
 
 //    public AnalogInput maxbotixSensor;
 
