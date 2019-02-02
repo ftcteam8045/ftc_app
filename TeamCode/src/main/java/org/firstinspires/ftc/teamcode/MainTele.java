@@ -174,12 +174,12 @@ public class MainTele extends OpMode {
         if (gamepad2.left_trigger > 0.1) {
             if (Cosmo.armmotor.getCurrentPosition() < armSlowSpeedPos) {
                 Cosmo.armmotor.setPower(0.09);
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
             }
 
             if (Cosmo.armmotor.getCurrentPosition() > armSlowSpeedPos) {
                 Cosmo.armmotor.setPower(-0.5);
-                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
             }
         }
 
