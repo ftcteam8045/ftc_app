@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-@TeleOp(name="CRServo_Test", group="Rick")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Vexmotor_Test", group="Rick")  // @Autonomous(...) is the other common choice
 public class vexmotor extends OpMode
 {
     /* Declare OpMode members. */
@@ -54,20 +54,22 @@ public class vexmotor extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
+    double power = 0.0;
     @Override
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
-
         //If X Button is pressed, run CRServo at half speed, otherwise stop
-        if(gamepad1.x){
-            vexMotor.setPower(.5);
-        }else if (gamepad1.y ){
-            vexMotor.setPower(0);
-        }else {
-            vexMotor.setPower(0);
+        if (gamepad1.y) {
+            power = 0.88;
+        } else if (gamepad1.a) {
+            power = -0.88;
+        } else {
+            power = 0.0;
         }
+            telemetry.addData("Power set to:", power );
+            vexMotor.setPower(power);
 
-
+        telemetry.update();
     }
 
     /*
