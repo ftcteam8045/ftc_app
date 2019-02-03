@@ -190,7 +190,6 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         int goldMineralX = -1;
         float goldMineralConf = -1;
-        Cosmo.sweepServo.setPower(1.0);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();

@@ -210,7 +210,7 @@ public class Hardware8045
         flagServo = hwMap.get(Servo.class, "flag_servo");
         dumpServo = hwMap.get(Servo.class, "dump_servo");
         sweepServo = hwMap.get(CRServo.class, "sweeper"  );
-
+//        sweepServo = hwMap.crservo.get("sweeper");
         /**
          * IMU SETUP
          */
