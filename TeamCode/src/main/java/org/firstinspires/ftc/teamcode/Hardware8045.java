@@ -59,7 +59,7 @@ public class Hardware8045
     public DcMotor  rightRear   = null;
     public DcMotor  liftmotor   = null;
     public DcMotor  armmotor   = null;
-    public DcMotor  sweepermotor   = null;
+   // public DcMotor  sweepermotor   = null;
     public DcMotor  exmotor   = null;
     public Servo    flagServo  = null;
     public Servo    dumpServo  = null;
