@@ -165,7 +165,7 @@ public class MainTele extends OpMode {
         int armSlowSpeedPos = 1400;
 
         if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
-            Cosmo.armmotor.setPower(-gamepad2.left_stick_y );
+            Cosmo.armmotor.setPower(-gamepad2.left_stick_y * 0.5);
         }
         else {
             Cosmo.armmotor.setPower(0);
