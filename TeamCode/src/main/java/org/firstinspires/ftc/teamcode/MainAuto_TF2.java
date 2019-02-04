@@ -63,7 +63,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     public double HookClear = 2.0;
     public double open = 0.0;         // servo for team marker
     public double closed = 0.45;      // servo for team marker
-    public double errorAllowed = 50;  // Tensorflow mineral detection
+    public double errorAllowed = 125;  // Tensorflow mineral detection
     public double mineralYZone = 530;  // Tensorflow mineral detection
     public double grayHueValue = 90.0;  // color sensor values
     public double redHueValue  =  5;
