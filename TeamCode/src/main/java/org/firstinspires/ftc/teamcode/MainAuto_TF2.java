@@ -190,7 +190,6 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         int goldMineralX = -1;
         float goldMineralConf = -1;
-        Cosmo.sweepServo.setPower(1.0);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
@@ -200,7 +199,6 @@ public class MainAuto_TF2 extends LinearOpMode {
          // Actual Init loop
          *************************************************************/
         while (!opModeIsActive() && !isStopRequested()) {
-            Cosmo.sweepServo.setPower(1.0);
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
