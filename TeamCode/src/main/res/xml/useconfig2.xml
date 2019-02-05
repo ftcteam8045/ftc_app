@@ -10,14 +10,14 @@
             <Servo name="flag_servo" port="1" />
             <Servo name="dump_servo" port="2" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
-            <LynxColorSensor name="revcolorsensor" port="0" bus="1" />
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
             <Matrix12vMotor name="lift_motor" port="0" />
             <Matrix12vMotor name="arm_motor" port="1" />
             <Matrix12vMotor name="ex_motor" port="2" />
-            <Matrix12vMotor name="sweeper_motor" port="3" />
+            <!--<Matrix12vMotor name="sweeper_motor" port="3" />-->
             <LynxEmbeddedIMU name="imu 1" port="0" bus="0" />
+            <LynxColorSensor name="revcolorsensor" port="1" bus="1" />
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

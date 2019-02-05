@@ -49,9 +49,9 @@ public class MainAuto_TF2 extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 10;
-    public int driveDis2 = 20;
-    public int driveDis3 = 9; //forward+backward
+    public int driveDis1 = 16;
+    public int driveDis2 = 22;
+    public int driveDis3 = 10; //forward+backward
     //public int driveDis4 = 45; //drive to wall
     public int driveDis4 = 28; //new distance
     public int driveDis5 = 55; //drive to base  on base side
@@ -61,10 +61,10 @@ public class MainAuto_TF2 extends LinearOpMode {
     public int driveDis9 = 0;
     public int driveDis10 = 0;
     public double HookClear = 2.0;
-    public double open = 0.0;         // servo for team marker
-    public double closed = 0.45;      // servo for team marker
+    public double closed = 0.02;         // servo for team marker
+    public double open = 0.7;      // servo for team marker
     public double errorAllowed = 125;  // Tensorflow mineral detection
-    public double mineralYZone = 530;  // Tensorflow mineral detection
+    public double mineralYZone = 480;  // Tensorflow mineral detection
     public double grayHueValue = 90.0;  // color sensor values
     public double redHueValue  =  5;
     public double blueHueValue = 189;
@@ -75,7 +75,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     // values is a reference to the hsvValues array.
     public float values[] = hsvValues;
 
-    public int liftmax=7200;
+    public int liftmax=7800;
 
 
     // State used for updating telemetry
@@ -451,7 +451,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
             sleep(300);
-            mecanumDrive(0.5, driveDis2, 0, 90);      // drive left 1x
+            mecanumDrive(0.6, driveDis2, 0, 90);      // drive left 1x
 
         }
 
@@ -464,11 +464,11 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.2, -driveDis3, 0, 0);     // drive backwards
             sleep(400);
-            mecanumDrive(0.5, 2*driveDis2, 0, 90);      // drive left 2x
+            mecanumDrive(0.6, 2*driveDis2, 0, 90);      // drive left 2x
         }
 
         // drive towards the wall (all modes)
-        mecanumDrive(0.6,driveDis4,0,90);      // drive towards wall
+        mecanumDrive(1,driveDis4,0,90);      // drive towards wall
 
 
         sleep(200);
@@ -477,8 +477,8 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(0.8, 135);
-            mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
-            mecanumDrive(0.5,-1,135,-90);  // DRIVE away from WALL
+            mecanumDrive(0.5,13,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.5,-1.5,135,-90);  // DRIVE away from WALL
 
             sleep(waitTime1);
             mecanumDrivetoTape(0.3, driveDis7 + 15, 135, 0);  //drive towards base
@@ -493,8 +493,8 @@ public class MainAuto_TF2 extends LinearOpMode {
             Cosmo.flagServo.setPosition(closed);
         }else {                         /** base side drive  **/
             mecanumTurn(0.8, -43);
-            mecanumDrive(0.5,12,-45,90);  // Drive to Wall
-            mecanumDrive(0.5,-1,-45,90);  // Drive away from Wall
+            mecanumDrive(0.5,13,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,-1.5,-45,90);  // Drive away from Wall
 
             sleep(waitTime1);
             mecanumDrivetoTape(0.6, driveDis5, -45, 0);  //drive towards base
@@ -725,7 +725,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             if (correction <= -180)
                 correction += 360;   // correction should be +/- 180 (to the left negative, right positive)
             if (correction >= 180) correction -= 360;
-            /**^^^^^^^^^^^MAYBE WE ONLY NEED TO DO THIS ONCE?????*/
+            /*^^^^^^^^^^^MAYBE WE ONLY NEED TO DO THIS ONCE?????*/
 
             double adjustment = Range.clip((Math.signum(correction) * Cosmo.turn_MIN_SPEED + Cosmo.turn_COEF * correction / 100), -1, 1);  // adjustment is motor power: sign of correction *0.07 (base power)  + a proportional bit
 

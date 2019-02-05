@@ -59,11 +59,10 @@ public class Hardware8045
     public DcMotor  rightRear   = null;
     public DcMotor  liftmotor   = null;
     public DcMotor  armmotor   = null;
-   // public DcMotor  sweepermotor   = null;
     public DcMotor  exmotor   = null;
     public Servo    flagServo  = null;
     public Servo    dumpServo  = null;
-    public CRServo  sweepServo  = null;
+//    public CRServo  sweepServo  = null;
 
 
 
@@ -140,7 +139,6 @@ public class Hardware8045
         rightRear = hwMap.get(DcMotor.class, "right_rear");
         liftmotor = hwMap.get(DcMotor.class, "lift_motor");
         armmotor = hwMap.get(DcMotor.class, "arm_motor");
-        sweepermotor = hwMap.get(DcMotor.class, "sweeper_motor");
         exmotor = hwMap.get(DcMotor.class, "ex_motor");
 
 
@@ -174,7 +172,6 @@ public class Hardware8045
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        sweepermotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         exmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
@@ -186,7 +183,6 @@ public class Hardware8045
         rightRear.setPower(0);
         liftmotor.setPower(0);
         armmotor.setPower(0);
-        sweepermotor.setPower(0);
         exmotor.setPower(0);
 
 
@@ -199,7 +195,6 @@ public class Hardware8045
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        sweepermotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         exmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
@@ -209,8 +204,7 @@ public class Hardware8045
 
         flagServo = hwMap.get(Servo.class, "flag_servo");
         dumpServo = hwMap.get(Servo.class, "dump_servo");
-        sweepServo = hwMap.get(CRServo.class, "sweeper"  );
-//        sweepServo = hwMap.crservo.get("sweeper");
+//        sweepServo = hwMap.get(CRServo.class, "sweeper"  );
         /**
          * IMU SETUP
          */
