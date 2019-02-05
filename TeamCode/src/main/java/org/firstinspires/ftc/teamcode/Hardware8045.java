@@ -62,7 +62,7 @@ public class Hardware8045
     public DcMotor  exmotor   = null;
     public Servo    flagServo  = null;
     public Servo    dumpServo  = null;
-//    public CRServo  sweepServo  = null;
+    public CRServo  sweepServo  = null;
 
 
 
