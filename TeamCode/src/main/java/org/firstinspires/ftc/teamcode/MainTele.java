@@ -295,7 +295,7 @@ public class MainTele extends OpMode {
 
 //      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftMax = 7100;
+        int liftMax = 7800;
 
         if (gamepad1.right_bumper) {                  //set logical that the lift is moving up.
             liftMovingUp = true;

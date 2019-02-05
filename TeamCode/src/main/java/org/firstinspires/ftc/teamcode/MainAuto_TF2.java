@@ -49,7 +49,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 16;
+    public int driveDis1 = 17;
     public int driveDis2 = 22;
     public int driveDis3 = 10; //forward+backward
     //public int driveDis4 = 45; //drive to wall
@@ -468,7 +468,7 @@ public class MainAuto_TF2 extends LinearOpMode {
         }
 
         // drive towards the wall (all modes)
-        mecanumDrive(1,driveDis4,0,90);      // drive towards wall
+        mecanumDrive(0.6,driveDis4,0,90);      // drive towards wall
 
 
         sleep(200);
@@ -477,7 +477,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(0.8, 135);
-            mecanumDrive(0.5,13,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
             mecanumDrive(0.5,-1.5,135,-90);  // DRIVE away from WALL
 
             sleep(waitTime1);
@@ -488,23 +488,23 @@ public class MainAuto_TF2 extends LinearOpMode {
             sleep(800);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.4, -1, 135, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -1.5, 135, 0); //drive back to crater slowly
 
             Cosmo.flagServo.setPosition(closed);
         }else {                         /** base side drive  **/
             mecanumTurn(0.8, -43);
-            mecanumDrive(0.5,13,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,13.5,-45,90);  // Drive to Wall
             mecanumDrive(0.5,-1.5,-45,90);  // Drive away from Wall
 
             sleep(waitTime1);
-            mecanumDrivetoTape(0.6, driveDis5, -45, 0);  //drive towards base
+            mecanumDrivetoTape(0.3, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             sleep(750);
             Cosmo.flagServo.setPosition(open);
             sleep(800);
             mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.4, -1, -45, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -1.5, -45, 0); //drive back to crater slowly
 
             Cosmo.flagServo.setPosition(closed);
         }
