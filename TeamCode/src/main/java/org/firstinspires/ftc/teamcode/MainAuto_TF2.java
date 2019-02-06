@@ -195,7 +195,11 @@ public class MainAuto_TF2 extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
         // AutoTransitioner used before waitForStart()
-        AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
+        if (teamIsRed) {
+            AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
+        } else {
+            AutoTransitioner.transitionOnStop(this, "MainTeleBlue");   // get ready for teleop at the end of auto
+        }
         /**************************************************************
          // Actual Init loop
          *************************************************************/
