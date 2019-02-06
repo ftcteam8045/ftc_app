@@ -477,15 +477,15 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(0.8, 135);
-            mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
-            mecanumDrive(0.5,-1.5,135,-90);  // DRIVE away from WALL
-
             sleep(waitTime1);
-            mecanumDrivetoTape(0.3, driveDis7 + 15, 135, 0);  //drive towards base
+            mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
+
+            mecanumDrivetoTape(0.25, driveDis7 + 25, 135, 0);  //drive towards base
             //Unclamp Team Marker
-            sleep(750);
+            //sleep(750);
             Cosmo.flagServo.setPosition(open);
-            sleep(800);
+            //sleep(800);
             mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
             sleep(300);
             mecanumDrive(0.4, -1.5, 135, 0); //drive back to crater slowly
@@ -493,15 +493,15 @@ public class MainAuto_TF2 extends LinearOpMode {
             Cosmo.flagServo.setPosition(closed);
         }else {                         /** base side drive  **/
             mecanumTurn(0.8, -43);
-            mecanumDrive(0.5,13.5,-45,90);  // Drive to Wall
-            mecanumDrive(0.5,-1.5,-45,90);  // Drive away from Wall
-
             sleep(waitTime1);
-            mecanumDrivetoTape(0.3, driveDis5, -45, 0);  //drive towards base
+            mecanumDrive(0.5,13.5,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
+
+            mecanumDrivetoTape(0.25, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
-            sleep(750);
+            //sleep(750);
             Cosmo.flagServo.setPosition(open);
-            sleep(800);
+            //sleep(800);
             mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
             sleep(300);
             mecanumDrive(0.4, -1.5, -45, 0); //drive back to crater slowly
