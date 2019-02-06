@@ -266,14 +266,16 @@ public class MainAuto_TF2 extends LinearOpMode {
                         }
 
 
-                        if (goldPosition == 0) {
-                            telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
-                        } else if (goldPosition == 2) {
-                            telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
-                        } else if (goldPosition == 1) {
-                            telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
-                        }
 
+
+                    }
+
+                    if (goldPosition == 0) {
+                        telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
+                    } else if (goldPosition == 2) {
+                        telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+                    } else if (goldPosition == 1) {
+                        telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
                     }
                 }
             }
@@ -477,6 +479,12 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(0.8, 135);
+            if (goldPosition == 2){
+                mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
+                mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
+                mecanumDrive(0.5,-14,135,0);  // DRIVE away from partner gold
+                mecanumDrive(0.5,7,135,-90);  // DRIVE right
+            }
             sleep(waitTime1);
             mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
             mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
