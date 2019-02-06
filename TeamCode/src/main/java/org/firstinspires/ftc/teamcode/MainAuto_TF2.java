@@ -45,6 +45,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     /**
      * Menu Parameter Initialization
      **/
+    public boolean hitOppenentsGold = false;
     public boolean teamIsRed = true;
     public boolean craterPosition = true;
     public boolean testBot = true;
@@ -479,7 +480,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(0.8, 135);
-            if (goldPosition == 2){    /** Hit off partner gold **/
+            if (goldPosition == 2 && hitOppenentsGold == true){    /** Hit off partner gold **/
                 mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
                 mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
                 mecanumDrive(0.5,-14,135,0);  // DRIVE away from partner gold
@@ -765,6 +766,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
     public void editParameters() {
 
+        String arrow01 = " ";
         String arrow0 = " ";
         String arrow1 = " ";
         String arrow2 = " ";
@@ -804,6 +806,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
             telemetry.addLine("Use Dpad to Navigate & change");
             telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
+            telemetry.addLine().addData(arrow01, waitTime1).addData("Hit off partner's gold", arrow01);
             telemetry.addLine().addData(arrow0, waitTime1).addData("Wait Time", arrow0);
             telemetry.addLine().addData(arrow1, colorIndex).addData(color[colorIndex], arrow1);
             telemetry.addLine().addData(arrow2, positionIndex).addData(position[positionIndex], arrow2);
@@ -827,7 +830,7 @@ public class MainAuto_TF2 extends LinearOpMode {
                 dpadPressedDown = false;
                 currentEdit += 1;
                 if (currentEdit > 13) {
-                    currentEdit = 0;
+                    currentEdit = -1;
                 }
             }
 
@@ -836,12 +839,16 @@ public class MainAuto_TF2 extends LinearOpMode {
             } else if (gamepad1.dpad_up == false && dpadPressedUp) {
                 dpadPressedUp = false;
                 currentEdit -= 1;
-                if (currentEdit < 0) {
+                if (currentEdit < -1) {
                     currentEdit = 13;
                 }
             }
 
-
+            if (currentEdit == -1) {
+                arrow01 = "<>";
+            } else {
+                arrow01 = "    ";
+            }
             if (currentEdit == 0) {
                 arrow0 = "<>";
             } else {
@@ -918,6 +925,13 @@ public class MainAuto_TF2 extends LinearOpMode {
                 dpadPressedLeft = true;
             } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
                 dpadPressedLeft = false;
+                if (currentEdit == -1) {
+                    if (hitOppenentsGold == true) {
+                        hitOppenentsGold = false;
+                    } else {
+                        hitOppenentsGold = true;
+                    }
+                }
                 if (currentEdit == 0) {
                     waitTime1 -= 1000;
                 }
