@@ -479,7 +479,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(0.8, 135);
-            if (goldPosition == 2){
+            if (goldPosition == 2){    /** Hit off partner gold **/
                 mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
                 mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
                 mecanumDrive(0.5,-14,135,0);  // DRIVE away from partner gold
@@ -489,7 +489,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
             mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
 
-            mecanumDrivetoTape(0.25, driveDis7 + 25, 135, 0);  //drive towards base
+            mecanumDrivetoTape(0.3, driveDis7 + 25, 135, 0);  //drive towards base
             //Unclamp Team Marker
             //sleep(750);
             Cosmo.flagServo.setPosition(open);
@@ -505,7 +505,7 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumDrive(0.5,13.5,-45,90);  // Drive to Wall
             mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
 
-            mecanumDrivetoTape(0.25, driveDis5, -45, 0);  //drive towards base
+            mecanumDrivetoTape(0.3, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             //sleep(750);
             Cosmo.flagServo.setPosition(open);

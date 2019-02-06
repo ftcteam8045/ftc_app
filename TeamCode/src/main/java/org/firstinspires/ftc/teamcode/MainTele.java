@@ -46,8 +46,8 @@ public class MainTele extends OpMode {
 
     public double armUp = 2100;
 
-    public double dump = 0.5;
-    public double transport = 0.60;
+    public double dump = 0.7;
+    public double transport = 0.4;
 
     public double grayHueValue = 120.0;
     public double redHueValue  =  5;
@@ -287,7 +287,7 @@ public class MainTele extends OpMode {
         if (gamepad2.a) {
             Cosmo.dumpServo.setPosition(dump);
         }
-        if (gamepad2.b) {
+        if (gamepad2.x) {
             Cosmo.dumpServo.setPosition(transport);
         }
 
