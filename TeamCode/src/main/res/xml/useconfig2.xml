@@ -7,14 +7,14 @@
             <Matrix12vMotor name="right_front" port="2" />
             <Matrix12vMotor name="right_rear" port="3" />
             <Servo name="flag_servo" port="1" />
-            <Servo name="dump_servo" port="2" />
-            <CRServo name="sweeper" port="5" />
+            <ContinuousRotationServo name="sweeper" port="0"/>
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
             <Matrix12vMotor name="lift_motor" port="0" />
             <Matrix12vMotor name="arm_motor" port="1" />
             <Matrix12vMotor name="ex_motor" port="2" />
+            <Servo name="dump_servo" port="5" />
             <RevBlinkinLedDriver name="ledlights" port="0" />
             <LynxEmbeddedIMU name="imu 1" port="0" bus="0" />
             <LynxColorSensor name="revcolorsensor" port="1" bus="1" />

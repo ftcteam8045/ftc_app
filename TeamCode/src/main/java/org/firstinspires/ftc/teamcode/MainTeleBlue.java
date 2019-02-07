@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name = "MainTele", group = "8045")  // @Autonomous(...) is the other common choice
+@TeleOp(name = "MainTeleBlue", group = "8045")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class MainTeleBlue extends OpMode {
 

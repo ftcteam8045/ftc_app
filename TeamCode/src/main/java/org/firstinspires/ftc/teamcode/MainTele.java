@@ -165,7 +165,7 @@ public class MainTele extends OpMode {
         int armSlowSpeedPos = 1400;
 
         if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
-            Cosmo.armmotor.setPower(-gamepad2.left_stick_y * 0.5);
+            Cosmo.armmotor.setPower(-gamepad2.left_stick_y * 0.4);
         }
         else {
             Cosmo.armmotor.setPower(0);
@@ -184,22 +184,22 @@ public class MainTele extends OpMode {
         }
 
         /** Sweeper Motor Controls for Controller 2 **/
+//
+//        if (gamepad2.right_trigger > 0.1){
+////            Cosmo.sweepermotor.setPower(1);
+//        }
+//
+//        if (gamepad2.left_bumper){
+//
+////            Cosmo.sweepermotor.setPower(-0.8);
+//
+//        }
+//
+//        if (gamepad2.right_bumper){
+//
+////            Cosmo.sweepermotor.setPower(0);
 
-        if (gamepad2.right_trigger > 0.1){
-//            Cosmo.sweepermotor.setPower(1);
-        }
-
-        if (gamepad2.left_bumper){
-
-//            Cosmo.sweepermotor.setPower(-0.8);
-
-        }
-
-        if (gamepad2.right_bumper){
-
-//            Cosmo.sweepermotor.setPower(0);
-
-        }
+//        }
 
 
         /** Extension Motor Controls for Controller 2 **/
@@ -207,7 +207,7 @@ public class MainTele extends OpMode {
         int exMax = 4740;
 
         if (gamepad2.right_stick_y != 0) {
-            Cosmo.exmotor.setPower(-gamepad2.right_stick_y);
+            Cosmo.exmotor.setPower(gamepad2.right_stick_y * 0.25);
         }
         else {
             Cosmo.exmotor.setPower(0);
