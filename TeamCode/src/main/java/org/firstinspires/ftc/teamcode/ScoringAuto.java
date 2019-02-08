@@ -29,12 +29,11 @@ import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_COEF;
 import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
-//Lara + Liesel positioning code
 
 
-@Autonomous(name = "Auto 2 Particle TF", group = "Cosmo")
+@Autonomous(name = "Scoring Auto", group = "Cosmo")
 //@Disabled
-public class MainAuto_TF2 extends LinearOpMode {
+public class ScoringAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
@@ -530,11 +529,13 @@ public class MainAuto_TF2 extends LinearOpMode {
             //sleep(750);
             Cosmo.flagServo.setPosition(open);
             //sleep(800);
-            mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
-            sleep(300);
-            mecanumDrive(0.4, -1.5, 135, 0); //drive back to crater slowly
-
+            mecanumDrive(0.6, -35, 135, 0); //drive back from crater
             Cosmo.flagServo.setPosition(closed);
+            mecanumDrive(0.5,10,135,90);  // DRIVE AWAY WALL
+            mecanumTurn(0.8, 0); //turn to score
+            mecanumDrive(0.6,50,0,-90);      // drive middle of crater
+
+
         }else {                         /** base side drive  **/
             mecanumTurn(0.8, -43);
             sleep(waitTime1);
