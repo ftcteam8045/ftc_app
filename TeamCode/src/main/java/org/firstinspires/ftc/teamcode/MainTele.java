@@ -44,7 +44,9 @@ public class MainTele extends OpMode {
     public String driveMode = "Normal";
     public boolean run = false;
 
-    public double armUp = 2100;
+    public double armUp1 = 1150;
+    public double armUp2 = 710;
+
 
     public double dump = 0.7;
     public double transport = 0.4;
@@ -60,16 +62,25 @@ public class MainTele extends OpMode {
     public float values[] = hsvValues;
 
     public boolean liftMovingUp = false;
-    public boolean readyToDump = false;
-    public boolean dumpNow = false;
-    public boolean moveUp = false;
-    public boolean readyToObtain = true;
-    public boolean tweakingArm = true;
+    public boolean extendArmOutToScore = false;
+    public boolean armMovingDown = false;
+    public boolean armMovingIn = false;
+    public boolean retractNow = false;
+    public boolean armMiddle = false;
+    public boolean clearWall = false;
+    public boolean finishRetracting = false;
+    public boolean moveArmUpToScore1 = false;
+    public boolean moveArmUpToScore2 = false;
+    public boolean moveBox = false;
+
+
 
 
     public int dumpLength = 3154;
-    public int moveLength = 1400;
-
+    public int moveLength1 = -1700;
+    public int moveLength2 = -380;
+    public int moveLength3 = -1800;
+    public int justAboveWallHeight = 2600;
 
 
     @Override
@@ -87,6 +98,9 @@ public class MainTele extends OpMode {
 
         telemetry.addData("Finished", "Initializing");
         telemetry.update();
+
+        Cosmo.dumpServo.setPosition(dump);
+
     }
 
     @Override
@@ -134,7 +148,7 @@ public class MainTele extends OpMode {
         if (gamepad1.left_bumper) {
             topSpeed = 1.0;
         } else if (gamepad1.left_trigger > 0.1) {
-            topSpeed = 0.4;
+            topSpeed = 0.3;
         }
         else {
             topSpeed = 0.6;
@@ -165,41 +179,41 @@ public class MainTele extends OpMode {
         int armSlowSpeedPos = 1400;
 
         if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
-            Cosmo.armmotor.setPower(-gamepad2.left_stick_y * 0.4);
+            Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.28);
         }
         else {
             Cosmo.armmotor.setPower(0);
         }
-
-        if (gamepad2.left_trigger > 0.1) {
-            if (Cosmo.armmotor.getCurrentPosition() < armSlowSpeedPos) {
-                Cosmo.armmotor.setPower(0.09);
-//                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-            }
-
-            if (Cosmo.armmotor.getCurrentPosition() > armSlowSpeedPos) {
-                Cosmo.armmotor.setPower(-0.5);
-//                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-            }
-        }
+//
+//        if (gamepad2.left_trigger > 0.1) {
+//            if (Cosmo.armmotor.getCurrentPosition() < armSlowSpeedPos) {
+//                Cosmo.armmotor.setPower(0.09);
+////                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//            }
+//
+//            if (Cosmo.armmotor.getCurrentPosition() > armSlowSpeedPos) {
+//                Cosmo.armmotor.setPower(-0.5);
+////                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//            }
+//        }
 
         /** Sweeper Motor Controls for Controller 2 **/
-//
-//        if (gamepad2.right_trigger > 0.1){
-////            Cosmo.sweepermotor.setPower(1);
-//        }
-//
-//        if (gamepad2.left_bumper){
-//
-////            Cosmo.sweepermotor.setPower(-0.8);
-//
-//        }
-//
-//        if (gamepad2.right_bumper){
-//
-////            Cosmo.sweepermotor.setPower(0);
 
-//        }
+        if (gamepad2.right_trigger > 0.1){
+            Cosmo.vexMotor.setPower(-0.88);
+        }
+
+        if (gamepad2.left_trigger > 0.1){
+
+            Cosmo.vexMotor.setPower(0.88);
+// njm
+        }
+
+        if (gamepad2.right_bumper || gamepad2.left_bumper){
+
+            Cosmo.vexMotor.setPower(0);
+
+        }
 
 
         /** Extension Motor Controls for Controller 2 **/
@@ -207,7 +221,7 @@ public class MainTele extends OpMode {
         int exMax = 4740;
 
         if (gamepad2.right_stick_y != 0) {
-            Cosmo.exmotor.setPower(gamepad2.right_stick_y * 0.25);
+            Cosmo.exmotor.setPower(gamepad2.right_stick_y);
         }
         else {
             Cosmo.exmotor.setPower(0);
@@ -217,69 +231,151 @@ public class MainTele extends OpMode {
         //extension arm one hit align
 
 
-//        if(gamepad2.x && readyToObtain){
-//
-//            Cosmo.exmotor.setPower(0.18);
-//            Cosmo.armmotor.setPower(0.5);
-//            sleep(920);
-//            Cosmo.armmotor.setPower(0.2);
-//            Cosmo.exmotor.setPower(1);
-//            sleep(1500);
-//            Cosmo.armmotor.setPower(0);
-//            Cosmo.exmotor.setPower(0);
-//            Cosmo.dumpServo.setPosition(open);
-//            readyToObtain = false;
-//
-//        }
+        /** arm down */
+        if (gamepad2.dpad_down){
+            armMiddle = true;
+        }
+
+        if (armMiddle){
+            if (Cosmo.armmotor.getCurrentPosition() < armUp2){
+                Cosmo.armmotor.setPower(0.8);
+            }
+            else {
+                armMovingIn = true;
+                armMiddle = false;
+            }
+
+        }
+        if (armMovingIn){
+            if (Cosmo.exmotor.getCurrentPosition() < moveLength2) {
+                Cosmo.exmotor.setPower(1);
+            } else {
+                Cosmo.exmotor.setPower(0);
+                armMovingDown = true;
+                armMovingIn = false;
+            }
+
+        }
+
+        if (armMovingDown) {
+            if (Cosmo.armmotor.getCurrentPosition() < justAboveWallHeight) {
+                Cosmo.armmotor.setPower(0.8);
+            } else {
+                Cosmo.armmotor.setPower(0);
+                armMovingDown = false;
+
+            }
+        }
+
+
+        /** GO UP TO SCORE  ONE HIT BUTTON **/
+
+
+        // Press gamepad2.Y
+        if (gamepad2.y) {
+            retractNow = true;
+        }
 
 
 
-//        if (gamepad2.y) {
-//            dumpNow = true;
-//
-//        }
-//
-//        if (dumpNow) {
-//
-//            if (Cosmo.exmotor.getCurrentPosition() > moveLength) {
-//                Cosmo.exmotor.setPower(-1);
-//            }
-//            else {
-//                Cosmo.exmotor.setPower(0);
-//                readyToDump = true;
-//                dumpNow = false;
-//            }
-//
-//
-//        }
-//
-//
-//        if (readyToDump){
-//
-//            if (Cosmo.armmotor.getCurrentPosition() < armUp){
-//
-//                Cosmo.armmotor.setPower(1);
-//
-//            }
-//            else {
-//                Cosmo.armmotor.setPower(0);
-//                moveUp = true;
-//                readyToDump = false;
-//            }
-//
-//        }
-//
-//        if (moveUp) {
-//
-//            while (Cosmo.exmotor.getCurrentPosition() < dumpLength) {
-//                Cosmo.exmotor.setPower(1);
-//
-//            }
-//                Cosmo.exmotor.setPower(0);
-//                moveUp = false;
-//        }
+        // Retract arm to first transport height
+        if (retractNow) {
+            if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
+                Cosmo.exmotor.setPower(1);
+            }
+            else {
+                Cosmo.exmotor.setPower(0);
+                clearWall = true;
+                retractNow = false;
+            }
+        }
 
+        // Raise arm to just above wall height
+        if (clearWall) {
+            if (Cosmo.armmotor.getCurrentPosition() > justAboveWallHeight ) {
+                Cosmo.armmotor.setPower(-0.6);
+            }
+            else {
+                Cosmo.armmotor.setPower(0);
+                clearWall = false;
+                finishRetracting = true;
+            }
+        }
 
+        // Retract arm to second transport height
+        if (finishRetracting) {
+            if (Cosmo.exmotor.getCurrentPosition() < moveLength2 ) {
+                Cosmo.exmotor.setPower(1);
+            }
+            else {
+                Cosmo.exmotor.setPower(0);
+
+                finishRetracting = false;
+                moveArmUpToScore1 = true;
+            }
+        }
+        if (moveArmUpToScore1){
+
+            if (Cosmo.armmotor.getCurrentPosition() > armUp1){
+
+                Cosmo.armmotor.setPower(-1);
+
+            }
+            else {
+                Cosmo.armmotor.setPower(0);
+                moveBox = true;
+                moveArmUpToScore1 = false;
+
+            }
+
+        }
+        //rotate collection box to transport orientation
+        if (moveBox){
+                Cosmo.dumpServo.setPosition(transport);
+                moveArmUpToScore2 = true;
+                moveBox = false;
+        }
+        // Rotate arm to scoring position
+        if (moveArmUpToScore2){
+
+            if (Cosmo.armmotor.getCurrentPosition() > armUp2){
+
+                Cosmo.armmotor.setPower(-1);
+
+            }
+            else {
+                Cosmo.armmotor.setPower(0);
+                extendArmOutToScore = true;
+                moveArmUpToScore2 = false;
+
+            }
+
+        }
+
+        // Extend arm to scoring position
+        if (extendArmOutToScore) {
+
+            while (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
+                Cosmo.exmotor.setPower(-1);
+
+            }
+                Cosmo.exmotor.setPower(0);
+            extendArmOutToScore = false;
+        }
+
+        if (gamepad1.b){
+            liftMovingUp = false;
+            extendArmOutToScore = false;
+            armMovingDown = false;
+            armMovingIn = false;
+            retractNow = false;
+            armMiddle = false;
+            clearWall = false;
+            finishRetracting = false;
+            moveArmUpToScore1 = false;
+            moveArmUpToScore2 = false;
+            moveBox = false;
+        }
 
         /** Dump Servo Controls for Controller 2 **/
 
@@ -291,7 +387,7 @@ public class MainTele extends OpMode {
             Cosmo.dumpServo.setPosition(transport);
         }
 
-/**ONE HIT LIFT HEIGHT**/
+        /**ONE HIT LIFT HEIGHT**/
 
 //      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();

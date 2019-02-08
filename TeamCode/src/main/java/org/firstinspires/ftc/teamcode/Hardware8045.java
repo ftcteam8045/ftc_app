@@ -62,7 +62,7 @@ public class Hardware8045
     public DcMotor  exmotor   = null;
     public Servo    flagServo  = null;
     public Servo    dumpServo  = null;
-    public CRServo  sweepServo  = null;
+    public CRServo  vexMotor  = null;
 
 
 
@@ -140,6 +140,7 @@ public class Hardware8045
         liftmotor = hwMap.get(DcMotor.class, "lift_motor");
         armmotor = hwMap.get(DcMotor.class, "arm_motor");
         exmotor = hwMap.get(DcMotor.class, "ex_motor");
+        vexMotor = hwMap.get(CRServo.class, "sweeper");
 
 
         // this should be for neverest  & using it for Matrix/yellowjackets as well.
@@ -148,11 +149,19 @@ public class Hardware8045
          rightFront.setDirection(DcMotor.Direction.REVERSE);
          rightRear.setDirection(DcMotor.Direction.REVERSE);
 
+        liftmotor.setDirection (DcMotor.Direction.REVERSE);   // new config
+        armmotor.setDirection (DcMotor.Direction.FORWARD);   // new config
+        exmotor.setDirection (DcMotor.Direction.FORWARD);   // new config
+
 //        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        liftmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        exmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
 ////this is for Tetrix
@@ -163,8 +172,6 @@ public class Hardware8045
 
 
 //        liftmotor.setDirection (DcMotor.Direction.FORWARD);  //   old configuration
-        liftmotor.setDirection (DcMotor.Direction.REVERSE);   // new config
-        liftmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

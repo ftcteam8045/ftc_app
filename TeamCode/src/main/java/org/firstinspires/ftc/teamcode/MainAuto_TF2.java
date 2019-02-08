@@ -8,6 +8,7 @@ import android.view.View;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -45,7 +46,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     /**
      * Menu Parameter Initialization
      **/
-    public boolean hitOppenentsGold = false;
+    public boolean hitPartnerGold = false;
     public boolean teamIsRed = true;
     public boolean craterPosition = true;
     public boolean testBot = true;
@@ -207,30 +208,33 @@ public class MainAuto_TF2 extends LinearOpMode {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
+                if (teamIsRed) {
+                    telemetry.addData("", "RED");
+                } else {
+                    telemetry.addData("", "BLUE");
+                }
+                if (craterPosition) {
+                    telemetry.addData("", "Crater");
+                } else {
+                    telemetry.addData("", "Base");
+                }
+                telemetry.addLine(" Press Left Joystick for Edit");
+                Color.RGBToHSV((int) (Cosmo.sensorColor.red() * 255),
+                        (int) (Cosmo.sensorColor.green() * 255),
+                        (int) (Cosmo.sensorColor.blue() * 255),
+                        hsvValues);
+                //  Color sensor test
+//                    telemetry.addData("Alpha", Cosmo.sensorColor.alpha());
+//                    telemetry.addData("Red  ", Cosmo.sensorColor.red());
+//                   telemetry.addData("Green", Cosmo.sensorColor.green());
+//                    telemetry.addData("Blue ", Cosmo.sensorColor.blue());
+                telemetry.addData("Hue", hsvValues[0]);
+                telemetry.addData("Team Color:", teamColor);
+
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
-                    if (teamIsRed) {
-                        telemetry.addData("", "RED");
-                    } else {
-                        telemetry.addData("", "BLUE");
-                    }
-                    if (craterPosition) {
-                        telemetry.addData("", "Crater");
-                    } else {
-                        telemetry.addData("", "Base");
-                    }
-                    telemetry.addLine(" Press Left Joystick for Edit");
 
-                    Color.RGBToHSV((int) (Cosmo.sensorColor.red() * 255),
-                            (int) (Cosmo.sensorColor.green() * 255),
-                            (int) (Cosmo.sensorColor.blue() * 255),
-                            hsvValues);
-                    //  Color sensor test
-                    telemetry.addData("Alpha", Cosmo.sensorColor.alpha());
-                    telemetry.addData("Red  ", Cosmo.sensorColor.red());
-                    telemetry.addData("Green", Cosmo.sensorColor.green());
-                    telemetry.addData("Blue ", Cosmo.sensorColor.blue());
-                    telemetry.addData("Hue", hsvValues[0]);
+
 
                     telemetry.addData("# Objects Detected", updatedRecognitions.size());
 
@@ -275,13 +279,14 @@ public class MainAuto_TF2 extends LinearOpMode {
 
                     }
 
-                    if (goldPosition == 0) {
-                        telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
-                    } else if (goldPosition == 2) {
-                        telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
-                    } else if (goldPosition == 1) {
-                        telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
-                    }
+
+                }
+                if (goldPosition == 0) {
+                    telemetry.addData("Gold Mineral Position", "Left");
+                } else if (goldPosition == 2) {
+                    telemetry.addData("Gold Mineral Position", "Right");
+                } else if (goldPosition == 1) {
+                    telemetry.addData("Gold Mineral Position", "Center");
                 }
             }
             /** Eli's edit Menu params  **/
@@ -292,6 +297,11 @@ public class MainAuto_TF2 extends LinearOpMode {
 //                });
 
                 editParameters();
+                if (teamIsRed) {
+                    teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+                } else {
+                    teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
+                }
 
 //                if (teamIsRed) {
 //                    relativeLayout.post(new Runnable() {
@@ -392,9 +402,20 @@ public class MainAuto_TF2 extends LinearOpMode {
                 Cosmo.liftmotor.setPower(0);
             }
 
+            /** Arm Controls for Controller 1 **/
+            if (gamepad1.left_stick_y > 0.01 || gamepad1.left_stick_y < 0.01) {
+                Cosmo.armmotor.setPower(gamepad1.left_stick_y * 0.4);
+            }
+            else {
+                Cosmo.armmotor.setPower(0);
+            }
+
 
                 telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
-                telemetry.update();
+            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
+
+
+            telemetry.update();
         }
         /**************************************************************
          // End Init loop
@@ -411,13 +432,23 @@ public class MainAuto_TF2 extends LinearOpMode {
         tfod.deactivate();     // turn off the tensorflow detector.
 
 //        while (opModeIsActive() && !isStopRequested() {
-        telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.milliseconds());
-        telemetry.update();
-//
+//        telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.milliseconds());
+//        telemetry.update();
+////
         // First task would be to deploy  here//
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
+        //move arm forward
+        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        while(Cosmo.armmotor.getCurrentPosition() < 550){
+            Cosmo.armmotor.setPower(0.4);
+            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
+            telemetry.update();
+        }
+        Cosmo.armmotor.setPower(0);
+
 
         // Unhook from lift holder with high torque motor
 
@@ -484,7 +515,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(0.8, 135);
-            if (goldPosition == 2 && hitOppenentsGold == true){    /** Hit off partner gold **/
+            if (goldPosition == 2 && hitPartnerGold == true){    /** Hit off partner gold **/
                 mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
                 mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
                 mecanumDrive(0.5,-14,135,0);  // DRIVE away from partner gold
@@ -810,7 +841,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
             telemetry.addLine("Use Dpad to Navigate & change");
             telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
-            telemetry.addLine().addData(arrow01, waitTime1).addData("Hit off partner's gold", arrow01);
+            telemetry.addLine().addData(arrow01, hitPartnerGold).addData("Hit off partner's gold", arrow01);
             telemetry.addLine().addData(arrow0, waitTime1).addData("Wait Time", arrow0);
             telemetry.addLine().addData(arrow1, colorIndex).addData(color[colorIndex], arrow1);
             telemetry.addLine().addData(arrow2, positionIndex).addData(position[positionIndex], arrow2);
@@ -930,10 +961,10 @@ public class MainAuto_TF2 extends LinearOpMode {
             } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
                 dpadPressedLeft = false;
                 if (currentEdit == -1) {
-                    if (hitOppenentsGold == true) {
-                        hitOppenentsGold = false;
+                    if (hitPartnerGold == true) {
+                        hitPartnerGold = false;
                     } else {
-                        hitOppenentsGold = true;
+                        hitPartnerGold = true;
                     }
                 }
                 if (currentEdit == 0) {
