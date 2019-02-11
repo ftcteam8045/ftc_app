@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode;
 
 import android.app.Activity;
@@ -50,10 +49,10 @@ public class ScoringAuto extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 16;
+    public int driveDis1 = 17;
     public int driveDis2 = 22;
     public int driveDis3 = 10; //forward+backward
-    //public int driveDis4 = 45; //drive to wall
+    public int goBackToScoreDistance = 62; //drive to wall
     public int driveDis4 = 28; //new distance
     public int driveDis5 = 55; //drive to base  on base side
     public int driveDis6 = 60; //drive to crater  used for crater and base starts
@@ -61,7 +60,7 @@ public class ScoringAuto extends LinearOpMode {
     public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
-    public double HookClear = 2.0;
+    public double HookClear = 3.0;
     public double closed = 0.02;         // servo for team marker
     public double open = 0.7;      // servo for team marker
     public double errorAllowed = 125;  // Tensorflow mineral detection
@@ -77,7 +76,29 @@ public class ScoringAuto extends LinearOpMode {
     public float values[] = hsvValues;
 
     public int liftmax=7800;
+    public boolean armMovingDown = false;
+    public boolean armMovingIn = false;
+    public boolean armMiddle = false;
+    public double armUp1 = 1150;
+    public double armUp2 = 710;
+    public double dump = 0.7;
+    public double transport = 0.4;
+    public boolean lookForMinerals = false;
+    public int moveLength2 = -380;
+    public int moveLength3 = -1800;
+    public int justAboveWallHeight = 2600;
+    public int dumpLength = 3154;
+    public int moveLength1 = -1700;
+    public int turnHeading = 10;
 
+    public boolean liftMovingUp = false;
+    public boolean extendArmOutToScore = false;
+    public boolean retractNow = false;
+    public boolean clearWall = false;
+    public boolean finishRetracting = false;
+    public boolean moveArmUpToScore1 = false;
+    public boolean moveArmUpToScore2 = false;
+    public boolean moveBox = false;
 
     // State used for updating telemetry
     public Orientation angles;
@@ -168,7 +189,7 @@ public class ScoringAuto extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
 
-       // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
+        // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
 
         //        /** Initialize the Tensor Flow Object Detection engine. */
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -262,11 +283,15 @@ public class ScoringAuto extends LinearOpMode {
 
                                     if (recognition.getLabel().equals("Gold")) {
                                         goldPosition = 0;    //Its gold, and it is on the left
+                                        goBackToScoreDistance = 18;
+                                        turnHeading = -10;
                                     }
 
                                 } else {
                                     if (recognition.getLabel().equals("Gold")) {
                                         goldPosition = 1;    //Its gold, and it is on the right (center)
+                                        goBackToScoreDistance = 40;
+                                        turnHeading = 0;
                                     }
                                 }
 
@@ -280,6 +305,25 @@ public class ScoringAuto extends LinearOpMode {
 
 
                 }
+//                if (goldPosition == 0) {        // left position
+//
+//                    goBackToScoreDistance = 10;
+//                    turnHeading = -10;
+//                }
+//
+//                if (goldPosition == 1) {       //center pos
+//
+//                    goBackToScoreDistance = 32;
+//                    turnHeading = 0;
+//
+//                }
+//
+//                if (goldPosition == 2) {      //right pos
+//                    goBackToScoreDistance = 54;
+//                    turnHeading = 10;
+//
+//
+//                }
                 if (goldPosition == 0) {
                     telemetry.addData("Gold Mineral Position", "Left");
                 } else if (goldPosition == 2) {
@@ -410,7 +454,7 @@ public class ScoringAuto extends LinearOpMode {
             }
 
 
-                telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
+            telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
             telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
 
 
@@ -439,81 +483,88 @@ public class ScoringAuto extends LinearOpMode {
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         //move arm forward
-        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        while(Cosmo.armmotor.getCurrentPosition() < 550){
-            Cosmo.armmotor.setPower(0.4);
-            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
-            telemetry.update();
-        }
-        Cosmo.armmotor.setPower(0);
-
+//        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        while(Cosmo.armmotor.getCurrentPosition() < 550){
+//            Cosmo.armmotor.setPower(0.4);
+//            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
+//            telemetry.update();
+//        }
+//        Cosmo.armmotor.setPower(0);
+//        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Unhook from lift holder with high torque motor
 
-        while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
+//        while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
+//
+//            Cosmo.liftmotor.setPower(1);
+//
+//        }
+//        Cosmo.liftmotor.setPower(0);
 
-            Cosmo.liftmotor.setPower(1);
 
+        if (craterPosition) {            /** crater side drive  **/
+            HookClear = HookClear + 1.7;
         }
-        Cosmo.liftmotor.setPower(0);
-
-
-
-        if (craterPosition){            /** crater side drive  **/
-            HookClear = HookClear+1.7;
-        }
-        sleep(700);
-        mecanumDrive(0.3, HookClear, 0, -90); //Drive right
+        if (craterPosition == false) {
+            sleep(700);
+            mecanumDrive(1, HookClear, 0, -90); //Drive right
 
 //          goldposition 0 = left,1 = center, 2 = right
 
-        if (goldPosition == 0) {        // left position
+            if (goldPosition == 0) {        // left position
 
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(200);
-            mecanumDrive(0.5, driveDis2+HookClear, 0, 90);    // drive left
-            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
-            sleep(200);
-            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
+                mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+                sleep(200);
+                mecanumDrive(0.5, driveDis2 + HookClear, 0, 90);    // drive left
+                mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+                sleep(200);
+                mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
 
+            }
+
+            if (goldPosition == 1) {       //center pos
+
+                mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+                sleep(300);
+                mecanumDrive(0.5, HookClear, 0, 90);    // drive left
+                sleep(200);
+                mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+                mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
+                sleep(300);
+                mecanumDrive(0.6, driveDis2, 0, 90);      // drive left 1x
+
+            }
+
+            if (goldPosition == 2) {      //right pos
+
+                mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+                sleep(500);
+                mecanumDrive(0.5, driveDis2 - HookClear, 0, -90);    // drive right
+                sleep(200);
+                mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+                mecanumDrive(0.2, -driveDis3, 0, 0);     // drive backwards
+                sleep(400);
+                mecanumDrive(0.6, 2 * driveDis2, 0, 90);      // drive left 2x
+            }
+
+            // drive towards the wall (all modes)
+            mecanumDrive(0.6, driveDis4, 0, 90);      // drive towards wall
+
+
+            sleep(200);
         }
 
-        if (goldPosition == 1) {       //center pos
 
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(300);
-            mecanumDrive(0.5, HookClear, 0, 90);    // drive left
-            sleep(200);
-            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
-            sleep(300);
-            mecanumDrive(0.6, driveDis2, 0, 90);      // drive left 1x
-
-        }
-
-        if (goldPosition == 2) {      //right pos
-
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(500);
-            mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
-            sleep(200);
-            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.2, -driveDis3, 0, 0);     // drive backwards
-            sleep(400);
-            mecanumDrive(0.6, 2*driveDis2, 0, 90);      // drive left 2x
-        }
-
-        // drive towards the wall (all modes)
-        mecanumDrive(0.6,driveDis4,0,90);      // drive towards wall
-
-
-        sleep(200);
-
-        // drive forward or backward based on crater starting position
-
-        if (craterPosition){            /** crater side drive  **/
-            mecanumTurn(0.8, 135);
+        if (craterPosition) {
+            sleep(700);
+            mecanumDrive(0.5, HookClear, 0, -90); //Drive right
+            mecanumDrive(0.8, driveDis1-2, 0, 0);     // drive forward
+            mecanumTurn(1,90);
+            mecanumDrive(1 , 54, 90, 0);    // drive left far
+            /** crater side drive  **/
+            mecanumTurn(1, 135);
             if (goldPosition == 2 && hitPartnerGold == true){    /** Hit off partner gold **/
                 mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
                 mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
@@ -521,19 +572,221 @@ public class ScoringAuto extends LinearOpMode {
                 mecanumDrive(0.5,7,135,-90);  // DRIVE right
             }
             sleep(waitTime1);
-            mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
-            mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
-
-            mecanumDrivetoTape(0.3, driveDis7 + 25, 135, 0);  //drive towards base
-            //Unclamp Team Marker
-            //sleep(750);
-            Cosmo.flagServo.setPosition(open);
-            //sleep(800);
-            mecanumDrive(0.6, -35, 135, 0); //drive back from crater
+            mecanumDrive(1,4,135,-90);  // DRIVE TO WALL
+            mecanumDrive(1,-2,135,-90);  // DRIVE away from WALL
+            mecanumDrive(1, driveDis7, 135, 0);  //drive towards base
+            mecanumDrivetoTape(0.5, driveDis7 + 25, 135, 0);  //drive towards base
+            Cosmo.flagServo.setPosition(open);            //Un clamp Team Marker
+            mecanumDrive(1, -45, 135, 0); //drive back from crater
             Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(0.5,10,135,90);  // DRIVE AWAY WALL
-            mecanumTurn(0.8, 0); //turn to score
-            mecanumDrive(0.6,50,0,-90);      // drive middle of crater
+            mecanumDrive(1,14,135,90);  // DRIVE AWAY WALL
+            mecanumTurn(1, 91); //turn to score
+            mecanumDrive(0.6,-goBackToScoreDistance,90,0); // drive back in front of gold
+            mecanumTurn(1, turnHeading);
+            /**************************************************************
+             // Actcual Scoring Auto Code \/
+             *************************************************************/
+//            lookForMinerals = true;  // scoring auto
+//            if (lookForMinerals){
+//                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
+//                    Cosmo.armmotor.setPower(0.8);
+//                }
+//                else {
+//                    armMovingIn = true;
+//                    lookForMinerals = false;
+//                }
+//
+//            }
+//            if (armMovingIn){
+//                if (Cosmo.exmotor.getCurrentPosition() < moveLength2) {
+//                    Cosmo.exmotor.setPower(1);
+//                } else {
+//                    Cosmo.exmotor.setPower(0);
+//                    armMovingDown = true;
+//                    armMovingIn = false;
+//
+//                }
+//
+//            }
+//
+//            if (armMovingDown) {
+//                if (Cosmo.armmotor.getCurrentPosition() < justAboveWallHeight) {
+//                    Cosmo.armmotor.setPower(0.8);
+//                } else {
+//                    Cosmo.armmotor.setPower(0);
+//                    armMovingDown = false;
+//                }
+//            }
+                                mecanumDrive(0.5, driveDis1 -5, 0, 0);     // drive forward to crater
+            //getting arm into crater and picking up blocks
+//            Cosmo.exmotor.setPower(-1);
+//            Cosmo.armmotor.setPower(0.3);
+//            sleep(500);
+//            Cosmo.exmotor.setPower(0);
+//            Cosmo.vexMotor.setPower(-0.88);
+//            Cosmo.armmotor.setPower(0);
+//            sleep(800);
+//            Cosmo.exmotor.setPower(1);
+//            sleep(400);
+//            Cosmo.exmotor.setPower(0);
+//            Cosmo.armmotor.setPower(0.8);
+//            sleep(300);
+//            Cosmo.armmotor.setPower(0);
+//            Cosmo.exmotor.setPower(-1);
+//            sleep(600);
+//            Cosmo.exmotor.setPower(0);
+//            sleep(500);
+//            retractNow = true;
+//            // Retract arm to first transport height
+//            if (retractNow) {
+//                if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
+//                    Cosmo.exmotor.setPower(1);
+//                }
+//                else {
+//                    Cosmo.exmotor.setPower(0);
+//                    clearWall = true;
+//                    retractNow = false;
+//                }
+//            }
+//
+//            // Raise arm to just above wall height
+//            if (clearWall) {
+//                if (Cosmo.armmotor.getCurrentPosition() > justAboveWallHeight ) {
+//                    Cosmo.armmotor.setPower(-0.6);
+//                }
+//                else {
+//                    Cosmo.armmotor.setPower(0);
+//                    clearWall = false;
+//                    finishRetracting = true;
+//                }
+//            }
+//
+//            // Retract arm to second transport height
+//            if (finishRetracting) {
+//                if (Cosmo.exmotor.getCurrentPosition() < moveLength2 ) {
+//                    Cosmo.exmotor.setPower(1);
+//                }
+//                else {
+//                    Cosmo.exmotor.setPower(0);
+//
+//                    finishRetracting = false;
+//                    moveArmUpToScore1 = true;
+//                }
+//            }
+//            if (moveArmUpToScore1){
+//
+//                if (Cosmo.armmotor.getCurrentPosition() > armUp1){
+//
+//                    Cosmo.armmotor.setPower(-1);
+//
+//                }
+//                else {
+//                    Cosmo.armmotor.setPower(0);
+//                    moveBox = true;
+//                    moveArmUpToScore1 = false;
+//
+//                }
+//
+//            }
+//            //rotate collection box to transport orientation
+//            if (moveBox){
+//                Cosmo.dumpServo.setPosition(transport);
+//                Cosmo.vexMotor.setPower(0);
+//                moveArmUpToScore2 = true;
+//                moveBox = false;
+//            }
+//            // Rotate arm to scoring position
+//            if (moveArmUpToScore2){
+//
+//                if (Cosmo.armmotor.getCurrentPosition() > armUp2){
+//
+//                    Cosmo.armmotor.setPower(-1);
+//
+//                }
+//                else {
+//                    Cosmo.armmotor.setPower(0);
+//                    extendArmOutToScore = true;
+//                    moveArmUpToScore2 = false;
+//
+//                }
+//
+//            }
+//
+//
+//            // Extend arm to scoring position
+//            if (extendArmOutToScore) {
+//
+//                while (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
+//                    Cosmo.exmotor.setPower(-1);
+//
+//                }
+//                Cosmo.exmotor.setPower(0);
+//                extendArmOutToScore = false;
+//            }
+            mecanumDrive(0.5, -(driveDis1-5), 0, 0);     // drive away from crater
+            if (goldPosition != 1){
+                mecanumTurn(1, -turnHeading);
+            }
+
+            if (goldPosition == 0) {
+                mecanumDrive(0.8, driveDis2, 0, -90);     // drive to center from left pos
+            }
+            if (goldPosition == 2) {
+                mecanumDrive(0.8, driveDis2, 0, 90);     // drive to center from right pos
+            }
+            mecanumTurn(0.8, -10); //turn to score in lander
+            mecanumDrive(0.3, -5, -10, 0);     // drive forward to lander
+//            Cosmo.exmotor.setPower(-1); //extend
+            mecanumDrive(0.2, -5, -10, 0);     // drive forward to lander slow
+//            Cosmo.exmotor.setPower(0); //stop extend
+//            Cosmo.armmotor.setPower(-0.1);
+            sleep(300);
+//            Cosmo.armmotor.setPower(0);
+            mecanumDrive(0.2, -2,-10, 0);     // drive forward to lander slow
+            Cosmo.dumpServo.setPosition(dump);
+            sleep(1000);
+//            Cosmo.vexMotor.setPower(-0.88);
+            sleep(2000);
+//            armMiddle = true;
+//            if (armMiddle){
+//                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
+//                    Cosmo.armmotor.setPower(0.8);
+//                }
+//                else {
+//                    armMovingIn = true;
+//                    armMiddle = false;
+//                    Cosmo.vexMotor.setPower(0);
+//                }
+//
+//            }
+//            if (armMovingIn){
+//                if (Cosmo.exmotor.getCurrentPosition() < moveLength2) {
+//                    Cosmo.exmotor.setPower(1);
+//                } else {
+//                    Cosmo.exmotor.setPower(0);
+//                    armMovingDown = true;
+//                    armMovingIn = false;
+//                }
+//
+//            }
+//
+//            if (armMovingDown) {
+//                if (Cosmo.armmotor.getCurrentPosition() < justAboveWallHeight) {
+//                    Cosmo.armmotor.setPower(0.8);
+//                } else {
+//                    Cosmo.armmotor.setPower(0);
+//                    armMovingDown = false;
+//
+//                }
+//            }
+            mecanumDrive(1, 7,-10, 0);     // drive away from lander
+            mecanumTurn(1, 0); //turn to face crater
+            mecanumDrive(1, driveDis1 - 10, 0, 0);     // drive to crater
+//            Cosmo.exmotor.setPower(-1); //extend to park in crater
+//            Cosmo.armmotor.setPower(0.2);
+//            sleep(500);
+//            Cosmo.exmotor.setPower(0); //stop
+//            Cosmo.armmotor.setPower(0); //stop
 
 
         }else {                         /** base side drive  **/
@@ -560,12 +813,12 @@ public class ScoringAuto extends LinearOpMode {
 
 
         //reset lift at end of auto
-        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
-
-            Cosmo.liftmotor.setPower(-1);
-
-        }
-        Cosmo.liftmotor.setPower(0);
+//        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
+//
+//            Cosmo.liftmotor.setPower(-1);
+//
+//        }
+//        Cosmo.liftmotor.setPower(0);
 
 
 
@@ -1110,9 +1363,4 @@ public class ScoringAuto extends LinearOpMode {
 
 
 }
-
-
-
-
-
 
