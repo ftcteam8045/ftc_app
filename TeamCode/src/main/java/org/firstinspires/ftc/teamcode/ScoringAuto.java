@@ -52,7 +52,7 @@ public class ScoringAuto extends LinearOpMode {
     public int driveDis1 = 17;
     public int driveDis2 = 22;
     public int driveDis3 = 10; //forward+backward
-    public int goBackToScoreDistance = 62; //drive to wall
+    public int goBackToScoreDistance = 25; //drive to wall
     public int driveDis4 = 28; //new distance
     public int driveDis5 = 55; //drive to base  on base side
     public int driveDis6 = 60; //drive to crater  used for crater and base starts
@@ -89,7 +89,7 @@ public class ScoringAuto extends LinearOpMode {
     public int justAboveWallHeight = 2600;
     public int dumpLength = 3154;
     public int moveLength1 = -1700;
-    public int turnHeading = 10;
+    public int turnHeading = 25;
 
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
@@ -283,14 +283,14 @@ public class ScoringAuto extends LinearOpMode {
 
                                     if (recognition.getLabel().equals("Gold")) {
                                         goldPosition = 0;    //Its gold, and it is on the left
-                                        goBackToScoreDistance = 18;
-                                        turnHeading = -10;
+                                        goBackToScoreDistance = -18;
+                                        turnHeading = -25;
                                     }
 
                                 } else {
                                     if (recognition.getLabel().equals("Gold")) {
                                         goldPosition = 1;    //Its gold, and it is on the right (center)
-                                        goBackToScoreDistance = 40;
+                                        goBackToScoreDistance = 0;
                                         turnHeading = 0;
                                     }
                                 }
@@ -560,8 +560,9 @@ public class ScoringAuto extends LinearOpMode {
         if (craterPosition) {
             sleep(700);
             mecanumDrive(0.5, HookClear, 0, -90); //Drive right
-            mecanumDrive(0.8, driveDis1-2, 0, 0);     // drive forward
+            mecanumDrive(0.8, driveDis1-6, 0, 0);     // drive forward
             mecanumTurn(1,90);
+            mecanumDrive(1 , 6, 90, -90);    // drive left far
             mecanumDrive(1 , 54, 90, 0);    // drive left far
             /** crater side drive  **/
             mecanumTurn(1, 135);
@@ -572,15 +573,17 @@ public class ScoringAuto extends LinearOpMode {
                 mecanumDrive(0.5,7,135,-90);  // DRIVE right
             }
             sleep(waitTime1);
-            mecanumDrive(1,4,135,-90);  // DRIVE TO WALL
+            mecanumDrive(1,6.5,135,-90);  // DRIVE TO WALL
             mecanumDrive(1,-2,135,-90);  // DRIVE away from WALL
+            sleep(100);
             mecanumDrive(1, driveDis7, 135, 0);  //drive towards base
-            mecanumDrivetoTape(0.5, driveDis7 + 25, 135, 0);  //drive towards base
+            mecanumDrivetoTape(0.3, driveDis7 + 25, 135, 0);  //drive towards base
             Cosmo.flagServo.setPosition(open);            //Un clamp Team Marker
             mecanumDrive(1, -45, 135, 0); //drive back from crater
             Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(1,14,135,90);  // DRIVE AWAY WALL
+            mecanumDrive(1,16,135,90);  // DRIVE AWAY WALL
             mecanumTurn(1, 91); //turn to score
+            mecanumDrive(0.6, -30,90,0); // drive back in front of gold
             mecanumDrive(0.6,-goBackToScoreDistance,90,0); // drive back in front of gold
             mecanumTurn(1, turnHeading);
             /**************************************************************
@@ -617,7 +620,7 @@ public class ScoringAuto extends LinearOpMode {
 //                    armMovingDown = false;
 //                }
 //            }
-                                mecanumDrive(0.5, driveDis1 -5, 0, 0);     // drive forward to crater
+                                mecanumDrive(0.5, driveDis1 -5, turnHeading, 0);     // drive forward to crater
             //getting arm into crater and picking up blocks
 //            Cosmo.exmotor.setPower(-1);
 //            Cosmo.armmotor.setPower(0.3);
@@ -725,14 +728,14 @@ public class ScoringAuto extends LinearOpMode {
 //            }
             mecanumDrive(0.5, -(driveDis1-5), 0, 0);     // drive away from crater
             if (goldPosition != 1){
-                mecanumTurn(1, -turnHeading);
+                mecanumTurn(1, 0);
             }
 
             if (goldPosition == 0) {
-                mecanumDrive(0.8, driveDis2, 0, -90);     // drive to center from left pos
+                mecanumDrive(0.8, goBackToScoreDistance-3, 0, -90);     // drive to center from left pos
             }
             if (goldPosition == 2) {
-                mecanumDrive(0.8, driveDis2, 0, 90);     // drive to center from right pos
+                mecanumDrive(0.8, goBackToScoreDistance+3, 0, 90);     // drive to center from right pos
             }
             mecanumTurn(0.8, -10); //turn to score in lander
             mecanumDrive(0.3, -5, -10, 0);     // drive forward to lander
@@ -744,9 +747,9 @@ public class ScoringAuto extends LinearOpMode {
 //            Cosmo.armmotor.setPower(0);
             mecanumDrive(0.2, -2,-10, 0);     // drive forward to lander slow
             Cosmo.dumpServo.setPosition(dump);
-            sleep(1000);
+//            sleep(1000);
 //            Cosmo.vexMotor.setPower(-0.88);
-            sleep(2000);
+//            sleep(2000);
 //            armMiddle = true;
 //            if (armMiddle){
 //                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
@@ -781,7 +784,9 @@ public class ScoringAuto extends LinearOpMode {
 //            }
             mecanumDrive(1, 7,-10, 0);     // drive away from lander
             mecanumTurn(1, 0); //turn to face crater
-            mecanumDrive(1, driveDis1 - 10, 0, 0);     // drive to crater
+            mecanumDrive(1, driveDis1 - 16, 0, 0);     // drive to crater
+            sleep(300);
+            mecanumDrive(0.5, 10, 0, 90);     // strafe in between minerals
 //            Cosmo.exmotor.setPower(-1); //extend to park in crater
 //            Cosmo.armmotor.setPower(0.2);
 //            sleep(500);
