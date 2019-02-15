@@ -45,7 +45,7 @@ public class MainTele extends OpMode {
     public boolean run = false;
 
     public double armUp1 = 1150;
-    public double armUp2 = 710;
+    public double armUp2 = 700;
 
 
     public double dump = 0.7;
@@ -79,7 +79,7 @@ public class MainTele extends OpMode {
     public int dumpLength = 3154;
     public int moveLength1 = -1700;
     public int moveLength2 = -380;
-    public int moveLength3 = -1800;
+    public int moveLength3 = -2200;
     public int justAboveWallHeight = 2600;
 
 
@@ -247,7 +247,7 @@ public class MainTele extends OpMode {
 
         }
         if (armMovingIn){
-            if (Cosmo.exmotor.getCurrentPosition() < moveLength2) {
+            if (Cosmo.exmotor.getCurrentPosition() < moveLength3) {
                 Cosmo.exmotor.setPower(1);
             } else {
                 Cosmo.exmotor.setPower(0);
@@ -332,8 +332,18 @@ public class MainTele extends OpMode {
         //rotate collection box to transport orientation
         if (moveBox){
                 Cosmo.dumpServo.setPosition(transport);
-                moveArmUpToScore2 = true;
+                extendArmOutToScore = true;
                 moveBox = false;
+        }
+        if (extendArmOutToScore) {
+
+            while (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
+                Cosmo.exmotor.setPower(-1);
+
+            }
+            Cosmo.exmotor.setPower(0);
+            moveArmUpToScore2 = true;
+            extendArmOutToScore = false;
         }
         // Rotate arm to scoring position
         if (moveArmUpToScore2){
@@ -345,7 +355,7 @@ public class MainTele extends OpMode {
             }
             else {
                 Cosmo.armmotor.setPower(0);
-                extendArmOutToScore = true;
+
                 moveArmUpToScore2 = false;
 
             }
@@ -353,15 +363,7 @@ public class MainTele extends OpMode {
         }
 
         // Extend arm to scoring position
-        if (extendArmOutToScore) {
 
-            while (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
-                Cosmo.exmotor.setPower(-1);
-
-            }
-                Cosmo.exmotor.setPower(0);
-            extendArmOutToScore = false;
-        }
 
         if (gamepad1.b){
             liftMovingUp = false;

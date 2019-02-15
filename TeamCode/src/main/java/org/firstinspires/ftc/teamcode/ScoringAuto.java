@@ -52,7 +52,7 @@ public class ScoringAuto extends LinearOpMode {
     public int driveDis1 = 17;
     public int driveDis2 = 22;
     public int driveDis3 = 10; //forward+backward
-    public int goBackToScoreDistance = 25; //drive to wall
+    public int goBackToScoreDistance = 55; //drive to wall
     public int driveDis4 = 28; //new distance
     public int driveDis5 = 55; //drive to base  on base side
     public int driveDis6 = 60; //drive to crater  used for crater and base starts
@@ -89,7 +89,7 @@ public class ScoringAuto extends LinearOpMode {
     public int justAboveWallHeight = 2600;
     public int dumpLength = 3154;
     public int moveLength1 = -1700;
-    public int turnHeading = 25;
+    public int turnHeading = 15;
 
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
@@ -283,14 +283,14 @@ public class ScoringAuto extends LinearOpMode {
 
                                     if (recognition.getLabel().equals("Gold")) {
                                         goldPosition = 0;    //Its gold, and it is on the left
-                                        goBackToScoreDistance = -18;
-                                        turnHeading = -25;
+                                        goBackToScoreDistance = 18;
+                                        turnHeading = -15;
                                     }
 
                                 } else {
                                     if (recognition.getLabel().equals("Gold")) {
                                         goldPosition = 1;    //Its gold, and it is on the right (center)
-                                        goBackToScoreDistance = 0;
+                                        goBackToScoreDistance = 35;
                                         turnHeading = 0;
                                     }
                                 }
@@ -583,7 +583,6 @@ public class ScoringAuto extends LinearOpMode {
             Cosmo.flagServo.setPosition(closed);
             mecanumDrive(1,16,135,90);  // DRIVE AWAY WALL
             mecanumTurn(1, 91); //turn to score
-            mecanumDrive(0.6, -30,90,0); // drive back in front of gold
             mecanumDrive(0.6,-goBackToScoreDistance,90,0); // drive back in front of gold
             mecanumTurn(1, turnHeading);
             /**************************************************************
@@ -726,7 +725,7 @@ public class ScoringAuto extends LinearOpMode {
 //                Cosmo.exmotor.setPower(0);
 //                extendArmOutToScore = false;
 //            }
-            mecanumDrive(0.5, -(driveDis1-5), 0, 0);     // drive away from crater
+            mecanumDrive(0.5, -(driveDis1-5), turnHeading, 0);     // drive away from crater
             if (goldPosition != 1){
                 mecanumTurn(1, 0);
             }

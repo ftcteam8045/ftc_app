@@ -151,7 +151,7 @@ public class Hardware8045
 
         liftmotor.setDirection (DcMotor.Direction.REVERSE);   // new config
         armmotor.setDirection (DcMotor.Direction.FORWARD);   // new config
-        exmotor.setDirection (DcMotor.Direction.FORWARD);   // new config
+        exmotor.setDirection (DcMotor.Direction.REVERSE);   // new config
 
 //        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
