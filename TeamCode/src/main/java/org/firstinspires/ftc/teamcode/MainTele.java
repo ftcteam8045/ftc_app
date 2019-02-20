@@ -46,6 +46,7 @@ public class MainTele extends OpMode {
 
     public double armUp1 = 1150;
     public double armUp2 = 700;
+    public double armUp3 = 880;
 
 
     public double dump = 0.7;
@@ -63,6 +64,7 @@ public class MainTele extends OpMode {
 
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
+    public boolean extendArmOutToScore2 = false;
     public boolean armMovingDown = false;
     public boolean armMovingIn = false;
     public boolean retractNow = false;
@@ -71,6 +73,7 @@ public class MainTele extends OpMode {
     public boolean finishRetracting = false;
     public boolean moveArmUpToScore1 = false;
     public boolean moveArmUpToScore2 = false;
+    public boolean moveArmUpToScore3 = false;
     public boolean moveBox = false;
 
 
@@ -80,6 +83,7 @@ public class MainTele extends OpMode {
     public int moveLength1 = -1700;
     public int moveLength2 = -380;
     public int moveLength3 = -2200;
+    public int moveLength4 = -6100;
     public int justAboveWallHeight = 2600;
 
 
@@ -342,6 +346,7 @@ public class MainTele extends OpMode {
 
             }
             Cosmo.exmotor.setPower(0);
+            sleep(500);
             moveArmUpToScore2 = true;
             extendArmOutToScore = false;
         }
@@ -350,20 +355,45 @@ public class MainTele extends OpMode {
 
             if (Cosmo.armmotor.getCurrentPosition() > armUp2){
 
-                Cosmo.armmotor.setPower(-1);
+                Cosmo.armmotor.setPower(-0.6);
 
             }
             else {
                 Cosmo.armmotor.setPower(0);
 
                 moveArmUpToScore2 = false;
+                extendArmOutToScore2 = true;
 
             }
 
         }
+        if (extendArmOutToScore2) {
 
-        // Extend arm to scoring position
+            while (Cosmo.exmotor.getCurrentPosition() > moveLength4) {
+                Cosmo.exmotor.setPower(-1);
 
+            }
+            Cosmo.exmotor.setPower(0);
+            extendArmOutToScore2 = false;
+            moveArmUpToScore3 = true;
+
+        }
+//        // Extend arm to scoring position
+        if (moveArmUpToScore3){
+
+            if (Cosmo.armmotor.getCurrentPosition() < armUp3){
+
+                Cosmo.armmotor.setPower(0.6);
+
+            }
+            else {
+                Cosmo.armmotor.setPower(0);
+
+                moveArmUpToScore3 = false;
+
+            }
+
+        }
 
         if (gamepad1.b){
             liftMovingUp = false;
