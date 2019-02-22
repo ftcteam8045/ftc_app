@@ -6,7 +6,7 @@
             <Matrix12vMotor name="left_rear" port="1" />
             <Matrix12vMotor name="right_front" port="2" />
             <Matrix12vMotor name="right_rear" port="3" />
-            <Servo name="flag_servo" port="1" />
+            <Servo name="flag_servo" port="0" />
             <ContinuousRotationServo name="sweeper" port="5"/>
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
         </LynxModule>

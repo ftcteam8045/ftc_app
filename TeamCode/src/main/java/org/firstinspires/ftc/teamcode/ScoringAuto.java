@@ -483,16 +483,18 @@ public class ScoringAuto extends LinearOpMode {
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         //move arm forward
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        while(Cosmo.armmotor.getCurrentPosition() < 550){
-//            Cosmo.armmotor.setPower(0.4);
-//            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
-//            telemetry.update();
-//        }
-//        Cosmo.armmotor.setPower(0);
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        while(Cosmo.armmotor.getCurrentPosition() < 550){
+            Cosmo.armmotor.setPower(0.4);
+            Cosmo.vexMotor.setPower(0.2);
+            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
+            telemetry.update();
+        }
+        Cosmo.armmotor.setPower(0);
+        Cosmo.vexMotor.setPower(0);
+        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Unhook from lift holder with high torque motor
 
@@ -560,7 +562,7 @@ public class ScoringAuto extends LinearOpMode {
         if (craterPosition) {
             sleep(700);
             mecanumDrive(0.5, HookClear, 0, -90); //Drive right
-            mecanumDrive(0.8, driveDis1-6, 0, 0);     // drive forward
+            mecanumDrive(0.8, driveDis1-7, 0, 0);     // drive forward
             mecanumTurn(1,90);
             mecanumDrive(1 , 6, 90, -90);    // drive left far
             mecanumDrive(1 , 54, 90, 0);    // drive left far
@@ -731,10 +733,10 @@ public class ScoringAuto extends LinearOpMode {
             }
 
             if (goldPosition == 0) {
-                mecanumDrive(0.8, goBackToScoreDistance-3, 0, -90);     // drive to center from left pos
+                mecanumDrive(0.8, 28, 0, -90);     // drive to center from left pos
             }
             if (goldPosition == 2) {
-                mecanumDrive(0.8, goBackToScoreDistance+3, 0, 90);     // drive to center from right pos
+                mecanumDrive(0.8, -28, 0, 90);     // drive to center from right pos
             }
             mecanumTurn(0.8, -10); //turn to score in lander
             mecanumDrive(0.3, -5, -10, 0);     // drive forward to lander

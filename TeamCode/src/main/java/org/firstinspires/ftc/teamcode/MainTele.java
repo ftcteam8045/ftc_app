@@ -341,14 +341,17 @@ public class MainTele extends OpMode {
         }
         if (extendArmOutToScore) {
 
-            while (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
+            if (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
                 Cosmo.exmotor.setPower(-1);
 
             }
-            Cosmo.exmotor.setPower(0);
-            sleep(500);
-            moveArmUpToScore2 = true;
-            extendArmOutToScore = false;
+            else {
+                Cosmo.exmotor.setPower(0);
+                sleep(100);
+                moveArmUpToScore2 = true;
+                extendArmOutToScore = false;
+
+            }
         }
         // Rotate arm to scoring position
         if (moveArmUpToScore2){
@@ -369,44 +372,47 @@ public class MainTele extends OpMode {
         }
         if (extendArmOutToScore2) {
 
-            while (Cosmo.exmotor.getCurrentPosition() > moveLength4) {
+            if (Cosmo.exmotor.getCurrentPosition() > moveLength4) {
                 Cosmo.exmotor.setPower(-1);
 
-            }
-            Cosmo.exmotor.setPower(0);
-            extendArmOutToScore2 = false;
-            moveArmUpToScore3 = true;
+            } else {
+                Cosmo.exmotor.setPower(0);
+                extendArmOutToScore2 = false;
+                moveArmUpToScore3 = true;
 
+            }
         }
 //        // Extend arm to scoring position
-        if (moveArmUpToScore3){
-
-            if (Cosmo.armmotor.getCurrentPosition() < armUp3){
-
-                Cosmo.armmotor.setPower(0.6);
-
-            }
-            else {
-                Cosmo.armmotor.setPower(0);
-
-                moveArmUpToScore3 = false;
-
-            }
-
-        }
+//        if (moveArmUpToScore3){
+//
+//            if (Cosmo.armmotor.getCurrentPosition() < armUp3){
+//
+//                Cosmo.armmotor.setPower(0.6);
+//
+//            }
+//            else {
+//                Cosmo.armmotor.setPower(0);
+//
+//                moveArmUpToScore3 = false;
+//
+//            }
+//
+//        }
 
         if (gamepad1.b){
-            liftMovingUp = false;
-            extendArmOutToScore = false;
-            armMovingDown = false;
-            armMovingIn = false;
-            retractNow = false;
-            armMiddle = false;
-            clearWall = false;
-            finishRetracting = false;
-            moveArmUpToScore1 = false;
-            moveArmUpToScore2 = false;
-            moveBox = false;
+              liftMovingUp = false;
+              extendArmOutToScore = false;
+              extendArmOutToScore2 = false;
+              armMovingDown = false;
+              armMovingIn = false;
+              retractNow = false;
+              armMiddle = false;
+              clearWall = false;
+              finishRetracting = false;
+              moveArmUpToScore1 = false;
+              moveArmUpToScore2 = false;
+              moveArmUpToScore3 = false;
+              moveBox = false;
         }
 
         /** Dump Servo Controls for Controller 2 **/

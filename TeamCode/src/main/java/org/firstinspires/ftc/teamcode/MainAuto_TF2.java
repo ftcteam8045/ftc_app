@@ -78,8 +78,28 @@ public class MainAuto_TF2 extends LinearOpMode {
     public float values[] = hsvValues;
 
     public int liftmax=7800;
-
-
+    public boolean liftMovingUp = false;
+    public boolean extendArmOutToScore = false;
+    public boolean extendArmOutToScore2 = false;
+    public boolean armMovingDown = false;
+    public boolean armMovingIn = false;
+    public boolean retractNow = false;
+    public boolean armMiddle = false;
+    public boolean clearWall = false;
+    public boolean finishRetracting = false;
+    public boolean moveArmUpToScore1 = false;
+    public boolean moveArmUpToScore2 = false;
+    public boolean moveArmUpToScore3 = false;
+    public boolean moveBox = false;
+    public double armUp1 = 1150;
+    public double armUp2 = 700;
+    public double armUp3 = 880;
+    public int dumpLength = 3154;
+    public int moveLength1 = -1700;
+    public int moveLength2 = -380;
+    public int moveLength3 = -2200;
+    public int moveLength4 = -6100;
+    public int justAboveWallHeight = 2600;
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -444,10 +464,14 @@ public class MainAuto_TF2 extends LinearOpMode {
         Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         while(Cosmo.armmotor.getCurrentPosition() < 550){
             Cosmo.armmotor.setPower(0.4);
+            Cosmo.vexMotor.setPower(0.2);
             telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
             telemetry.update();
         }
         Cosmo.armmotor.setPower(0);
+        Cosmo.vexMotor.setPower(0);
+        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         // Unhook from lift holder with high torque motor
@@ -525,16 +549,50 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
             mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
 
-            mecanumDrivetoTape(0.3, driveDis7 + 25, 135, 0);  //drive towards base
+            mecanumDrivetoTape(0.5, driveDis7 + 25, 135, 0);  //drive towards base
             //Unclamp Team Marker
             //sleep(750);
             Cosmo.flagServo.setPosition(open);
             //sleep(800);
-            mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
-            sleep(300);
-            mecanumDrive(0.4, -1.5, 135, 0); //drive back to crater slowly
-
+            mecanumDrive(0.5, -45, 135, 0); //drive back from crater
+            mecanumDrive(0.5,-5,135,-90);  // DRIVE away from WALL
             Cosmo.flagServo.setPosition(closed);
+            mecanumTurn(0.8, 315);
+            mecanumDrive(0.5,5,315,90);  // DRIVE away from WALL
+            mecanumDrive(0.6, 15, 315, 0); //drive back to crater
+            sleep(300);
+            mecanumDrive(0.4, 1.5, 315, 0); //drive back to crater slowly
+//            armMiddle = true;
+//            if (armMiddle){
+//                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
+//                    Cosmo.armmotor.setPower(0.8);
+//                }
+//                else {
+//                    armMovingIn = true;
+//                    armMiddle = false;
+//                }
+//
+//            }
+//            if (armMovingIn){
+//                if (Cosmo.exmotor.getCurrentPosition() < moveLength3) {
+//                    Cosmo.exmotor.setPower(1);
+//                } else {
+//                    Cosmo.exmotor.setPower(0);
+//                    armMovingDown = true;
+//                    armMovingIn = false;
+//                }
+//
+//            }
+//
+//            if (armMovingDown) {
+//                if (Cosmo.armmotor.getCurrentPosition() < justAboveWallHeight) {
+//                    Cosmo.armmotor.setPower(0.8);
+//                } else {
+//                    Cosmo.armmotor.setPower(0);
+//                    armMovingDown = false;
+//
+//                }
+//            }
         }else {                         /** base side drive  **/
             mecanumTurn(0.8, -43);
             sleep(waitTime1);
