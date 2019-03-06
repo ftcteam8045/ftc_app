@@ -32,9 +32,9 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "Auto 2 Particle TF", group = "Cosmo")
+@Autonomous(name = "NoStrafeMode", group = "Cosmo")
 //@Disabled
-public class MainAuto_TF2 extends LinearOpMode {
+public class NoStrafeMode extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
@@ -100,6 +100,7 @@ public class MainAuto_TF2 extends LinearOpMode {
     public int moveLength3 = -2200;
     public int moveLength4 = -6100;
     public int justAboveWallHeight = 2600;
+    public double slow = 0.70710678118;
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -189,7 +190,7 @@ public class MainAuto_TF2 extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
 
-       // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
+        // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
 
         //        /** Initialize the Tensor Flow Object Detection engine. */
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -423,15 +424,15 @@ public class MainAuto_TF2 extends LinearOpMode {
             }
 
             /** Arm Controls for Controller 1 **/
-            if (gamepad1.left_stick_y > 0.01 || gamepad1.left_stick_y < 0.01) {
-                Cosmo.armmotor.setPower(gamepad1.left_stick_y * 0.4);
+            if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
+                Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.4);
             }
             else {
                 Cosmo.armmotor.setPower(0);
             }
 
 
-                telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
+            telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
             telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
 
 
@@ -459,7 +460,7 @@ public class MainAuto_TF2 extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-//        //move arm forward
+        //move arm forward
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        while(Cosmo.armmotor.getCurrentPosition() < 550){
@@ -472,10 +473,10 @@ public class MainAuto_TF2 extends LinearOpMode {
 //        Cosmo.vexMotor.setPower(0);
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-        // Unhook from lift holder with high torque motor
-
+//
+//
+//        // Unhook from lift holder with high torque motor
+//
         while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
 
             Cosmo.liftmotor.setPower(1);
@@ -496,11 +497,12 @@ public class MainAuto_TF2 extends LinearOpMode {
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            mecanumTurn(1,90);
             sleep(200);
-            mecanumDrive(0.5, driveDis2+HookClear, 0, 90);    // drive left
-            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.5, driveDis2+HookClear, 90, 0);    // drive left
+            mecanumDrive(0.8, driveDis3*slow, 90, -90);     // drive forward
             sleep(200);
-            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
+            mecanumDrive(0.8, -driveDis3*slow, 90, -90);     // drive backwards
 
         }
 
@@ -513,24 +515,26 @@ public class MainAuto_TF2 extends LinearOpMode {
             mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
             mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
             sleep(300);
-            mecanumDrive(0.6, driveDis2, 0, 90);      // drive left 1x
+            mecanumTurn(1,90);
+            mecanumDrive(0.6, driveDis2*slow, 90, 0);      // drive left 1x
 
         }
 
         if (goldPosition == 2) {      //right pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            mecanumTurn(1,90);
             sleep(500);
-            mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
+            mecanumDrive(0.5, -(driveDis2-HookClear), 90, 0);    // drive right
             sleep(200);
-            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.2, -driveDis3, 0, 0);     // drive backwards
+            mecanumDrive(0.8, driveDis3*slow, 90, -90);     // drive forward
+            mecanumDrive(0.8, -driveDis3*slow, 90, -90);     // drive backwards
             sleep(400);
-            mecanumDrive(0.6, 2*driveDis2, 0, 90);      // drive left 2x
+            mecanumDrive(0.6, 2*driveDis2*slow, 90, 0);      // drive left 2x
         }
 
         // drive towards the wall (all modes)
-        mecanumDrive(0.6,driveDis4,0,90);      // drive towards wall
+        mecanumDrive(0.6,driveDis4*slow,0,0);      // drive towards wall
 
 
         sleep(200);
