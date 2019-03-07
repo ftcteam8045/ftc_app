@@ -497,44 +497,42 @@ public class NoStrafeMode extends LinearOpMode {
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumTurn(1,90);
+            mecanumTurn(1,45);
             sleep(200);
-            mecanumDrive(0.5, driveDis2+HookClear, 90, 0);    // drive left
-            mecanumDrive(0.8, driveDis3*slow, 90, -90);     // drive forward
+            mecanumDrive(0.8, driveDis3, 45, 0);     // drive forward
             sleep(200);
-            mecanumDrive(0.8, -driveDis3*slow, 90, -90);     // drive backwards
+            mecanumDrive(0.8, -driveDis3, 45, 0);     // drive backwards
+            mecanumDrive(0.5, 24*slow, 0, 90);    // drive left
+
 
         }
 
         if (goldPosition == 1) {       //center pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(300);
-            mecanumDrive(0.5, HookClear, 0, 90);    // drive left
+            mecanumTurn(1,5);
             sleep(200);
-            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
-            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
-            sleep(300);
-            mecanumTurn(1,90);
-            mecanumDrive(0.6, driveDis2*slow, 90, 0);      // drive left 1x
+            mecanumDrive(0.8, driveDis3, 5, 0);     // drive forward
+            sleep(200);
+            mecanumDrive(0.8, -driveDis3, 5, 0);     // drive backwards
+            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 1x
 
         }
 
         if (goldPosition == 2) {      //right pos
 
             mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumTurn(1,90);
-            sleep(500);
-            mecanumDrive(0.5, -(driveDis2-HookClear), 90, 0);    // drive right
+            mecanumTurn(1,-45);
             sleep(200);
-            mecanumDrive(0.8, driveDis3*slow, 90, -90);     // drive forward
-            mecanumDrive(0.8, -driveDis3*slow, 90, -90);     // drive backwards
-            sleep(400);
-            mecanumDrive(0.6, 2*driveDis2*slow, 90, 0);      // drive left 2x
+            mecanumDrive(0.8, driveDis3, -45, 0);     // drive forward
+            sleep(200);
+            mecanumDrive(0.8, -driveDis3, -45, 0);     // drive backwards
+            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 2x
         }
 
         // drive towards the wall (all modes)
-        mecanumDrive(0.6,driveDis4*slow,0,0);      // drive towards wall
+        mecanumTurn(1, 90);
+        mecanumDrive(0.6,driveDis4*slow,90,0);      // drive towards wall
 
 
         sleep(200);

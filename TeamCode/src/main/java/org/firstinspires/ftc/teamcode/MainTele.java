@@ -68,6 +68,7 @@ public class MainTele extends OpMode {
     public boolean armMovingDown = false;
     public boolean armMovingIn = false;
     public boolean retractNow = false;
+    public boolean oneHit = false;
     public boolean armMiddle = false;
     public boolean clearWall = false;
     public boolean finishRetracting = false;
@@ -185,7 +186,7 @@ public class MainTele extends OpMode {
         if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
             Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.28);
         }
-        else {
+        else{
             Cosmo.armmotor.setPower(0);
         }
 //
@@ -227,7 +228,7 @@ public class MainTele extends OpMode {
         if (gamepad2.right_stick_y != 0) {
             Cosmo.exmotor.setPower(gamepad2.right_stick_y);
         }
-        else {
+        else{
             Cosmo.exmotor.setPower(0);
         }
 
@@ -238,6 +239,7 @@ public class MainTele extends OpMode {
         /** arm down */
         if (gamepad2.dpad_down){
             armMiddle = true;
+//            oneHit = true;
         }
 
         if (armMiddle){
@@ -267,7 +269,7 @@ public class MainTele extends OpMode {
             } else {
                 Cosmo.armmotor.setPower(0);
                 armMovingDown = false;
-
+//                oneHit = false;
             }
         }
 
@@ -278,110 +280,109 @@ public class MainTele extends OpMode {
         // Press gamepad2.Y
         if (gamepad2.y) {
             retractNow = true;
+//            oneHit = true;
         }
 
 
 
         // Retract arm to first transport height
-        if (retractNow) {
-            if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
-                Cosmo.exmotor.setPower(1);
-            }
-            else {
-                Cosmo.exmotor.setPower(0);
-                clearWall = true;
-                retractNow = false;
-            }
-        }
-
-        // Raise arm to just above wall height
-        if (clearWall) {
-            if (Cosmo.armmotor.getCurrentPosition() > justAboveWallHeight ) {
-                Cosmo.armmotor.setPower(-0.6);
-            }
-            else {
-                Cosmo.armmotor.setPower(0);
-                clearWall = false;
-                finishRetracting = true;
-            }
-        }
-
-        // Retract arm to second transport height
-        if (finishRetracting) {
-            if (Cosmo.exmotor.getCurrentPosition() < moveLength2 ) {
-                Cosmo.exmotor.setPower(1);
-            }
-            else {
-                Cosmo.exmotor.setPower(0);
-
-                finishRetracting = false;
-                moveArmUpToScore1 = true;
-            }
-        }
-        if (moveArmUpToScore1){
-
-            if (Cosmo.armmotor.getCurrentPosition() > armUp1){
-
-                Cosmo.armmotor.setPower(-1);
-
-            }
-            else {
-                Cosmo.armmotor.setPower(0);
-                moveBox = true;
-                moveArmUpToScore1 = false;
-
+//        if (oneHit){
+            if (retractNow) {
+                if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
+                    Cosmo.exmotor.setPower(1);
+                } else {
+                    Cosmo.exmotor.setPower(0);
+                    clearWall = true;
+                    retractNow = false;
+                }
             }
 
-        }
-        //rotate collection box to transport orientation
-        if (moveBox){
+            // Raise arm to just above wall height
+            if (clearWall) {
+                if (Cosmo.armmotor.getCurrentPosition() > justAboveWallHeight) {
+                    Cosmo.armmotor.setPower(-0.6);
+                } else {
+                    Cosmo.armmotor.setPower(0);
+                    clearWall = false;
+                    finishRetracting = true;
+                    moveArmUpToScore1 = true;
+                }
+            }
+
+            // Retract arm to second transport height
+            if (finishRetracting) {
+                if (Cosmo.exmotor.getCurrentPosition() < moveLength2) {
+                    Cosmo.exmotor.setPower(1);
+                } else {
+                    Cosmo.exmotor.setPower(0);
+
+                    finishRetracting = false;
+
+                }
+            }
+            if (moveArmUpToScore1) {
+
+                if (Cosmo.armmotor.getCurrentPosition() > armUp1) {
+
+                    Cosmo.armmotor.setPower(-1);
+
+                } else {
+                    Cosmo.armmotor.setPower(0);
+                    moveBox = true;
+                    moveArmUpToScore1 = false;
+
+                }
+
+            }
+            //rotate collection box to transport orientation
+            if (moveBox) {
                 Cosmo.dumpServo.setPosition(transport);
                 extendArmOutToScore = true;
                 moveBox = false;
-        }
-        if (extendArmOutToScore) {
+            }
+            if (extendArmOutToScore) {
 
-            if (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
-                Cosmo.exmotor.setPower(-1);
+                if (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
+                    Cosmo.exmotor.setPower(-1);
+
+                } else {
+                    Cosmo.exmotor.setPower(0);
+                    sleep(100);
+                    moveArmUpToScore2 = true;
+                    extendArmOutToScore = false;
+
+                }
+            }
+            // Rotate arm to scoring position
+            if (moveArmUpToScore2) {
+
+                if (Cosmo.armmotor.getCurrentPosition() > armUp2) {
+
+                    Cosmo.armmotor.setPower(-1);
+
+                } else {
+                    Cosmo.armmotor.setPower(0);
+
+                    moveArmUpToScore2 = false;
+                    extendArmOutToScore2 = true;
+
+                }
 
             }
-            else {
-                Cosmo.exmotor.setPower(0);
-                sleep(100);
-                moveArmUpToScore2 = true;
-                extendArmOutToScore = false;
+            if (extendArmOutToScore2) {
 
+                if (Cosmo.exmotor.getCurrentPosition() > moveLength4) {
+                    Cosmo.exmotor.setPower(-1);
+
+                } else {
+                    Cosmo.exmotor.setPower(0);
+                    extendArmOutToScore2 = false;
+                    moveArmUpToScore3 = true;
+
+                }
             }
-        }
-        // Rotate arm to scoring position
-        if (moveArmUpToScore2){
-
-            if (Cosmo.armmotor.getCurrentPosition() > armUp2){
-
-                Cosmo.armmotor.setPower(-0.6);
-
-            }
-            else {
-                Cosmo.armmotor.setPower(0);
-
-                moveArmUpToScore2 = false;
-                extendArmOutToScore2 = true;
-
-            }
-
-        }
-        if (extendArmOutToScore2) {
-
-            if (Cosmo.exmotor.getCurrentPosition() > moveLength4) {
-                Cosmo.exmotor.setPower(-1);
-
-            } else {
-                Cosmo.exmotor.setPower(0);
-                extendArmOutToScore2 = false;
-                moveArmUpToScore3 = true;
-
-            }
-        }
+//            oneHit = false;
+//        }
 //        // Extend arm to scoring position
 //        if (moveArmUpToScore3){
 //
