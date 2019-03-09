@@ -51,9 +51,9 @@ public class NoStrafeMode extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 15;
+    public int driveDis1 = 11;
     public int driveDis2 = 22;
-    public int driveDis3 = 10; //forward+backward
+    public int driveDis3 = 12; //forward+backward
     //public int driveDis4 = 45; //drive to wall
     public int driveDis4 = 50; //new distance
     public int driveDis5 = 55; //drive to base  on base side
@@ -77,7 +77,7 @@ public class NoStrafeMode extends LinearOpMode {
     // values is a reference to the hsvValues array.
     public float values[] = hsvValues;
 
-    public int liftmax=7800;
+    public int liftmax=8250;
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
     public boolean extendArmOutToScore2 = false;
@@ -494,16 +494,18 @@ public class NoStrafeMode extends LinearOpMode {
 
         if (goldPosition == 0) {        // left position
 
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(200);
+            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
+            sleep(100);
+            mecanumDrive(0.3, -HookClear, 0, -90); //Drive right
+            sleep(100);
             mecanumTurn(1,45);
-            sleep(200);
-            mecanumDrive(0.6, driveDis3+2, 45, 0);     // drive forward
-            sleep(200);
-            mecanumDrive(0.6, -(driveDis3+2), 45, 0);     // drive backwards
-            sleep(200);
+            sleep(100);
+            mecanumDrive(0.8, driveDis3+4, 45, 0);     // drive forward
+            sleep(100);
+            mecanumDrive(0.8, -(driveDis3+4), 45, 0);     // drive backwards
+            sleep(100);
             mecanumTurn(1,90);
-            sleep(200);
+            sleep(100);
 //            mecanumDrive(0.5, 24*slow, 0, 90);    // drive left
 
 
@@ -511,12 +513,15 @@ public class NoStrafeMode extends LinearOpMode {
 
         if (goldPosition == 1) {       //center pos
 
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            mecanumTurn(1,5);
-            sleep(200);
-            mecanumDrive(0.6, driveDis3+2, 5, 0);     // drive forward
-            sleep(200);
-            mecanumDrive(0.6, -(driveDis3+2), 5, 0);     // drive backwards
+            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
+            sleep(100);
+            mecanumDrive(0.3, -HookClear, 0, -90); //Drive right
+            sleep(100);
+            mecanumTurn(1,8);
+            sleep(100);
+            mecanumDrive(0.8, driveDis3+2, 8, 0);     // drive forward
+            sleep(100);
+            mecanumDrive(0.8, -(driveDis3+2), 8, 0);     // drive backwards
             mecanumTurn(1,90);
 //            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 1x
 
@@ -524,24 +529,26 @@ public class NoStrafeMode extends LinearOpMode {
 
         if (goldPosition == 2) {      //right pos
 
-            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
-            sleep(200);
+            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
+            sleep(100);
+            mecanumDrive(0.3, -HookClear, 0, -90); //Drive right
+            sleep(100);
             mecanumTurn(1,-45);
-            sleep(200);
-            mecanumDrive(0.6, driveDis3+2, -45, 0);     // drive forward
-            sleep(200);
-            mecanumDrive(0.6, -(driveDis3+2), -45, 0);     // drive backwards
-            sleep(200);
+            sleep(100);
+            mecanumDrive(0.8, driveDis3+4, -45, 0);     // drive forward
+            sleep(100);
+            mecanumDrive(0.8, -(driveDis3+4), -45, 0);     // drive backwards
+            sleep(100);
             mecanumTurn(1,90);
-            sleep(200);
+            sleep(100);
 //            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 2x
         }
 
 
 
         // drive towards the wall (all modes)
+        mecanumDrive(0.5,-8,90,90);  // DRIVE away from WALL
         mecanumDrive(0.6, driveDis4, 90, 0);      // drive left 2x
-        mecanumDrive(0.5,5,0,90);  // DRIVE away from WALL
 
 
         sleep(200);
@@ -549,7 +556,7 @@ public class NoStrafeMode extends LinearOpMode {
         // drive forward or backward based on crater starting position
 
         if (craterPosition){            /** crater side drive  **/
-            mecanumTurn(0.8, 135);
+            mecanumTurn(1, 135);
             if (goldPosition == 2 && hitPartnerGold == true){    /** Hit off partner gold **/
                 mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
                 mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
@@ -557,18 +564,18 @@ public class NoStrafeMode extends LinearOpMode {
                 mecanumDrive(0.5,7,135,-90);  // DRIVE right
             }
             sleep(waitTime1);
-            mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.5,12,135,-90);  // DRIVE TO WALL
             mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
 
-            mecanumDrivetoTape(0.5, driveDis7 + 25, 135, 0);  //drive towards base
+            mecanumDrivetoTape(0.6, driveDis7 + 25, 135, 0);  //drive towards base
             //Unclamp Team Marker
             //sleep(750);
             Cosmo.flagServo.setPosition(open);
             //sleep(800);
             mecanumDrive(0.5, -45, 135, 0); //drive back from crater
-            mecanumDrive(0.5,-7,135,-90);  // DRIVE away from WALL
             Cosmo.flagServo.setPosition(closed);
-            mecanumTurn(1, 315);
+            mecanumDrive(0.5,-7,135,-90);  // DRIVE away from WALL
+            mecanumTurn(1, 314);
             mecanumDrive(0.5,7,315,90);  // DRIVE away from WALL
             mecanumDrive(0.6, 15, 315, 0); //drive back to crater
             sleep(300);
@@ -605,12 +612,12 @@ public class NoStrafeMode extends LinearOpMode {
 //                }
 //            }
         }else {                         /** base side drive  **/
-            mecanumTurn(0.8, -43);
+            mecanumTurn(1, -46);
             sleep(waitTime1);
-            mecanumDrive(0.5,13.5,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,6,-45,90);  // Drive to Wall
             mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
 
-            mecanumDrivetoTape(0.3, driveDis5, -45, 0);  //drive towards base
+            mecanumDrivetoTape(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             //sleep(750);
             Cosmo.flagServo.setPosition(open);

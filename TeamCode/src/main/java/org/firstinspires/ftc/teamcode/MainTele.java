@@ -36,7 +36,7 @@ public class MainTele extends OpMode {
     public boolean aIsReleased = true;
 
     //Back mode
-    public boolean frontIsForward = true;
+    public boolean frontIsForward = false;
     public boolean rightbtnIsReleased = true;
 
     //Drive type
@@ -45,7 +45,7 @@ public class MainTele extends OpMode {
     public boolean run = false;
 
     public double armUp1 = 1150;
-    public double armUp2 = 720;
+    public double armUp2 = 750;
     public double armUp3 = 880;
 
 
@@ -432,7 +432,7 @@ public class MainTele extends OpMode {
 
 //      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftMax = 7800;
+        int liftMax = 8250;
 
         if (gamepad1.right_bumper) {                  //set logical that the lift is moving up.
             liftMovingUp = true;

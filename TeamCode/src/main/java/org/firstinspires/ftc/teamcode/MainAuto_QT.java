@@ -451,7 +451,7 @@ public class MainAuto_QT extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        int liftmax = 10800;
+        int liftmax = 8250;
 
         // Unhook from lift holder with high torque motor
 
