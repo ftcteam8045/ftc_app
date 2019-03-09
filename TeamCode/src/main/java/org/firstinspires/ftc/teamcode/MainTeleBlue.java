@@ -19,6 +19,7 @@ public class MainTeleBlue extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     double timeLeft;
 
+    /** Change the booliand and the team color definition for the MainTeleBlue */
     public boolean teamIsRed = false;
 //    public RevBlinkinLedDriver.BlinkinPattern teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
     public RevBlinkinLedDriver.BlinkinPattern teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
