@@ -62,7 +62,7 @@ public class NoStrafeMode extends LinearOpMode {
     public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
-    public double HookClear = 2.0;
+    public double HookClear = 3.0;
     public double closed = 0.02;         // servo for team marker
     public double open = 0.7;      // servo for team marker
     public double errorAllowed = 125;  // Tensorflow mineral detection
@@ -500,9 +500,9 @@ public class NoStrafeMode extends LinearOpMode {
             sleep(100);
             mecanumTurn(1,45);
             sleep(100);
-            mecanumDrive(0.8, driveDis3+4, 45, 0);     // drive forward
+            mecanumDrive(0.8, driveDis3+5, 45, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.8, -(driveDis3+4), 45, 0);     // drive backwards
+            mecanumDrive(0.8, -(driveDis3+5), 45, 0);     // drive backwards
             sleep(100);
             mecanumTurn(1,90);
             sleep(100);
@@ -535,9 +535,9 @@ public class NoStrafeMode extends LinearOpMode {
             sleep(100);
             mecanumTurn(1,-45);
             sleep(100);
-            mecanumDrive(0.8, driveDis3+4, -45, 0);     // drive forward
+            mecanumDrive(0.8, driveDis3+5.5, -45, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.8, -(driveDis3+4), -45, 0);     // drive backwards
+            mecanumDrive(0.8, -(driveDis3+5.5), -45, 0);     // drive backwards
             sleep(100);
             mecanumTurn(1,90);
             sleep(100);
