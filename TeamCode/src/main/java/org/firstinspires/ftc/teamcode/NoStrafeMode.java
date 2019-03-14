@@ -492,17 +492,17 @@ public class NoStrafeMode extends LinearOpMode {
 
 //          goldposition 0 = left,1 = center, 2 = right
 
+        Cosmo.LEDDriver.setPattern(teamColor);
+
         if (goldPosition == 0) {        // left position
 
             mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.3, -HookClear, 0, -90); //Drive right
+            mecanumTurn(1,47);
             sleep(100);
-            mecanumTurn(1,45);
+            mecanumDrive(0.8, driveDis3+8, 47, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.8, driveDis3+5, 45, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+5), 45, 0);     // drive backwards
+            mecanumDrive(0.8, -(driveDis3+8 ), 47, 0);     // drive backwards
             sleep(100);
             mecanumTurn(1,90);
             sleep(100);
@@ -515,13 +515,11 @@ public class NoStrafeMode extends LinearOpMode {
 
             mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.3, -HookClear, 0, -90); //Drive right
+            mecanumTurn(1,7);
             sleep(100);
-            mecanumTurn(1,0);
+            mecanumDrive(0.8, driveDis3+3, 7, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.8, driveDis3+2, 0, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+2), 0, 0);     // drive backwards
+            mecanumDrive(0.8, -(driveDis3+3), 7, 0);     // drive backwards
             mecanumTurn(1,90);
 //            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 1x
 
@@ -531,13 +529,11 @@ public class NoStrafeMode extends LinearOpMode {
 
             mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.3, -HookClear, 0, -90); //Drive right
+            mecanumTurn(1,-43);
             sleep(100);
-            mecanumTurn(1,-45);
+            mecanumDrive(0.8, driveDis3+5.5, -43, 0);     // drive forward
             sleep(100);
-            mecanumDrive(0.8, driveDis3+5.5, -45, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+5.5), -45, 0);     // drive backwards
+            mecanumDrive(0.8, -(driveDis3+5.5), -43, 0);     // drive backwards
             sleep(100);
             mecanumTurn(1,90);
             sleep(100);
@@ -547,8 +543,8 @@ public class NoStrafeMode extends LinearOpMode {
 
 
         // drive towards the wall (all modes)
-        mecanumDrive(0.5,-8,90,90);  // DRIVE away from WALL
-        mecanumDrive(0.6, driveDis4, 90, 0);      // drive left 2x
+        mecanumDrive(0.5,-8,88,90);  // DRIVE away from WALL
+        mecanumDrive(0.6, driveDis4+4, 88, 0);      // drive left 2x
 
 
         sleep(200);
@@ -614,7 +610,7 @@ public class NoStrafeMode extends LinearOpMode {
         }else {                         /** base side drive  **/
             mecanumTurn(1, -46);
             sleep(waitTime1);
-            mecanumDrive(0.5,12,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,13,-45,90);  // Drive to Wall
             mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
 
             mecanumDrivetoTape(0.6, driveDis5, -43, 0);  //drive towards base
@@ -622,9 +618,9 @@ public class NoStrafeMode extends LinearOpMode {
             //sleep(750);
             Cosmo.flagServo.setPosition(open);
             //sleep(800);
-            mecanumDrive(0.6, -(driveDis6+10), -43, 0); //drive back to crater
+            mecanumDrive(0.6, -(driveDis6+10), -47, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.4, -1.5, -43, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -1.5, -47, 0); //drive back to crater slowly
 
             Cosmo.flagServo.setPosition(closed);
         }
