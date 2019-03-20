@@ -422,7 +422,11 @@ public class MainTele extends OpMode {
 
 
         if (gamepad2.a) {
-            Cosmo.dumpServo.setPosition(dump);
+            if(Cosmo.armmotor.getCurrentPosition() > armUp2){
+                Cosmo.dumpServo.setPosition(dump+0.15);
+            }else{
+                Cosmo.dumpServo.setPosition(dump);
+            }
         }
         if (gamepad2.x) {
             Cosmo.dumpServo.setPosition(transport);
