@@ -185,7 +185,7 @@ public class MainTele extends OpMode {
 
         if(oneHit == false) {
             if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
-                Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.28);
+                Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.40);
             } else {
                 Cosmo.armmotor.setPower(0);
             }
@@ -240,6 +240,7 @@ public class MainTele extends OpMode {
 
         /** arm down */
         if (gamepad2.dpad_down){
+            extendArmOutToScore2 = false;
             armMiddle = true;
             oneHit = true;
             Cosmo.dumpServo.setPosition(dump);
@@ -379,8 +380,6 @@ public class MainTele extends OpMode {
 
                 } else {
                     Cosmo.exmotor.setPower(0);
-                    extendArmOutToScore2 = false;
-                    moveArmUpToScore3 = true;
                     oneHit = false;
 
                 }
