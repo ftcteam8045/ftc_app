@@ -81,12 +81,12 @@ public class MainTele extends OpMode {
 
 
 
-    public int dumpLength = 3154;
-    public int moveLength1 = -1700;
-    public int moveLength2 = -380;
-    public int moveLength3 = -2200;
-    public int moveLength4 = -6100;
-    public int justAboveWallHeight = 2600;
+    public double multiplier = 0.1818;
+    public double moveLength1 = -1700*multiplier;
+    public double moveLength2 = -380*multiplier;
+    public double moveLength3 = -2200*multiplier;
+    public double moveLength4 = -6100*multiplier;
+    public double justAboveWallHeight = 2600;
 
 
     @Override
