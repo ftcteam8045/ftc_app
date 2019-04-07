@@ -229,6 +229,7 @@ public class MainTele extends OpMode {
         if(oneHit == false) {
             if (gamepad2.right_stick_y != 0) {
                 Cosmo.exmotor.setPower(gamepad2.right_stick_y);
+                extendArmOutToScore2 = false;
             } else {
                 Cosmo.exmotor.setPower(0);
             }
@@ -361,11 +362,11 @@ public class MainTele extends OpMode {
 //            }
         if (extendArmOutToScore2) {
 
-            if (Cosmo.exmotor.getCurrentPosition() > -2000) {
+            if (Cosmo.exmotor.getCurrentPosition() > -2100) {
                 Cosmo.exmotor.setPower(-1);
 
             } else {
-                Cosmo.exmotor.setPower(-0.25);
+                Cosmo.exmotor.setPower(-0.3);
                 oneHit = false;
 
             }
@@ -375,7 +376,7 @@ public class MainTele extends OpMode {
 
                 if (Cosmo.armmotor.getCurrentPosition() > armUp2-100) {
 
-                    Cosmo.armmotor.setPower(-0.4);
+                    Cosmo.armmotor.setPower(-0.2);
 
                 } else {
                     Cosmo.armmotor.setPower(0);
@@ -424,8 +425,9 @@ public class MainTele extends OpMode {
 
 
         if (gamepad2.a) {
-            if(Cosmo.armmotor.getCurrentPosition() > armUp2){
-                Cosmo.dumpServo.setPosition(dump+0.15);
+            if(Cosmo.armmotor.getCurrentPosition() < armUp2-100){
+                Cosmo.dumpServo.setPosition(dump);
+                Cosmo.vexMotor.setPower(-0.88);
             }else{
                 Cosmo.dumpServo.setPosition(dump);
             }
