@@ -575,7 +575,7 @@ public class NoStrafeMode extends LinearOpMode {
             mecanumDrive(0.5,7,315,90);  // DRIVE back to WALL
             mecanumDrive(0.6, 15, 317, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.4, 1.5, 317, 0); //drive back to crater slowly
+            mecanumDrive(0.4, 10, 317, 0); //drive back to crater slowly
 //            armMiddle = true;
 //            if (armMiddle){
 //                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
@@ -620,7 +620,7 @@ public class NoStrafeMode extends LinearOpMode {
             //sleep(800);
             mecanumDrive(0.6, -(driveDis6+10), -47, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.4, -1.5, -47, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -10, -47, 0); //drive back to crater slowly
 
             Cosmo.flagServo.setPosition(closed);
         }
@@ -631,12 +631,12 @@ public class NoStrafeMode extends LinearOpMode {
 
 
         //reset lift at end of auto
-        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
-
-            Cosmo.liftmotor.setPower(-1);
-
-        }
-        Cosmo.liftmotor.setPower(0);
+//        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
+//
+//            Cosmo.liftmotor.setPower(-1);
+//
+//        }
+//        Cosmo.liftmotor.setPower(0);
 
 
 
