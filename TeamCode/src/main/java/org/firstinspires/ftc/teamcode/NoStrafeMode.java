@@ -78,6 +78,8 @@ public class NoStrafeMode extends LinearOpMode {
     public float values[] = hsvValues;
 
     public int liftmax=8250;
+    public double dump = 0.7;
+    public double transport = 0.4;
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
     public boolean extendArmOutToScore2 = false;
@@ -638,7 +640,13 @@ public class NoStrafeMode extends LinearOpMode {
 //        }
 //        Cosmo.liftmotor.setPower(0);
 
+//end of auto lower arm
+        while(Cosmo.armmotor.getCurrentPosition() < 3000) {
+            Cosmo.armmotor.setPower(0.4);
+        }
 
+        Cosmo.armmotor.setPower(0);
+        Cosmo.dumpServo.setPosition(dump);
 
         if (tfod != null) {
             tfod.shutdown();
