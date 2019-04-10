@@ -376,7 +376,7 @@ public class MainTele extends OpMode {
 
                 if (Cosmo.armmotor.getCurrentPosition() > armUp2-100) {
 
-                    Cosmo.armmotor.setPower(-0.2);
+                    Cosmo.armmotor.setPower(-0.1);
 
                 } else {
                     Cosmo.armmotor.setPower(0);
