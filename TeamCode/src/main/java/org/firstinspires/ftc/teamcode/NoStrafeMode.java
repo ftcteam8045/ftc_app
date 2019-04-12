@@ -641,7 +641,7 @@ public class NoStrafeMode extends LinearOpMode {
 //        Cosmo.liftmotor.setPower(0);
 
 //end of auto lower arm
-        while(Cosmo.armmotor.getCurrentPosition() < 3000) {
+        while(Cosmo.armmotor.getCurrentPosition() < 2600) {
             Cosmo.armmotor.setPower(0.4);
         }
 

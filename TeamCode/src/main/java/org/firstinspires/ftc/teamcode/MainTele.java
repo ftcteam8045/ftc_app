@@ -51,7 +51,7 @@ public class MainTele extends OpMode {
 
 
     public double dump = 0.7;
-    public double transport = 0.4;
+    public double transport = 0.3;
 
     public double grayHueValue = 120.0;
     public double redHueValue  =  5;
@@ -66,6 +66,7 @@ public class MainTele extends OpMode {
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
     public boolean extendArmOutToScore2 = false;
+    public boolean extendArmOutToScore3 = false;
     public boolean armMovingDown = false;
     public boolean armMovingIn = false;
     public boolean retractNow = false;
@@ -245,6 +246,7 @@ public class MainTele extends OpMode {
             armMiddle = true;
             oneHit = true;
             Cosmo.dumpServo.setPosition(dump);
+            Cosmo.vexMotor.setPower(-0.88);
 
         }
 
@@ -287,7 +289,7 @@ public class MainTele extends OpMode {
         if (gamepad2.y) {
             retractNow = true;
             oneHit = true;
-            Cosmo.vexMotor.setPower(0.88);
+            Cosmo.vexMotor.setPower(-0.88);
         }
 
 
@@ -300,6 +302,8 @@ public class MainTele extends OpMode {
                     Cosmo.exmotor.setPower(0);
                     moveArmUpToScore1 = true;
                     retractNow = false;
+                    extendArmOutToScore3 = true;
+
                 }
             }
 
@@ -328,14 +332,11 @@ public class MainTele extends OpMode {
             if (moveArmUpToScore1) {
 
                 if (Cosmo.armmotor.getCurrentPosition() > armUp1) {
-
+                    Cosmo.vexMotor.setPower(0.88);
                     Cosmo.armmotor.setPower(-1);
-                    Cosmo.vexMotor.setPower(0);
                 } else {
-                    Cosmo.armmotor.setPower(0);
                     moveBox = true;
                     moveArmUpToScore1 = false;
-                    extendArmOutToScore2 = true;
                     moveArmUpToScore2 = true;
 
 
@@ -360,6 +361,20 @@ public class MainTele extends OpMode {
 //
 //                }
 //            }
+        if (extendArmOutToScore3) {
+
+            if (Cosmo.exmotor.getCurrentPosition() > -500) {
+                Cosmo.exmotor.setPower(-0.5);
+
+            } else {
+                Cosmo.armmotor.setPower(0);
+                extendArmOutToScore2 = true;
+                extendArmOutToScore3 = false;
+                Cosmo.vexMotor.setPower(0);
+
+
+            }
+        }
         if (extendArmOutToScore2) {
 
             if (Cosmo.exmotor.getCurrentPosition() > -2100) {
@@ -371,12 +386,14 @@ public class MainTele extends OpMode {
 
             }
         }
+
+
             // Rotate arm to scoring position
             if (moveArmUpToScore2) {
 
                 if (Cosmo.armmotor.getCurrentPosition() > armUp2-100) {
 
-                    Cosmo.armmotor.setPower(-0.1);
+                    Cosmo.armmotor.setPower(-0.2);
 
                 } else {
                     Cosmo.armmotor.setPower(0);
@@ -406,19 +423,21 @@ public class MainTele extends OpMode {
 //        }
 
         if (gamepad1.b){
-              liftMovingUp = false;
-              extendArmOutToScore = false;
-              extendArmOutToScore2 = false;
-              armMovingDown = false;
-              armMovingIn = false;
-              retractNow = false;
-              armMiddle = false;
-              clearWall = false;
-              finishRetracting = false;
-              moveArmUpToScore1 = false;
-              moveArmUpToScore2 = false;
-              moveArmUpToScore3 = false;
-              moveBox = false;
+            liftMovingUp = false;
+          extendArmOutToScore = false;
+        extendArmOutToScore2 = false;
+          extendArmOutToScore3 = false;
+            armMovingDown = false;
+           armMovingIn = false;
+         retractNow = false;
+             oneHit = false;
+        armMiddle = false;
+            clearWall = false;
+         finishRetracting = false;
+           moveArmUpToScore1 = false;
+         moveArmUpToScore2 = false;
+          moveArmUpToScore3 = false;
+          moveBox = false;
         }
 
         /** Dump Servo Controls for Controller 2 **/
