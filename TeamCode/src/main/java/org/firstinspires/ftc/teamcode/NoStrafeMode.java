@@ -78,6 +78,8 @@ public class NoStrafeMode extends LinearOpMode {
     public float values[] = hsvValues;
 
     public int liftmax=8250;
+    public double dump = 0.7;
+    public double transport = 0.4;
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
     public boolean extendArmOutToScore2 = false;
@@ -414,14 +416,19 @@ public class NoStrafeMode extends LinearOpMode {
 
             /** Lift Controls for Controller 1 **/
 
-            if (gamepad1.right_trigger >= 0.1) {
-                Cosmo.liftmotor.setPower(gamepad1.right_trigger);
-            } else if (gamepad1.left_trigger >= 0.1)  {
-                Cosmo.liftmotor.setPower(-gamepad1.left_trigger);
-            }
-            else {
+            if (gamepad1.dpad_down) {
+                Cosmo.liftmotor.setPower(-1.0);
+                liftMovingUp = false;
+
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+            }else if (gamepad1.dpad_up){                    // don't turn off power if the lift is raising
+                Cosmo.liftmotor.setPower(1.0);
+                liftMovingUp = false;
+
+            } else {
                 Cosmo.liftmotor.setPower(0);
             }
+
 
             /** Arm Controls for Controller 1 **/
             if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
@@ -575,7 +582,7 @@ public class NoStrafeMode extends LinearOpMode {
             mecanumDrive(0.5,7,315,90);  // DRIVE back to WALL
             mecanumDrive(0.6, 15, 317, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.4, 1.5, 317, 0); //drive back to crater slowly
+            mecanumDrive(0.3, 10, 317, 0); //drive back to crater slowly
 //            armMiddle = true;
 //            if (armMiddle){
 //                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
@@ -610,7 +617,7 @@ public class NoStrafeMode extends LinearOpMode {
         }else {                         /** base side drive  **/
             mecanumTurn(1, -46);
             sleep(waitTime1);
-            mecanumDrive(0.5,13,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,12,-45,90);  // Drive to Wall
             mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
 
             mecanumDrivetoTape(0.6, driveDis5, -43, 0);  //drive towards base
@@ -620,7 +627,7 @@ public class NoStrafeMode extends LinearOpMode {
             //sleep(800);
             mecanumDrive(0.6, -(driveDis6+10), -47, 0); //drive back to crater
             sleep(300);
-            mecanumDrive(0.4, -1.5, -47, 0); //drive back to crater slowly
+            mecanumDrive(0.3, -10, -47, 0); //drive back to crater slowly
 
             Cosmo.flagServo.setPosition(closed);
         }
@@ -631,13 +638,14 @@ public class NoStrafeMode extends LinearOpMode {
 
 
         //reset lift at end of auto
-        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
+//        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
+//
+//            Cosmo.liftmotor.setPower(-1);
+//
+//        }
+//        Cosmo.liftmotor.setPower(0);
 
-            Cosmo.liftmotor.setPower(-1);
-
-        }
-        Cosmo.liftmotor.setPower(0);
-
+//end of auto lower arm
 
 
         if (tfod != null) {
