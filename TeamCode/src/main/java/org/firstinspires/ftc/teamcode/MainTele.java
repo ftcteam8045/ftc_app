@@ -289,7 +289,7 @@ public class MainTele extends OpMode {
         if (gamepad2.y) {
             retractNow = true;
             oneHit = true;
-            Cosmo.vexMotor.setPower(-0.88);
+
         }
 
 
@@ -298,6 +298,7 @@ public class MainTele extends OpMode {
             if (retractNow) {
                 if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
                     Cosmo.exmotor.setPower(1);
+                    Cosmo.vexMotor.setPower(-0.88);
                 } else {
                     Cosmo.exmotor.setPower(0);
                     moveArmUpToScore1 = true;
@@ -332,14 +333,15 @@ public class MainTele extends OpMode {
             if (moveArmUpToScore1) {
 
                 if (Cosmo.armmotor.getCurrentPosition() > armUp1) {
-                    Cosmo.vexMotor.setPower(0.88);
+
                     Cosmo.armmotor.setPower(-1);
+                    Cosmo.vexMotor.setPower(0.88);
+
                 } else {
                     moveBox = true;
                     moveArmUpToScore1 = false;
                     moveArmUpToScore2 = true;
-
-
+                    Cosmo.vexMotor.setPower(-0.88);
                 }
 
             }
@@ -457,12 +459,11 @@ public class MainTele extends OpMode {
 
         /**ONE HIT LIFT HEIGHT**/
 
-//      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         int liftMax = 8250;
 
         if (gamepad1.right_bumper) {                  //set logical that the lift is moving up.
-            liftMovingUp = true;
+            liftMovingUp = false;
         }
 
 
