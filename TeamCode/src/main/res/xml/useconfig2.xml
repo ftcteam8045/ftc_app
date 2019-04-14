@@ -8,6 +8,7 @@
             <Matrix12vMotor name="right_rear" port="3" />
             <Servo name="flag_servo" port="0" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+            <REV_VL53L0X_RANGE_SENSOR name="sensor_range" port="0" bus="1"/>
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
             <Matrix12vMotor name="lift_motor" port="0" />
