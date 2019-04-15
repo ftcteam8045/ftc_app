@@ -698,6 +698,8 @@ public class NoStrafeMode extends LinearOpMode {
         while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts))
                 && opModeIsActive() &&    // opmode has to be active
                 (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) ) {         //  stop if the hue goes outside of the gray range
+            telemetry.addLine("Meccanum Drive to Tape");
+            telemetry.update();
             //Determine correction
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
@@ -779,7 +781,12 @@ public class NoStrafeMode extends LinearOpMode {
         rfbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
         rrbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
         while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive()  /* ENCODERS*/) {//Should we average all four motors?
+
+            telemetry.addLine("Meccanum Drive");
+            telemetry.update();
+
             //Determine correction
+
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
                 correction += 360;
@@ -842,6 +849,8 @@ public class NoStrafeMode extends LinearOpMode {
         }
 
         while (abs(correction) >= Cosmo.turn_THRESHOLD && opModeIsActive()) { //opmode active?{
+            telemetry.addLine("Meccanum Turn");
+            telemetry.update();
             correction = target_heading - getheading();
             if (abs(correction) <= Cosmo.turn_THRESHOLD) break;
 
