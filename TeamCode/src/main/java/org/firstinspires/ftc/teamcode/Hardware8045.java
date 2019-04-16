@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -109,7 +110,7 @@ public class Hardware8045
     private ElapsedTime period  = new ElapsedTime();
 
     ColorSensor sensorColor;
-
+    DistanceSensor armSensor;
 
 
     /* Constructor */
@@ -235,7 +236,8 @@ public class Hardware8045
         // get a reference to the color sensor.
 //        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
         sensorColor = hwMap.get(ColorSensor.class, "revcolorsensor");
-
+// you can use this as a regular DistanceSensor.
+        armSensor = hwMap.get(DistanceSensor.class, "sensor_range");
 
     }
 

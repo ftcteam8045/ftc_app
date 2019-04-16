@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -34,7 +36,7 @@ public class MainTele extends OpMode {
     public boolean reverseDrive = false;
     //Booleans
 
-    public boolean aIsReleased = true;
+    public boolean hanging = false;
 
     //Back mode
     public boolean frontIsForward = false;
@@ -140,13 +142,17 @@ public class MainTele extends OpMode {
         }
 
         /**  set lights color  **/
+        /** 2M Distance Sensor Code  */
 
-        Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
-        if (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) {
-            Cosmo.LEDDriver.setPattern(teamColor);
-        } else {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-        }
+//        Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
+//        if (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) {
+//            Cosmo.LEDDriver.setPattern(teamColor);
+//        } else if (Cosmo.armSensor.getDistance(DistanceUnit.MM)<200){
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//        } else{
+//            Cosmo.LEDDriver.setPattern(teamColor);
+//
+//        }
 
 
         /**  set drive speed  **/
@@ -179,7 +185,16 @@ public class MainTele extends OpMode {
         }
 
 
+        /** 2M Distance Sensor Code  */
 
+        if (hanging == false) {
+            if (Cosmo.armSensor.getDistance(DistanceUnit.MM) < 200) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            } else {
+                Cosmo.LEDDriver.setPattern(teamColor);
+
+            }
+        }
         /** Vertical Arm Controls for Controller 2 **/
 
         int armSlowSpeedPos = 1400;
@@ -297,7 +312,7 @@ public class MainTele extends OpMode {
         // Retract arm to first transport height
             if (retractNow) {
                 if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
-                    Cosmo.exmotor.setPower(1);
+                    Cosmo.exmotor.setPower(0.8);
                     Cosmo.vexMotor.setPower(-0.88);
                 } else {
                     Cosmo.exmotor.setPower(0);
@@ -442,6 +457,11 @@ public class MainTele extends OpMode {
           moveBox = false;
         }
 
+        if (gamepad2.right_stick_y != 0){
+            extendArmOutToScore2 = false;
+            moveArmUpToScore2 = false;
+        }
+
         /** Dump Servo Controls for Controller 2 **/
 
 
@@ -466,7 +486,10 @@ public class MainTele extends OpMode {
             liftMovingUp = false;
         }
 
-
+        if (Cosmo.liftmotor.getCurrentPosition() < -2500){
+            hanging = true;
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+        }
 
 
         /** Lift Controls for Controller 1 **/
@@ -495,7 +518,7 @@ public class MainTele extends OpMode {
         /**ONE HIT LIFT HEIGHT**/
 
 
-
+        telemetry.addData("armSensor", Cosmo.armSensor.getDistance(DistanceUnit.MM));
         telemetry.addLine().addData("Drive Mode", driveMode);
         telemetry.addData("TimeLeft: ",timeLeft);
 //        telemetry.addData("Right -X: ", -gamepad1.right_stick_x);

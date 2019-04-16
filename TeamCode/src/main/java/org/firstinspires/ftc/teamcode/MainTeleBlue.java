@@ -1,16 +1,31 @@
-package org.firstinspires.ftc.teamcode;
-
-import android.graphics.Color;
-
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Hardware8045;
 
-@TeleOp(name = "MainTeleBlue", group = "8045")  // @Autonomous(...) is the other common choice
+        package org.firstinspires.ftc.teamcode;
+
+        import android.graphics.Color;
+
+        import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+        import com.qualcomm.robotcore.hardware.Servo;
+        import com.qualcomm.robotcore.util.ElapsedTime;
+
+        import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+        import static java.lang.Math.abs;
+        import static java.lang.Math.pow;
+        import static java.lang.Math.sqrt;
+
+
+@TeleOp(name = "MainTele", group = "8045")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class MainTeleBlue extends OpMode {
+public class MainTele extends OpMode {
 
     Hardware8045 Cosmo;
 
@@ -21,15 +36,16 @@ public class MainTeleBlue extends OpMode {
 
     /** Change the booliand and the team color definition for the MainTeleBlue */
     public boolean teamIsRed = false;
-//    public RevBlinkinLedDriver.BlinkinPattern teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+    //    public RevBlinkinLedDriver.BlinkinPattern teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
     public RevBlinkinLedDriver.BlinkinPattern teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
 
-//    double turnDirection;
+
+    //    double turnDirection;
     public double topSpeed = 0.5 ;
     public boolean reverseDrive = false;
     //Booleans
 
-    public boolean aIsReleased = true;
+    public boolean hanging = false;
 
     //Back mode
     public boolean frontIsForward = false;
@@ -40,13 +56,13 @@ public class MainTeleBlue extends OpMode {
     public String driveMode = "Normal";
     public boolean run = false;
 
-    public double armUp1 = 1150;
+    public double armUp1 = 1280;
     public double armUp2 = 750;
     public double armUp3 = 880;
 
 
     public double dump = 0.7;
-    public double transport = 0.4;
+    public double transport = 0.3;
 
     public double grayHueValue = 120.0;
     public double redHueValue  =  5;
@@ -61,6 +77,7 @@ public class MainTeleBlue extends OpMode {
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
     public boolean extendArmOutToScore2 = false;
+    public boolean extendArmOutToScore3 = false;
     public boolean armMovingDown = false;
     public boolean armMovingIn = false;
     public boolean retractNow = false;
@@ -76,12 +93,12 @@ public class MainTeleBlue extends OpMode {
 
 
 
-    public int dumpLength = 3154;
-    public int moveLength1 = -1700;
-    public int moveLength2 = -380;
-    public int moveLength3 = -2200;
-    public int moveLength4 = -6100;
-    public int justAboveWallHeight = 2600;
+    public double multiplier = 0.1818;
+    public double moveLength1 = -750;
+    public double moveLength2 = -380*multiplier;
+    public double moveLength3 = -2200*multiplier;
+    public double moveLength4 = -6100*multiplier;
+    public double justAboveWallHeight = 2600;
 
 
     @Override
@@ -134,13 +151,17 @@ public class MainTeleBlue extends OpMode {
         }
 
         /**  set lights color  **/
+        /** 2M Distance Sensor Code  */
 
-        Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
-        if (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) {
-            Cosmo.LEDDriver.setPattern(teamColor);
-        } else {
-            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-        }
+//        Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
+//        if (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) {
+//            Cosmo.LEDDriver.setPattern(teamColor);
+//        } else if (Cosmo.armSensor.getDistance(DistanceUnit.MM)<200){
+//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+//        } else{
+//            Cosmo.LEDDriver.setPattern(teamColor);
+//
+//        }
 
 
         /**  set drive speed  **/
@@ -173,14 +194,23 @@ public class MainTeleBlue extends OpMode {
         }
 
 
+        /** 2M Distance Sensor Code  */
 
+        if (hanging == false) {
+            if (Cosmo.armSensor.getDistance(DistanceUnit.MM) < 200) {
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            } else {
+                Cosmo.LEDDriver.setPattern(teamColor);
+
+            }
+        }
         /** Vertical Arm Controls for Controller 2 **/
 
         int armSlowSpeedPos = 1400;
 
         if(oneHit == false) {
             if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
-                Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.28);
+                Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.40);
             } else {
                 Cosmo.armmotor.setPower(0);
             }
@@ -224,6 +254,7 @@ public class MainTeleBlue extends OpMode {
         if(oneHit == false) {
             if (gamepad2.right_stick_y != 0) {
                 Cosmo.exmotor.setPower(gamepad2.right_stick_y);
+                extendArmOutToScore2 = false;
             } else {
                 Cosmo.exmotor.setPower(0);
             }
@@ -235,9 +266,11 @@ public class MainTeleBlue extends OpMode {
 
         /** arm down */
         if (gamepad2.dpad_down){
+            extendArmOutToScore2 = false;
             armMiddle = true;
             oneHit = true;
             Cosmo.dumpServo.setPosition(dump);
+            Cosmo.vexMotor.setPower(-0.88);
 
         }
 
@@ -280,106 +313,123 @@ public class MainTeleBlue extends OpMode {
         if (gamepad2.y) {
             retractNow = true;
             oneHit = true;
+
         }
 
 
 
         // Retract arm to first transport height
-            if (retractNow) {
-                if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
-                    Cosmo.exmotor.setPower(1);
-                } else {
-                    Cosmo.exmotor.setPower(0);
-                    clearWall = true;
-                    retractNow = false;
-                }
-            }
-
-            // Raise arm to just above wall height
-            if (clearWall) {
-                if (Cosmo.armmotor.getCurrentPosition() > justAboveWallHeight) {
-                    Cosmo.armmotor.setPower(-0.9);
-                } else {
-                    Cosmo.armmotor.setPower(0);
-                    clearWall = false;
-                    finishRetracting = true;
-                    moveArmUpToScore1 = true;
-                }
-            }
-
-            // Retract arm to second transport height
-            if (finishRetracting) {
-                if (Cosmo.exmotor.getCurrentPosition() < moveLength2) {
-                    Cosmo.exmotor.setPower(1);
-                } else {
-                    Cosmo.exmotor.setPower(0);
-
-                    finishRetracting = false;
-
-                }
-            }
-            if (moveArmUpToScore1) {
-
-                if (Cosmo.armmotor.getCurrentPosition() > armUp1) {
-
-                    Cosmo.armmotor.setPower(-0.5);
-
-                } else {
-                    Cosmo.armmotor.setPower(0);
-                    moveBox = true;
-                    moveArmUpToScore1 = false;
-
-                }
+        if (retractNow) {
+            if (Cosmo.exmotor.getCurrentPosition() < moveLength1) {
+                Cosmo.exmotor.setPower(0.8);
+                Cosmo.vexMotor.setPower(-0.88);
+            } else {
+                Cosmo.exmotor.setPower(0);
+                moveArmUpToScore1 = true;
+                retractNow = false;
+                extendArmOutToScore3 = true;
 
             }
-            //rotate collection box to transport orientation
-            if (moveBox) {
-                Cosmo.dumpServo.setPosition(transport);
-                extendArmOutToScore = true;
-                moveBox = false;
+        }
+
+        // Raise arm to just above wall height
+//            if (clearWall) {
+//                if (Cosmo.armmotor.getCurrentPosition() > justAboveWallHeight) {
+//                    Cosmo.armmotor.setPower(-0.9);
+//                } else {
+//                    Cosmo.armmotor.setPower(0);
+//                    clearWall = false;
+//                    finishRetracting = true;
+//                }
+//            }
+//
+//            // Retract arm to second transport height
+//            if (finishRetracting) {
+//                if (Cosmo.exmotor.getCurrentPosition() < moveLength2) {
+//                    Cosmo.exmotor.setPower(1);
+//                } else {
+//                    Cosmo.exmotor.setPower(0);
+//
+//                    finishRetracting = false;
+//
+//                }
+//            }
+        if (moveArmUpToScore1) {
+
+            if (Cosmo.armmotor.getCurrentPosition() > armUp1) {
+
+                Cosmo.armmotor.setPower(-1);
+                Cosmo.vexMotor.setPower(0.88);
+
+            } else {
+                moveBox = true;
+                moveArmUpToScore1 = false;
+                moveArmUpToScore2 = true;
+                Cosmo.vexMotor.setPower(-0.88);
             }
-            if (extendArmOutToScore) {
 
-                if (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
-                    Cosmo.exmotor.setPower(-1);
+        }
+        //rotate collection box to transport orientation
+        if (moveBox) {
+            Cosmo.dumpServo.setPosition(transport);
+            moveBox = false;
+        }
+//            if (extendArmOutToScore) {
+//
+//                if (Cosmo.exmotor.getCurrentPosition() > moveLength3) {
+//                    Cosmo.exmotor.setPower(-1);
+//
+//                } else {
+//                    Cosmo.exmotor.setPower(0);
+//                    sleep(100);
+//                    moveArmUpToScore2 = true;
+//                    extendArmOutToScore = false;
+//
+//                }
+//            }
+        if (extendArmOutToScore3) {
 
-                } else {
-                    Cosmo.exmotor.setPower(0);
-                    sleep(100);
-                    moveArmUpToScore2 = true;
-                    extendArmOutToScore = false;
+            if (Cosmo.exmotor.getCurrentPosition() > -500) {
+                Cosmo.exmotor.setPower(-0.5);
 
-                }
+            } else {
+                Cosmo.armmotor.setPower(0);
+                extendArmOutToScore2 = true;
+                extendArmOutToScore3 = false;
+                Cosmo.vexMotor.setPower(0);
+
+
             }
-            // Rotate arm to scoring position
-            if (moveArmUpToScore2) {
+        }
+        if (extendArmOutToScore2) {
 
-                if (Cosmo.armmotor.getCurrentPosition() > armUp2) {
+            if (Cosmo.exmotor.getCurrentPosition() > -2100) {
+                Cosmo.exmotor.setPower(-1);
 
-                    Cosmo.armmotor.setPower(-0.4);
-
-                } else {
-                    Cosmo.armmotor.setPower(0);
-
-                    moveArmUpToScore2 = false;
-                    extendArmOutToScore2 = true;
-
-                }
+            } else {
+                Cosmo.exmotor.setPower(-0.3);
+                oneHit = false;
 
             }
-            if (extendArmOutToScore2) {
+        }
 
-                if (Cosmo.exmotor.getCurrentPosition() > moveLength4) {
-                    Cosmo.exmotor.setPower(-1);
 
-                } else {
-                    Cosmo.exmotor.setPower(0);
-                    extendArmOutToScore2 = false;
-                    moveArmUpToScore3 = true;
-                    oneHit = false;
+        // Rotate arm to scoring position
+        if (moveArmUpToScore2) {
 
-                }
+            if (Cosmo.armmotor.getCurrentPosition() > armUp2-100) {
+
+                Cosmo.armmotor.setPower(-0.2);
+
+            } else {
+                Cosmo.armmotor.setPower(0);
+
+                moveArmUpToScore2 = false;
+
             }
+
+        }
+
 
 //        // Extend arm to scoring position
 //        if (moveArmUpToScore3){
@@ -399,26 +449,38 @@ public class MainTeleBlue extends OpMode {
 //        }
 
         if (gamepad1.b){
-              liftMovingUp = false;
-              extendArmOutToScore = false;
-              extendArmOutToScore2 = false;
-              armMovingDown = false;
-              armMovingIn = false;
-              retractNow = false;
-              armMiddle = false;
-              clearWall = false;
-              finishRetracting = false;
-              moveArmUpToScore1 = false;
-              moveArmUpToScore2 = false;
-              moveArmUpToScore3 = false;
-              moveBox = false;
+            liftMovingUp = false;
+            extendArmOutToScore = false;
+            extendArmOutToScore2 = false;
+            extendArmOutToScore3 = false;
+            armMovingDown = false;
+            armMovingIn = false;
+            retractNow = false;
+            oneHit = false;
+            armMiddle = false;
+            clearWall = false;
+            finishRetracting = false;
+            moveArmUpToScore1 = false;
+            moveArmUpToScore2 = false;
+            moveArmUpToScore3 = false;
+            moveBox = false;
+        }
+
+        if (gamepad2.right_stick_y != 0){
+            extendArmOutToScore2 = false;
+            moveArmUpToScore2 = false;
         }
 
         /** Dump Servo Controls for Controller 2 **/
 
 
         if (gamepad2.a) {
-            Cosmo.dumpServo.setPosition(dump);
+            if(Cosmo.armmotor.getCurrentPosition() < armUp2-100){
+                Cosmo.dumpServo.setPosition(dump);
+                Cosmo.vexMotor.setPower(-0.88);
+            }else{
+                Cosmo.dumpServo.setPosition(dump);
+            }
         }
         if (gamepad2.x) {
             Cosmo.dumpServo.setPosition(transport);
@@ -426,15 +488,17 @@ public class MainTeleBlue extends OpMode {
 
         /**ONE HIT LIFT HEIGHT**/
 
-//      assume it's zeroed from Auto???  not the best solution
 //        int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
         int liftMax = 8250;
 
         if (gamepad1.right_bumper) {                  //set logical that the lift is moving up.
-            liftMovingUp = true;
+            liftMovingUp = false;
         }
 
-
+        if (Cosmo.liftmotor.getCurrentPosition() < -2500){
+            hanging = true;
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+        }
 
 
         /** Lift Controls for Controller 1 **/
@@ -457,13 +521,13 @@ public class MainTeleBlue extends OpMode {
         if (Cosmo.liftmotor.getCurrentPosition() > liftMax){
             liftMovingUp = false;
         }
-                // don't turn off power if the lift is raising
+        // don't turn off power if the lift is raising
 
 
         /**ONE HIT LIFT HEIGHT**/
 
 
-
+        telemetry.addData("armSensor", Cosmo.armSensor.getDistance(DistanceUnit.MM));
         telemetry.addLine().addData("Drive Mode", driveMode);
         telemetry.addData("TimeLeft: ",timeLeft);
 //        telemetry.addData("Right -X: ", -gamepad1.right_stick_x);
