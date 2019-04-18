@@ -77,7 +77,7 @@ public class NoStrafeMode extends LinearOpMode {
     // values is a reference to the hsvValues array.
     public float values[] = hsvValues;
 
-    public int liftmax=8500;
+    public int liftmax=8700;
     public double dump = 0.7;
     public double transport = 0.4;
     public boolean liftMovingUp = false;
@@ -199,7 +199,7 @@ public class NoStrafeMode extends LinearOpMode {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfodParameters.minimumConfidence  = 0.30;
+            tfodParameters.minimumConfidence  = 0.40;
             tfodParameters.useObjectTracker = true;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
 //            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
@@ -495,7 +495,7 @@ public class NoStrafeMode extends LinearOpMode {
             HookClear = HookClear+1.7;
         }
         sleep(700);
-        mecanumDrive(0.3, HookClear-0.8, 0, -90); //Drive right
+        mecanumDrive(0.35, HookClear-0.8, 0, -90); //Drive right
 
 //          goldposition 0 = left,1 = center, 2 = right
 
@@ -582,6 +582,7 @@ public class NoStrafeMode extends LinearOpMode {
             mecanumDrive(0.5,7,315,90);  // DRIVE back to WALL
             mecanumDrive(0.6, 15, 317, 0); //drive back to crater
             sleep(300);
+            Cosmo.flagServo.setPosition(closed);
             mecanumDrive(0.2, 8, 317, 0); //drive back to crater slowly
 //            armMiddle = true;
 //            if (armMiddle){
@@ -617,7 +618,7 @@ public class NoStrafeMode extends LinearOpMode {
         }else {                         /** base side drive  **/
             mecanumTurn(1, -46);
             sleep(waitTime1);
-            mecanumDrive(0.5,11,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,8,-45,90);  // Drive to Wall
             mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
 
             mecanumDrivetoTape(0.6, driveDis5, -43, 0);  //drive towards base
@@ -627,9 +628,9 @@ public class NoStrafeMode extends LinearOpMode {
             //sleep(800);
             mecanumDrive(0.6, -(driveDis6+10), -47, 0); //drive back to crater
             sleep(300);
+            Cosmo.flagServo.setPosition(closed);
             mecanumDrive(0.2, -8, -47, 0); //drive back to crater slowly
 
-            Cosmo.flagServo.setPosition(closed);
         }
         Cosmo.leftFront.setPower(0);
         Cosmo.rightFront.setPower(0);

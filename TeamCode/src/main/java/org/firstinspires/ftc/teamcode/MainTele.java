@@ -147,11 +147,8 @@ public class MainTele extends OpMode {
 //        Color.RGBToHSV((int)(Cosmo.sensorColor.red() * 255), (int)(Cosmo.sensorColor.green() * 255), (int)(Cosmo.sensorColor.blue() * 255), hsvValues);
 //        if (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) {
 //            Cosmo.LEDDriver.setPattern(teamColor);
-//        } else if (Cosmo.armSensor.getDistance(DistanceUnit.MM)<200){
+//        } else {
 //            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
-//        } else{
-//            Cosmo.LEDDriver.setPattern(teamColor);
-//
 //        }
 
 

@@ -1,3 +1,5 @@
+package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware8045;
 
-        package org.firstinspires.ftc.teamcode;
 
         import android.graphics.Color;
 
@@ -23,9 +24,9 @@ import org.firstinspires.ftc.teamcode.Hardware8045;
         import static java.lang.Math.sqrt;
 
 
-@TeleOp(name = "MainTele", group = "8045")  // @Autonomous(...) is the other common choice
-//@Disabled
-public class MainTele extends OpMode {
+@TeleOp(name = "MainTeleBlue", group = "8045")  // @Autonomous(...) is the other common choice
+//@Disabledbl
+public class MainTeleBlue extends OpMode {
 
     Hardware8045 Cosmo;
 
