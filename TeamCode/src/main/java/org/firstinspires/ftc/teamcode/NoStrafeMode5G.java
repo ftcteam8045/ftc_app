@@ -8,7 +8,6 @@ import android.view.View;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -32,9 +31,9 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "NoStrafeMode", group = "Cosmo")
+@Autonomous(name = "NoStrafeMode5G", group = "Cosmo")
 //@Disabled
-public class NoStrafeMode extends LinearOpMode {
+public class NoStrafeMode5G extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
