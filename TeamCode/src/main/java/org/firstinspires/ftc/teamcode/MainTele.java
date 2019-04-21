@@ -188,7 +188,7 @@ public class MainTele extends OpMode {
             if (Cosmo.armSensor.getDistance(DistanceUnit.MM) < 200) {
                 Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
             } else {
-                Cosmo.LEDDriver.setPattern(teamColor);
+                Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
             }
         }
