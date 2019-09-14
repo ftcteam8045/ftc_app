@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldcode.RoverRuckus;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -15,6 +15,7 @@ import java.util.Date;
 
 
 @TeleOp(name="Vexmotor_Test", group="8045")  // @Autonomous(...) is the other common choice
+@Disabled
 public class vexmotor extends OpMode
 {
     /* Declare OpMode members. */

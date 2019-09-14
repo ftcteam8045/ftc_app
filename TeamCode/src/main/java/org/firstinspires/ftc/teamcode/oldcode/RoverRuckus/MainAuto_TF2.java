@@ -1,5 +1,5 @@
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldcode.RoverRuckus;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -32,9 +32,9 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "NoStrafeMode", group = "Cosmo")
-//@Disabled
-public class NoStrafeMode extends LinearOpMode {
+@Autonomous(name = "Auto 2 Particle TF", group = "Cosmo")
+@Disabled
+public class MainAuto_TF2 extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
@@ -51,22 +51,22 @@ public class NoStrafeMode extends LinearOpMode {
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 11;
+    public int driveDis1 = 16;
     public int driveDis2 = 22;
-    public int driveDis3 = 12; //forward+backward
+    public int driveDis3 = 10; //forward+backward
     //public int driveDis4 = 45; //drive to wall
-    public int driveDis4 = 50; //new distance
+    public int driveDis4 = 28; //new distance
     public int driveDis5 = 55; //drive to base  on base side
     public int driveDis6 = 60; //drive to crater  used for crater and base starts
     public int driveDis7 = 25;  // DRIVE TO BASE ON CRATER START
     public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
-    public double HookClear = 3.5;
+    public double HookClear = 2.0;
     public double closed = 0.02;         // servo for team marker
     public double open = 0.7;      // servo for team marker
     public double errorAllowed = 125;  // Tensorflow mineral detection
-    public double mineralYZone = 470;  // Tensorflow mineral detection
+    public double mineralYZone = 480;  // Tensorflow mineral detection
     public double grayHueValue = 90.0;  // color sensor values
     public double redHueValue  =  5;
     public double blueHueValue = 189;
@@ -77,9 +77,7 @@ public class NoStrafeMode extends LinearOpMode {
     // values is a reference to the hsvValues array.
     public float values[] = hsvValues;
 
-    public int liftmax=8700;
-    public double dump = 0.7;
-    public double transport = 0.4;
+    public int liftmax=7800;
     public boolean liftMovingUp = false;
     public boolean extendArmOutToScore = false;
     public boolean extendArmOutToScore2 = false;
@@ -102,7 +100,6 @@ public class NoStrafeMode extends LinearOpMode {
     public int moveLength3 = -2200;
     public int moveLength4 = -6100;
     public int justAboveWallHeight = 2600;
-    public double slow = 0.70710678118;
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -192,7 +189,7 @@ public class NoStrafeMode extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
 
-        // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
+       // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
 
         //        /** Initialize the Tensor Flow Object Detection engine. */
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -218,7 +215,12 @@ public class NoStrafeMode extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-
+        // AutoTransitioner used before waitForStart()
+        if (teamIsRed) {
+            AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
+        } else {
+            AutoTransitioner.transitionOnStop(this, "MainTeleBlue");   // get ready for teleop at the end of auto
+        }
         /**************************************************************
          // Actual Init loop
          *************************************************************/
@@ -332,12 +334,7 @@ public class NoStrafeMode extends LinearOpMode {
 //                }
             }
 
-            // AutoTransitioner used before waitForStart()
-            if (teamIsRed) {
-                AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
-            } else {
-                AutoTransitioner.transitionOnStop(this, "MainTeleBlue");   // get ready for teleop at the end of auto
-            }
+
             /** Signal the position of the gold mineral  here. From POV of driver**/
 
             if (goldPosition == 0) {
@@ -416,30 +413,25 @@ public class NoStrafeMode extends LinearOpMode {
 
             /** Lift Controls for Controller 1 **/
 
-            if (gamepad1.dpad_down) {
-                Cosmo.liftmotor.setPower(-1.0);
-                liftMovingUp = false;
-
-//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-            }else if (gamepad1.dpad_up){                    // don't turn off power if the lift is raising
-                Cosmo.liftmotor.setPower(1.0);
-                liftMovingUp = false;
-
-            } else {
+            if (gamepad1.right_trigger >= 0.1) {
+                Cosmo.liftmotor.setPower(gamepad1.right_trigger);
+            } else if (gamepad1.left_trigger >= 0.1)  {
+                Cosmo.liftmotor.setPower(-gamepad1.left_trigger);
+            }
+            else {
                 Cosmo.liftmotor.setPower(0);
             }
 
-
             /** Arm Controls for Controller 1 **/
-            if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
-                Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.4);
+            if (gamepad1.left_stick_y > 0.01 || gamepad1.left_stick_y < 0.01) {
+                Cosmo.armmotor.setPower(gamepad1.left_stick_y * 0.4);
             }
             else {
                 Cosmo.armmotor.setPower(0);
             }
 
 
-            telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
+                telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
             telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
 
 
@@ -467,21 +459,23 @@ public class NoStrafeMode extends LinearOpMode {
 
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        //move arm forward
+//        //move arm forward
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        while(Cosmo.armmotor.getCurrentPosition() < 400){
+//        while(Cosmo.armmotor.getCurrentPosition() < 550){
 //            Cosmo.armmotor.setPower(0.4);
-//            Cosmo.vexMotor.setPower(0.1);
+//            Cosmo.vexMotor.setPower(0.2);
+//            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
+//            telemetry.update();
 //        }
 //        Cosmo.armmotor.setPower(0);
 //        Cosmo.vexMotor.setPower(0);
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//
-//
-//        // Unhook from lift holder with high torque motor
-//
+
+
+        // Unhook from lift holder with high torque motor
+
         while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
 
             Cosmo.liftmotor.setPower(1);
@@ -495,63 +489,48 @@ public class NoStrafeMode extends LinearOpMode {
             HookClear = HookClear+1.7;
         }
         sleep(700);
-        mecanumDrive(0.35, HookClear-0.4, 0, -90); //Drive right
+        mecanumDrive(0.3, HookClear, 0, -90); //Drive right
 
 //          goldposition 0 = left,1 = center, 2 = right
 
-        Cosmo.LEDDriver.setPattern(teamColor);
-
         if (goldPosition == 0) {        // left position
 
-            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
-            sleep(100);
-            mecanumTurn(1,47);
-            sleep(100);
-            mecanumDrive(0.8, driveDis3+9, 47, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+9 ), 47, 0);     // drive backwards
-            sleep(100);
-            mecanumTurn(1,90);
-            sleep(100);
-//            mecanumDrive(0.5, 24*slow, 0, 90);    // drive left
-
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(200);
+            mecanumDrive(0.5, driveDis2+HookClear, 0, 90);    // drive left
+            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+            sleep(200);
+            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
 
         }
 
         if (goldPosition == 1) {       //center pos
 
-            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
-            sleep(100);
-            mecanumTurn(1,7);
-            sleep(100);
-            mecanumDrive(0.8, driveDis3+3, 7, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+3), 7, 0);     // drive backwards
-            mecanumTurn(1,90);
-//            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 1x
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(300);
+            mecanumDrive(0.5, HookClear, 0, 90);    // drive left
+            sleep(200);
+            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.3, -driveDis3, 0, 0);     // drive backwards
+            sleep(300);
+            mecanumDrive(0.6, driveDis2, 0, 90);      // drive left 1x
 
         }
 
         if (goldPosition == 2) {      //right pos
 
-            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
-            sleep(100);
-            mecanumTurn(1,-43);
-            sleep(100);
-            mecanumDrive(0.8, driveDis3+5.5, -43, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+5.5), -43, 0);     // drive backwards
-            sleep(100);
-            mecanumTurn(1,90);
-            sleep(100);
-//            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 2x
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(500);
+            mecanumDrive(0.5, driveDis2-HookClear, 0, -90);    // drive right
+            sleep(200);
+            mecanumDrive(0.3, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.2, -driveDis3, 0, 0);     // drive backwards
+            sleep(400);
+            mecanumDrive(0.6, 2*driveDis2, 0, 90);      // drive left 2x
         }
 
-
-
         // drive towards the wall (all modes)
-        mecanumDrive(0.5,-8,88,90);  // DRIVE away from WALL
-        mecanumDrive(0.6, driveDis4+4, 88, 0);      // drive left 2x
+        mecanumDrive(0.6,driveDis4,0,90);      // drive towards wall
 
 
         sleep(200);
@@ -559,7 +538,7 @@ public class NoStrafeMode extends LinearOpMode {
         // drive forward or backward based on crater starting position
 
         if (craterPosition){            /** crater side drive  **/
-            mecanumTurn(1, 135);
+            mecanumTurn(0.8, 135);
             if (goldPosition == 2 && hitPartnerGold == true){    /** Hit off partner gold **/
                 mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
                 mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
@@ -567,23 +546,22 @@ public class NoStrafeMode extends LinearOpMode {
                 mecanumDrive(0.5,7,135,-90);  // DRIVE right
             }
             sleep(waitTime1);
-            mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
+            mecanumDrive(0.5,13.5,135,-90);  // DRIVE TO WALL
             mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
 
-            mecanumDrivetoTape(0.55, driveDis7 + 23, 133, 0);  //drive towards base
+            mecanumDrivetoTape(0.5, driveDis7 + 25, 135, 0);  //drive towards base
             //Unclamp Team Marker
             //sleep(750);
             Cosmo.flagServo.setPosition(open);
             //sleep(800);
-            mecanumDrive(0.5, -45, 137, 0); //drive back from crater
+            mecanumDrive(0.5, -45, 135, 0); //drive back from crater
+            mecanumDrive(0.5,-5,135,-90);  // DRIVE away from WALL
             Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(0.5,-7,135,-90);  // DRIVE away from WALL
-            mecanumTurn(1, 314);
-            mecanumDrive(0.5,7,315,90);  // DRIVE back to WALL
-            mecanumDrive(0.6, 15, 317, 0); //drive back to crater
+            mecanumTurn(0.8, 315);
+            mecanumDrive(0.5,5,315,90);  // DRIVE away from WALL
+            mecanumDrive(0.6, 15, 315, 0); //drive back to crater
             sleep(300);
-            Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(0.2, 8, 317, 0); //drive back to crater slowly
+            mecanumDrive(0.4, 1.5, 315, 0); //drive back to crater slowly
 //            armMiddle = true;
 //            if (armMiddle){
 //                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
@@ -616,21 +594,21 @@ public class NoStrafeMode extends LinearOpMode {
 //                }
 //            }
         }else {                         /** base side drive  **/
-            mecanumTurn(1, -46);
+            mecanumTurn(0.8, -43);
             sleep(waitTime1);
-            mecanumDrive(0.5,8,-45,90);  // Drive to Wall
+            mecanumDrive(0.5,13.5,-45,90);  // Drive to Wall
             mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
 
-            mecanumDrivetoTape(0.6, driveDis5, -43, 0);  //drive towards base
+            mecanumDrivetoTape(0.3, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
             //sleep(750);
             Cosmo.flagServo.setPosition(open);
             //sleep(800);
-            mecanumDrive(0.6, -(driveDis6+10), -47, 0); //drive back to crater
+            mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
             sleep(300);
-            Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(0.2, -8, -47, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -1.5, -45, 0); //drive back to crater slowly
 
+            Cosmo.flagServo.setPosition(closed);
         }
         Cosmo.leftFront.setPower(0);
         Cosmo.rightFront.setPower(0);
@@ -639,14 +617,14 @@ public class NoStrafeMode extends LinearOpMode {
 
 
         //reset lift at end of auto
-//        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
-//
-//            Cosmo.liftmotor.setPower(-1);
-//
-//        }
-//        Cosmo.liftmotor.setPower(0);
+        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
 
-//end of auto lower arm
+            Cosmo.liftmotor.setPower(-1);
+
+        }
+        Cosmo.liftmotor.setPower(0);
+
+
 
 
         if (tfod != null) {
@@ -699,8 +677,6 @@ public class NoStrafeMode extends LinearOpMode {
         while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts))
                 && opModeIsActive() &&    // opmode has to be active
                 (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) ) {         //  stop if the hue goes outside of the gray range
-            telemetry.addLine("Meccanum Drive to Tape");
-            telemetry.update();
             //Determine correction
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
@@ -782,12 +758,7 @@ public class NoStrafeMode extends LinearOpMode {
         rfbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
         rrbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
         while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive()  /* ENCODERS*/) {//Should we average all four motors?
-
-            telemetry.addLine("Meccanum Drive");
-            telemetry.update();
-
             //Determine correction
-
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
                 correction += 360;
@@ -850,8 +821,6 @@ public class NoStrafeMode extends LinearOpMode {
         }
 
         while (abs(correction) >= Cosmo.turn_THRESHOLD && opModeIsActive()) { //opmode active?{
-            telemetry.addLine("Meccanum Turn");
-            telemetry.update();
             correction = target_heading - getheading();
             if (abs(correction) <= Cosmo.turn_THRESHOLD) break;
 
