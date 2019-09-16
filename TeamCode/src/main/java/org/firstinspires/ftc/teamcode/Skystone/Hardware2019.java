@@ -99,6 +99,7 @@ public class Hardware2019
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
+    DistanceSensor sensor;
 
 
     /* Constructor */
@@ -200,6 +201,10 @@ public class Hardware2019
         // and named "imu".
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
+
+
+
+        sensor = hwMap.get(DistanceSensor.class, "sensor");
 
 
 

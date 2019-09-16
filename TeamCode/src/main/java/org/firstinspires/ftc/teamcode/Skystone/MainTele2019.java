@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.Skystone;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @TeleOp(name = "MainTele", group = "8045")  // @Autonomous(...) is the other common choice
@@ -25,11 +29,10 @@ public class MainTele2019 extends OpMode {
     public boolean rightbtnIsReleased = true;
 
     //Drive type
-    public double driveType = 0;
-    public String driveMode = "Normal";
+
     public boolean run = false;
 
-
+//    Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorDistance;
     // hsvValues is an array that will hold the hue, saturation, and value information.
     public float hsvValues[] = {0F, 0F, 0F};
     // values is a reference to the hsvValues array.
@@ -48,6 +51,7 @@ public class MainTele2019 extends OpMode {
     public void init() {
         Cosmo = new Hardware2019();
         Cosmo.init(hardwareMap);
+
 
         telemetry.addData("Status", "Initializing");
         telemetry.update();
@@ -68,6 +72,7 @@ public class MainTele2019 extends OpMode {
 
     @Override
     public void loop() {
+
         timeLeft = 120 - runtime.seconds();
 
 //        // BACK mode
@@ -81,15 +86,6 @@ public class MainTele2019 extends OpMode {
             rightbtnIsReleased = true;
         }
 
-        if (gamepad1.left_stick_button) {
-            if (gamepad1.dpad_up) {
-                driveType = 0;
-            } else if (gamepad1.dpad_left) {
-                driveType = 1;
-            } else if (gamepad1.dpad_right) {
-                driveType = 2;
-            }
-        }
 
         /**  set lights color  **/
         /** 2M Distance Sensor Code  */
@@ -119,17 +115,9 @@ public class MainTele2019 extends OpMode {
 //            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
 //        }
 
-        /** DRIVE  HERE   */
-        if (driveType == 0) {
-            drivesmart(-gamepad1.right_stick_x, -gamepad1.right_stick_y, gamepad1.left_stick_x);
-            driveMode = "Normal";
-        } else if(driveType == 1) {
-            drivesmart(-gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-            driveMode = "Gamer";
-        } else {
-            drivesmart(-gamepad1.left_stick_x, -gamepad1.right_stick_y, gamepad1.right_stick_x);
-            driveMode = "South Paw";
-        }
+
+        telemetry.addData("range", String.format("%.01f mm", Cosmo.sensor.getDistance(DistanceUnit.MM)));
+
 
         telemetry.update();
     }
