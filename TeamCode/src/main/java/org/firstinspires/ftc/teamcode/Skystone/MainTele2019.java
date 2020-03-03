@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Skystone;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 @TeleOp(name = "MainTele", group = "8045")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class MainTele2019 extends OpMode {
 
     Hardware2019 Cosmo;

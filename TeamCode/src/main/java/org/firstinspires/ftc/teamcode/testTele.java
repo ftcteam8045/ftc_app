@@ -15,7 +15,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 @TeleOp(name = "testTeleRick", group = "8045")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class testTele extends OpMode {
 
    testHardware Cosmo;
