@@ -88,12 +88,14 @@ public class R2D2 extends LinearOpMode {
         double rightPower;
 
 // List of available sound resources
-        String  sounds[] = {"R2D2", "QWORD8", "QWORD9", "QWORD16", "QWORD22", "QR2_D2S1", "QR2_D2S2", "QR2_D2S3",
-                "QR2_D2W1", "QR2_D2W2", "QR2_D2W3", "QSCANING", "QSNTNC1", "QSNTNC2", "QSNTNC4", "QSNTNC6",
-                "QSNTNC7", "QSNTNC8", "QSNTNC9", "QSNTNC10", "QSNTNC13", "QSNTNC16", "QSNTNC18", "QSNTNC20",
-                "QWORD1", "QWORD4" };
 
-        boolean soundPlaying = false;
+        String  sounds[] ={"r2d2.wav","qword8.wav", "qword9.wav", "qword16.wav", "qword22.wav", "qr2d2s1.wav", "qr2d2s2.wav",
+                "qr2d2s3.wav", "qr2d2w1.wav",  "qr2d2w2.wav",  "qr2d2w3.wav",  "qscaning.wav",  "qsntnc1.wav", "qsntnc2.wav",
+                "qsntnc4.wav",  "qsntnc6.wav",  "qsntnc7.wav",  "qsntnc8.wav",  "qsntnc9.wav",  "qsntnc10.wav",  "qsntnc13.wav",
+                "qsntnc16.wav", "qsntnc18.wav",  "qsntnc20.wav",  "qword1.wav",  "qword4.wav", };
+
+
+            boolean soundPlaying = false;
 
 
         // Wait for the game to start (driver presses PLAY)
