@@ -27,12 +27,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Skystone;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -45,24 +49,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  *
  *
  */
-public class Hardware8045testbot
+public class Hardware2019
 {
     /* Public OpMode members. */
     public DcMotor  leftFront   = null;
     public DcMotor  rightFront  = null;
     public DcMotor  leftRear    = null;
     public DcMotor  rightRear   = null;
-    public DcMotor  liftmotor   = null;
-    public DcMotor  liftDown   = null;
 
 
     //    public Servo    rightClaw   = null;
 
-    public com.qualcomm.hardware.rev.RevBlinkinLedDriver LEDDriver;
     //public com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern LEDpattern;
 
     // The IMU sensor object
-    BNO055IMU imu;
+    public BNO055IMU imu;
     // State used for updating telemetry
     Orientation angles;
     Acceleration gravity;
@@ -76,18 +77,16 @@ public class Hardware8045testbot
     public final double turn_COEF = 1.0;
     public static final double drive_COEF = 1.0; //Maximum additional speed to add to a motor during a gyro drive
 
-
-//    Tetrix motors 1440 counts per rev,  neverrest 40  1120cpr  NR O20 537.6  yellowjacket 223rpm: 753.2cpr  60rpm: 2,786cpr  30rpm: 5,264cpr
-//    public final double WHEEL_DIAMETER = 4.0;
-//    public final double GEAR_RATIO = 24/24;
-//    public final double TICKS_REV = 537.6;
-//    public final double COUNTS_PER_INCH = (TICKS_REV * GEAR_RATIO) / (WHEEL_DIAMETER * 3.1415);
-//    public final double COUNTS_PER_INCH = 45;   // Yellowjacket 223 24/32 gear ratio
+////    public final double WHEEL_DIAMETER = 4.0;
+////    public final double GEAR_RATIO = 24/24;
+////    public final double TICKS_REV = 537.6;
+////    public final double COUNTS_PER_INCH = (TICKS_REV * GEAR_RATIO) / (WHEEL_DIAMETER * 3.1415);
+    public final double COUNTS_PER_INCH = 72;   // Yellowjacket 223 24/32 gear ratio   100 inches drove only 62
 //    public final double COUNTS_PER_INCH = 60;   // Yellowjacket 223 32/32 gear ratio
 //    public final double COUNTS_PER_INCH = 32;   // Neverest 20 orbitals 24/32 gear ratio
 //    public final double COUNTS_PER_INCH = 42;   // Neverest 20 orbitals 32/32 gear ratio
-    public final double COUNTS_PER_INCH = 114;  // Tetrix Direct
-    public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;
+//    public final double COUNTS_PER_INCH = 114;  // Tetrix Direct
+//    public final double COUNTS_PER_CM = COUNTS_PER_INCH / 2.54 ;
 
 //    public static final double MID_SERVO       =  0.5 ;
 //    public static final double ARM_UP_POWER    =  0.45 ;
@@ -100,8 +99,11 @@ public class Hardware8045testbot
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
+    DistanceSensor sensor;
+
+
     /* Constructor */
-    public Hardware8045testbot(){
+    public Hardware2019(){
 
 
 
@@ -116,7 +118,6 @@ public class Hardware8045testbot
 
 
         // LED lights
-        LEDDriver = hwMap.get(com.qualcomm.hardware.rev.RevBlinkinLedDriver.class, "ledlights");
         //LEDpattern =  com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
 
 
@@ -125,43 +126,63 @@ public class Hardware8045testbot
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftRear  = hwMap.get(DcMotor.class, "left_rear");
         rightRear = hwMap.get(DcMotor.class, "right_rear");
-//        liftmotor = hwMap.get(DcMotor.class, "lift_motor");
-//// this is for neverrest.  yellow jacket?
-//         leftFront.setDirection(DcMotor.Direction.FORWARD);
-//         leftRear.setDirection(DcMotor.Direction.FORWARD);
-//         rightFront.setDirection(DcMotor.Direction.REVERSE);
-//         rightRear.setDirection(DcMotor.Direction.REVERSE);
 
-//   this is for Tetrix
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
-//        liftmotor.setDirection (DcMotor.Direction.FORWARD);
+        // this should be for neverest  & using it for Matrix/yellowjackets as well.
+         leftFront.setDirection(DcMotor.Direction.FORWARD);
+         leftRear.setDirection(DcMotor.Direction.FORWARD);
+         rightFront.setDirection(DcMotor.Direction.REVERSE);
+         rightRear.setDirection(DcMotor.Direction.REVERSE);
+
+
+//        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+
+////this is for Tetrix
+//        leftFront.setDirection(DcMotor.Direction.REVERSE);
+//        leftRear.setDirection(DcMotor.Direction.REVERSE);
+//        rightFront.setDirection(DcMotor.Direction.FORWARD);
+//        rightRear.setDirection(DcMotor.Direction.FORWARD);
+
+
+//        liftmotor.setDirection (DcMotor.Direction.FORWARD);  //   old configuration
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
 
         // Set all motors to zero power
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftRear.setPower(0);
         rightRear.setPower(0);
-//        liftmotor.setPower(0);
 
+
+
+        // Define and Initialize Motors
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        liftmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Define and Initialize Motors
+
+
+
 
         // Define and initialize ALL installed servos.
-//        leftClaw  = hwMap.get(Servo.class, "left_hand");
-//        rightClaw = hwMap.get(Servo.class, "right_hand");
-//        leftClaw.setPosition(MID_SERVO);
-//        rightClaw.setPosition(MID_SERVO);
 
+
+//        sweepServo = hwMap.get(CRServo.class, "sweeper"  );
         /**
          * IMU SETUP
          */
@@ -183,7 +204,11 @@ public class Hardware8045testbot
 
 
 
- }
+        sensor = hwMap.get(DistanceSensor.class, "sensor");
+
+
+
+    }
 
 
 }

@@ -1,5 +1,5 @@
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.oldcode.RoverRuckus;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -31,9 +32,9 @@ import static org.firstinspires.ftc.teamcode.oldcode.DriveTrain.drive_THRESHOLD;
 //Lara + Liesel positioning code
 
 
-@Autonomous(name = "NoStrafeMode5G", group = "Cosmo")
-//@Disabled
-public class NoStrafeMode5G extends LinearOpMode {
+@Autonomous(name = "Auto Colorsensor", group = "Cosmo")
+@Disabled
+public class MainAuto_Colorsensor extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    Hardware8045testbot Cosmo = new Hardware8045testbot();   // Use a Pushbot's hardware
@@ -45,28 +46,24 @@ public class NoStrafeMode5G extends LinearOpMode {
     /**
      * Menu Parameter Initialization
      **/
-    public boolean hitPartnerGold = false;
     public boolean teamIsRed = true;
     public boolean craterPosition = true;
     public boolean testBot = true;
     public int waitTime1 = 0;
-    public int driveDis1 = 11;
-    public int driveDis2 = 22;
-    public int driveDis3 = 12; //forward+backward
-    //public int driveDis4 = 45; //drive to wall
-    public int driveDis4 = 50; //new distance
+    public int driveDis1 = 12;
+    public int driveDis2 = 20;
+    public int driveDis3 = 7; //forward+backward
+    public int driveDis4 = 45; //drive to wall
     public int driveDis5 = 55; //drive to base  on base side
     public int driveDis6 = 60; //drive to crater  used for crater and base starts
     public int driveDis7 = 25;  // DRIVE TO BASE ON CRATER START
     public int driveDis8 = 0;
     public int driveDis9 = 0;
     public int driveDis10 = 0;
-    public double HookClear = 3.5;
-    public double closed = 0.02;         // servo for team marker
-    public double open = 0.7;      // servo for team marker
-    public double errorAllowed = 125;  // Tensorflow mineral detection
-    public double mineralYZone = 470;  // Tensorflow mineral detection
-    public double grayHueValue = 90.0;  // color sensor values
+    public double HookClear = 2.0;
+    public double open = 0.0;
+    public double closed = 0.45;
+    public double grayHueValue = 120.0;
     public double redHueValue  =  5;
     public double blueHueValue = 189;
     public double grayRedBorder  = (grayHueValue + redHueValue  ) / 2;
@@ -76,32 +73,9 @@ public class NoStrafeMode5G extends LinearOpMode {
     // values is a reference to the hsvValues array.
     public float values[] = hsvValues;
 
-    public int liftmax=8700;
-    public double dump = 0.7;
-    public double transport = 0.4;
-    public boolean liftMovingUp = false;
-    public boolean extendArmOutToScore = false;
-    public boolean extendArmOutToScore2 = false;
-    public boolean armMovingDown = false;
-    public boolean armMovingIn = false;
-    public boolean retractNow = false;
-    public boolean armMiddle = false;
-    public boolean clearWall = false;
-    public boolean finishRetracting = false;
-    public boolean moveArmUpToScore1 = false;
-    public boolean moveArmUpToScore2 = false;
-    public boolean moveArmUpToScore3 = false;
-    public boolean moveBox = false;
-    public double armUp1 = 1150;
-    public double armUp2 = 700;
-    public double armUp3 = 880;
-    public int dumpLength = 3154;
-    public int moveLength1 = -1700;
-    public int moveLength2 = -380;
-    public int moveLength3 = -2200;
-    public int moveLength4 = -6100;
-    public int justAboveWallHeight = 2600;
-    public double slow = 0.70710678118;
+    public int liftmax=10600;
+
+
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -138,10 +112,6 @@ public class NoStrafeMode5G extends LinearOpMode {
          */
         Cosmo.init(hardwareMap);
         Cosmo.sensorColor.enableLed(true);
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
 
 
         /** TURN ON LIGHTS */
@@ -191,7 +161,7 @@ public class NoStrafeMode5G extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
 
-        // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
+       // com.vuforia.CameraDevice.getInstance().setFlashTorchMode(true);  // turn on flash?
 
         //        /** Initialize the Tensor Flow Object Detection engine. */
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -201,8 +171,7 @@ public class NoStrafeMode5G extends LinearOpMode {
             tfodParameters.minimumConfidence  = 0.40;
             tfodParameters.useObjectTracker = true;
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-//            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
-            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold");    // lets try only looking for gold
+            tfod.loadModelFromAsset("RoverRuckus.tflite", "Gold", "Silver");
 
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
@@ -212,12 +181,11 @@ public class NoStrafeMode5G extends LinearOpMode {
             tfod.activate();
         }
 
-        int goldMineralX = -1;
-        float goldMineralConf = -1;
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-
+        // AutoTransitioner used before waitForStart()
+        AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
         /**************************************************************
          // Actual Init loop
          *************************************************************/
@@ -225,85 +193,122 @@ public class NoStrafeMode5G extends LinearOpMode {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                if (teamIsRed) {
-                    telemetry.addData("", "RED");
-                } else {
-                    telemetry.addData("", "BLUE");
-                }
-                if (craterPosition) {
-                    telemetry.addData("", "Crater");
-                } else {
-                    telemetry.addData("", "Base");
-                }
-                telemetry.addLine(" Press Left Joystick for Edit");
-                Color.RGBToHSV((int) (Cosmo.sensorColor.red() * 255),
-                        (int) (Cosmo.sensorColor.green() * 255),
-                        (int) (Cosmo.sensorColor.blue() * 255),
-                        hsvValues);
-                //  Color sensor test
-//                    telemetry.addData("Alpha", Cosmo.sensorColor.alpha());
-//                    telemetry.addData("Red  ", Cosmo.sensorColor.red());
-//                   telemetry.addData("Green", Cosmo.sensorColor.green());
-//                    telemetry.addData("Blue ", Cosmo.sensorColor.blue());
-                telemetry.addData("Hue", hsvValues[0]);
-                telemetry.addData("Team Color:", teamColor);
-
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
+                    if (teamIsRed) {
+                        telemetry.addData("", "RED");
+                    } else {
+                        telemetry.addData("", "BLUE");
+                    }
+                    if (craterPosition) {
+                        telemetry.addData("", "Crater");
+                    } else {
+                        telemetry.addData("", "Base");
+                    }
+                    telemetry.addLine(" Press Left Joystick for Edit");
 
-
+                    Color.RGBToHSV((int) (Cosmo.sensorColor.red() * 255),
+                            (int) (Cosmo.sensorColor.green() * 255),
+                            (int) (Cosmo.sensorColor.blue() * 255),
+                            hsvValues);
+                    //  Color sensor test
+                    telemetry.addData("Alpha", Cosmo.sensorColor.alpha());
+                    telemetry.addData("Red  ", Cosmo.sensorColor.red());
+                    telemetry.addData("Green", Cosmo.sensorColor.green());
+                    telemetry.addData("Blue ", Cosmo.sensorColor.blue());
+                    telemetry.addData("Hue", hsvValues[0]);
+                    telemetry.addData("Sat", hsvValues[1]);
+                    telemetry.addData("Val", hsvValues[2]);
 
                     telemetry.addData("# Objects Detected", updatedRecognitions.size());
 
                     for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addLine().addData("", "%.2f %s   X %.0f Y %.0f", recognition.getConfidence(), recognition.getLabel(), (recognition.getLeft()+recognition.getRight())/2, (recognition.getBottom()+recognition.getTop())/2);
+                        telemetry.addLine().addData("", "%.2f %s   X %.0f Y %.0f", recognition.getConfidence(), recognition.getLabel(), recognition.getLeft(), recognition.getBottom());
                     }
                     // ELI V    case for seeing exactly three objects (hope 1 gold and two silver)?!
-                    goldPosition = 2;  //If i see nothing assum it is on the right
-
-
-                    if (updatedRecognitions.size() != 0) {
-
-
-                        //Origin for coordinates is upper left, x goes from left to right and y goes from top to bottom
-                        //Crater rim is about 300 on Y axis
-                        //X cood were 8 for left mineral and 436-ish for right
-
-
-                        //Set to right by default, if we see gold as left or center, set accordingly
-
-
+                    if (updatedRecognitions.size() == 3) {
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
                         for (Recognition recognition : updatedRecognitions) {
-                            if (abs((recognition.getBottom() + recognition.getTop()) / 2 - mineralYZone) < errorAllowed ) {   //This mineral is in the allowed Y zone
-
-                                if (abs((recognition.getLeft() + recognition.getRight()) / 2) < 220) {
-
-                                    if (recognition.getLabel().equals("Gold")) {
-                                        goldPosition = 0;    //Its gold, and it is on the left
-                                    }
-
-                                } else {
-                                    if (recognition.getLabel().equals("Gold")) {
-                                        goldPosition = 1;    //Its gold, and it is on the right (center)
-                                    }
-                                }
-
+                            if (recognition.getLabel().equals("Gold")) {
+                                goldMineralX = (int) recognition.getLeft();
+                            } else if (silverMineral1X == -1) {
+                                silverMineral1X = (int) recognition.getLeft();
+                            } else {
+                                silverMineral2X = (int) recognition.getLeft();
+                            }
+                        }
+                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                goldPosition = 0;
+                                telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                goldPosition = 2;
+                                telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+                            } else {
+                                goldPosition = 1;
+                                telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
                             }
                         }
 
+                    } else if (updatedRecognitions.size() != 3) {
+                        int goldMineralX = -1;
+                        float goldMineralConf = -1;
 
-
-
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals("Gold")) {
+                                if (recognition.getConfidence() >= goldMineralConf) {
+                                    goldMineralConf = recognition.getConfidence();
+                                    goldMineralX = (int) recognition.getLeft();
+                                }
+                            }
+                        }
+                        if (goldMineralX < 400) {
+                            goldPosition = 0;
+                            telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
+                        } else if (goldMineralX < 850) {
+                            goldPosition = 1;
+                            telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
+                        } else{
+                            goldPosition = 2;
+                            telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+                        }
                     }
+                    // ELI ^
 
+//                    if (updatedRecognitions.size() == 3) {
+//                        int goldMineralX = -1;
+//                        int silverMineral1X = -1;
+//                        int silverMineral2X = -1;
+//                        for (Recognition recognition : updatedRecognitions) {
+//                            if (recognition.getLabel().equals("Gold")) {
+//                                goldMineralX = (int) recognition.getLeft();
+//                            } else if (silverMineral1X == -1) {
+//                                silverMineral1X = (int) recognition.getLeft();
+//                            } else {
+//                                silverMineral2X = (int) recognition.getLeft();
+//                            }
+//                        }
+//                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+//                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+//                                goldPosition = 0;
+//                                telemetry.addData("Gold Mineral Position", "Left").addData(" ", goldPosition);
+//                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+//                                goldPosition = 2;
+//                                telemetry.addData("Gold Mineral Position", "Right").addData(" ", goldPosition);
+//                            } else {
+//                                goldPosition = 1;
+//                                telemetry.addData("Gold Mineral Position", "Center").addData(" ", goldPosition);
+//                            }
+//                        }
+//                    }
+//                    else {
+//                        goldPosition = 69;
+//                        telemetry.addData("Gold Mineral NOT FOUND ", goldPosition);
+//                    }
 
-                }
-                if (goldPosition == 0) {
-                    telemetry.addData("Gold Mineral Position", "Left");
-                } else if (goldPosition == 2) {
-                    telemetry.addData("Gold Mineral Position", "Right");
-                } else if (goldPosition == 1) {
-                    telemetry.addData("Gold Mineral Position", "Center");
+                    //telemetry.update();
                 }
             }
             /** Eli's edit Menu params  **/
@@ -314,11 +319,6 @@ public class NoStrafeMode5G extends LinearOpMode {
 //                });
 
                 editParameters();
-                if (teamIsRed) {
-                    teamColor = RevBlinkinLedDriver.BlinkinPattern.RED;
-                } else {
-                    teamColor = RevBlinkinLedDriver.BlinkinPattern.BLUE;
-                }
 
 //                if (teamIsRed) {
 //                    relativeLayout.post(new Runnable() {
@@ -331,12 +331,7 @@ public class NoStrafeMode5G extends LinearOpMode {
 //                }
             }
 
-            // AutoTransitioner used before waitForStart()
-            if (teamIsRed) {
-                AutoTransitioner.transitionOnStop(this, "MainTele");   // get ready for teleop at the end of auto
-            } else {
-                AutoTransitioner.transitionOnStop(this, "MainTeleBlue");   // get ready for teleop at the end of auto
-            }
+
             /** Signal the position of the gold mineral  here. From POV of driver**/
 
             if (goldPosition == 0) {
@@ -415,40 +410,31 @@ public class NoStrafeMode5G extends LinearOpMode {
 
             /** Lift Controls for Controller 1 **/
 
-            if (gamepad1.dpad_down) {
-                Cosmo.liftmotor.setPower(-1.0);
-                liftMovingUp = false;
-
-//            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-            }else if (gamepad1.dpad_up){                    // don't turn off power if the lift is raising
-                Cosmo.liftmotor.setPower(1.0);
-                liftMovingUp = false;
-
-            } else {
+            if (gamepad1.right_trigger >= 0.1) {
+                Cosmo.liftmotor.setPower(-gamepad1.right_trigger);
+            }
+            else {
+                Cosmo.liftmotor.setPower(0);
+            }
+            if (gamepad1.left_trigger >= 0.1)  {
+                Cosmo.liftmotor.setPower(gamepad1.left_trigger);
+            }
+            else {
                 Cosmo.liftmotor.setPower(0);
             }
 
 
-            /** Arm Controls for Controller 1 **/
-            if (gamepad2.left_stick_y > 0.01 || gamepad2.left_stick_y < 0.01) {
-                Cosmo.armmotor.setPower(gamepad2.left_stick_y * 0.4);
-            }
-            else {
-                Cosmo.armmotor.setPower(0);
-            }
 
-
-            telemetry.addData("lift encoder",Cosmo.liftmotor.getCurrentPosition());
-            telemetry.addData("arm",Cosmo.armmotor.getCurrentPosition());
-
-
-            telemetry.update();
+                telemetry.update();
         }
         /**************************************************************
          // End Init loop
          *************************************************************/
         // Wait for the game to start (driver presses PLAY) replaced by init loop
         //       waitForStart();
+
+
+
 
 
 
@@ -459,28 +445,19 @@ public class NoStrafeMode5G extends LinearOpMode {
         tfod.deactivate();     // turn off the tensorflow detector.
 
 //        while (opModeIsActive() && !isStopRequested() {
-//        telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.milliseconds());
-//        telemetry.update();
-////
+        telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.milliseconds());
+        telemetry.update();
+//
         // First task would be to deploy  here//
-
+        mecanumDrivetoTape(0.5, 48, 0, 0);     // drive forward
+        sleep(30000);
 
         int liftStartPos = Cosmo.liftmotor.getCurrentPosition();
-        //move arm forward
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        while(Cosmo.armmotor.getCurrentPosition() < 400){
-//            Cosmo.armmotor.setPower(0.4);
-//            Cosmo.vexMotor.setPower(0.1);
-//        }
-//        Cosmo.armmotor.setPower(0);
-//        Cosmo.vexMotor.setPower(0);
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        Cosmo.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//
-//
-//        // Unhook from lift holder with high torque motor
-//
+        int liftmax = 10800;
+
+        // Unhook from lift holder with high torque motor
+
+
         while(Cosmo.liftmotor.getCurrentPosition() < liftStartPos + liftmax && !isStopRequested()){
 
             Cosmo.liftmotor.setPower(1);
@@ -491,66 +468,51 @@ public class NoStrafeMode5G extends LinearOpMode {
 
 
         if (craterPosition){            /** crater side drive  **/
-            HookClear = HookClear+1.7;
+            HookClear = HookClear+2.0;
         }
         sleep(700);
-        mecanumDrive(0.35, HookClear-0.4, 0, -90); //Drive right
+        mecanumDrive(0.5, HookClear, 0, -90); //Drive right
 
 //          goldposition 0 = left,1 = center, 2 = right
 
-        Cosmo.LEDDriver.setPattern(teamColor);
-
         if (goldPosition == 0) {        // left position
 
-            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
-            sleep(100);
-            mecanumTurn(1,47);
-            sleep(100);
-            mecanumDrive(0.8, driveDis3+9, 47, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+9 ), 47, 0);     // drive backwards
-            sleep(100);
-            mecanumTurn(1,90);
-            sleep(100);
-//            mecanumDrive(0.5, 24*slow, 0, 90);    // drive left
-
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(200);
+            mecanumDrive(1, driveDis2+HookClear+1, 0, 85);    // drive left
+            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+            sleep(200);
+            mecanumDrive(0.5, -driveDis3 + 5, 0, 0);     // drive backwards
 
         }
 
         if (goldPosition == 1) {       //center pos
 
-            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
-            sleep(100);
-            mecanumTurn(1,7);
-            sleep(100);
-            mecanumDrive(0.8, driveDis3+3, 7, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+3), 7, 0);     // drive backwards
-            mecanumTurn(1,90);
-//            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 1x
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(300);
+            mecanumDrive(1, HookClear, 0, 90);    // drive left
+            sleep(200);
+            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.5, -driveDis3 +4, 0, 0);     // drive backwards
+            sleep(300);
+            mecanumDrive(1, driveDis2, 0, 85);      // drive left 1x
 
         }
 
         if (goldPosition == 2) {      //right pos
 
-            mecanumDrive(0.6, driveDis1, 0, 0);     // drive forward
-            sleep(100);
-            mecanumTurn(1,-43);
-            sleep(100);
-            mecanumDrive(0.8, driveDis3+5.5, -43, 0);     // drive forward
-            sleep(100);
-            mecanumDrive(0.8, -(driveDis3+5.5), -43, 0);     // drive backwards
-            sleep(100);
-            mecanumTurn(1,90);
-            sleep(100);
-//            mecanumDrive(0.6, 24*slow, 90, 0);      // drive left 2x
+            mecanumDrive(0.5, driveDis1, 0, 0);     // drive forward
+            sleep(500);
+            mecanumDrive(1, driveDis2-HookClear, 0, -90);    // drive right
+            sleep(200);
+            mecanumDrive(0.5, driveDis3, 0, 0);     // drive forward
+            mecanumDrive(0.5, -driveDis3, 0, 0);     // drive backwards
+            sleep(400);
+            mecanumDrive(1, 2*driveDis2, 0, 85);      // drive left 2x
         }
 
-
-
         // drive towards the wall (all modes)
-        mecanumDrive(0.5,-8,88,90);  // DRIVE away from WALL
-        mecanumDrive(0.6, driveDis4+4, 88, 0);      // drive left 2x
+        mecanumDrive(1,driveDis4,0,85);      // drive towards wall
 
 
         sleep(200);
@@ -559,77 +521,33 @@ public class NoStrafeMode5G extends LinearOpMode {
 
         if (craterPosition){            /** crater side drive  **/
             mecanumTurn(1, 135);
-            if (goldPosition == 2 && hitPartnerGold == true){    /** Hit off partner gold **/
-                mecanumDrive(0.5,-7,135,-90);  // DRIVE left to align with partner gold
-                mecanumDrive(0.5,14,135,0);  // DRIVE to partner gold
-                mecanumDrive(0.5,-14,135,0);  // DRIVE away from partner gold
-                mecanumDrive(0.5,7,135,-90);  // DRIVE right
-            }
-            sleep(waitTime1);
             mecanumDrive(0.5,10,135,-90);  // DRIVE TO WALL
-            mecanumDrive(0.5,-2,135,-90);  // DRIVE away from WALL
-
-            mecanumDrivetoTape(0.55, driveDis7 + 23, 133, 0);  //drive towards base
+            mecanumDrive(0.6, driveDis7 + 5, 135, 0);  //drive towards base
             //Unclamp Team Marker
-            //sleep(750);
+            sleep(750);
             Cosmo.flagServo.setPosition(open);
-            //sleep(800);
-            mecanumDrive(0.5, -45, 137, 0); //drive back from crater
-            Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(0.5,-7,135,-90);  // DRIVE away from WALL
-            mecanumTurn(1, 314);
-            mecanumDrive(0.5,7,315,90);  // DRIVE back to WALL
-            mecanumDrive(0.6, 15, 317, 0); //drive back to crater
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            Cosmo.LEDDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+            sleep(800);
+            mecanumDrive(0.6, -driveDis6, 135, 0); //drive back to crater
             sleep(300);
+            mecanumDrive(0.4, -1, 135, 0); //drive back to crater slowly
+
             Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(0.2, 8, 317, 0); //drive back to crater slowly
-//            armMiddle = true;
-//            if (armMiddle){
-//                if (Cosmo.armmotor.getCurrentPosition() < armUp2){
-//                    Cosmo.armmotor.setPower(0.8);
-//                }
-//                else {
-//                    armMovingIn = true;
-//                    armMiddle = false;
-//                }
-//
-//            }
-//            if (armMovingIn){
-//                if (Cosmo.exmotor.getCurrentPosition() < moveLength3) {
-//                    Cosmo.exmotor.setPower(1);
-//                } else {
-//                    Cosmo.exmotor.setPower(0);
-//                    armMovingDown = true;
-//                    armMovingIn = false;
-//                }
-//
-//            }
-//
-//            if (armMovingDown) {
-//                if (Cosmo.armmotor.getCurrentPosition() < justAboveWallHeight) {
-//                    Cosmo.armmotor.setPower(0.8);
-//                } else {
-//                    Cosmo.armmotor.setPower(0);
-//                    armMovingDown = false;
-//
-//                }
-//            }
         }else {                         /** base side drive  **/
-            mecanumTurn(1, -46);
-            sleep(waitTime1);
-            mecanumDrive(0.5,8,-45,90);  // Drive to Wall
-            mecanumDrive(0.5,-2,-45,90);  // Drive away from Wall
-
-            mecanumDrivetoTape(0.6, driveDis5, -43, 0);  //drive towards base
+            mecanumTurn(1, -43);
+            mecanumDrive(0.5,12,-45,90);
+            mecanumDrive(0.6, driveDis5, -45, 0);  //drive towards base
             //Unclamp Team Marker
-            //sleep(750);
+            sleep(750);
             Cosmo.flagServo.setPosition(open);
-            //sleep(800);
-            mecanumDrive(0.6, -(driveDis6+10), -47, 0); //drive back to crater
+            sleep(800);
+            mecanumDrive(0.6, -driveDis6, -45, 0); //drive back to crater
             sleep(300);
-            Cosmo.flagServo.setPosition(closed);
-            mecanumDrive(0.2, -8, -47, 0); //drive back to crater slowly
+            mecanumDrive(0.4, -1, -45, 0); //drive back to crater slowly
 
+            Cosmo.flagServo.setPosition(closed);
         }
         Cosmo.leftFront.setPower(0);
         Cosmo.rightFront.setPower(0);
@@ -638,14 +556,14 @@ public class NoStrafeMode5G extends LinearOpMode {
 
 
         //reset lift at end of auto
-//        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos+10 && !isStopRequested()){
-//
-//            Cosmo.liftmotor.setPower(-1);
-//
-//        }
-//        Cosmo.liftmotor.setPower(0);
+        while(Cosmo.liftmotor.getCurrentPosition() > liftStartPos && !isStopRequested()){
 
-//end of auto lower arm
+            Cosmo.liftmotor.setPower(-1);
+
+        }
+        Cosmo.liftmotor.setPower(0);
+
+
 
 
         if (tfod != null) {
@@ -698,8 +616,6 @@ public class NoStrafeMode5G extends LinearOpMode {
         while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts))
                 && opModeIsActive() &&    // opmode has to be active
                 (hsvValues[0] > grayRedBorder && hsvValues[0] < grayBlueBorder ) ) {         //  stop if the hue goes outside of the gray range
-            telemetry.addLine("Meccanum Drive to Tape");
-            telemetry.update();
             //Determine correction
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
@@ -781,12 +697,7 @@ public class NoStrafeMode5G extends LinearOpMode {
         rfbase = signum(distance) * Math.sin(Math.toRadians(drive_direction + 45));
         rrbase = signum(distance) * Math.cos(Math.toRadians(drive_direction + 45));
         while (((abs(Cosmo.rightRear.getCurrentPosition() - right_start) + abs(Cosmo.leftRear.getCurrentPosition() - left_start)) / 2 < abs(moveCounts)) && opModeIsActive()  /* ENCODERS*/) {//Should we average all four motors?
-
-            telemetry.addLine("Meccanum Drive");
-            telemetry.update();
-
             //Determine correction
-
             double correction = robot_orientation - getheading();
             if (correction <= -180) {
                 correction += 360;
@@ -849,15 +760,13 @@ public class NoStrafeMode5G extends LinearOpMode {
         }
 
         while (abs(correction) >= Cosmo.turn_THRESHOLD && opModeIsActive()) { //opmode active?{
-            telemetry.addLine("Meccanum Turn");
-            telemetry.update();
             correction = target_heading - getheading();
             if (abs(correction) <= Cosmo.turn_THRESHOLD) break;
 
             if (correction <= -180)
                 correction += 360;   // correction should be +/- 180 (to the left negative, right positive)
             if (correction >= 180) correction -= 360;
-            /*^^^^^^^^^^^MAYBE WE ONLY NEED TO DO THIS ONCE?????*/
+            /**^^^^^^^^^^^MAYBE WE ONLY NEED TO DO THIS ONCE?????*/
 
             double adjustment = Range.clip((Math.signum(correction) * Cosmo.turn_MIN_SPEED + Cosmo.turn_COEF * correction / 100), -1, 1);  // adjustment is motor power: sign of correction *0.07 (base power)  + a proportional bit
 
@@ -889,7 +798,6 @@ public class NoStrafeMode5G extends LinearOpMode {
 
     public void editParameters() {
 
-        String arrow01 = " ";
         String arrow0 = " ";
         String arrow1 = " ";
         String arrow2 = " ";
@@ -929,12 +837,11 @@ public class NoStrafeMode5G extends LinearOpMode {
 
             telemetry.addLine("Use Dpad to Navigate & change");
             telemetry.addLine().addData("", currentEdit).addData("current edit number", ' ');
-            telemetry.addLine().addData(arrow01, hitPartnerGold).addData("Hit off partner's gold", arrow01);
             telemetry.addLine().addData(arrow0, waitTime1).addData("Wait Time", arrow0);
             telemetry.addLine().addData(arrow1, colorIndex).addData(color[colorIndex], arrow1);
             telemetry.addLine().addData(arrow2, positionIndex).addData(position[positionIndex], arrow2);
             telemetry.addLine().addData(arrow3, botIndex).addData(botName[botIndex], arrow3);
-            telemetry.addLine().addData(arrow4, driveDis1).addData("First drive foreward", arrow4);
+            telemetry.addLine().addData(arrow4, driveDis1).addData("Distance 1", arrow4);
             telemetry.addLine().addData(arrow5, driveDis2).addData("Distance 2", arrow5);
             telemetry.addLine().addData(arrow6, driveDis3).addData("Distance 3", arrow6);
             telemetry.addLine().addData(arrow7, driveDis4).addData("Distance 4", arrow7);
@@ -953,7 +860,7 @@ public class NoStrafeMode5G extends LinearOpMode {
                 dpadPressedDown = false;
                 currentEdit += 1;
                 if (currentEdit > 13) {
-                    currentEdit = -1;
+                    currentEdit = 0;
                 }
             }
 
@@ -962,16 +869,12 @@ public class NoStrafeMode5G extends LinearOpMode {
             } else if (gamepad1.dpad_up == false && dpadPressedUp) {
                 dpadPressedUp = false;
                 currentEdit -= 1;
-                if (currentEdit < -1) {
+                if (currentEdit < 0) {
                     currentEdit = 13;
                 }
             }
 
-            if (currentEdit == -1) {
-                arrow01 = "<>";
-            } else {
-                arrow01 = "    ";
-            }
+
             if (currentEdit == 0) {
                 arrow0 = "<>";
             } else {
@@ -1048,15 +951,8 @@ public class NoStrafeMode5G extends LinearOpMode {
                 dpadPressedLeft = true;
             } else if (gamepad1.dpad_left == false && dpadPressedLeft) {
                 dpadPressedLeft = false;
-                if (currentEdit == -1) {
-                    if (hitPartnerGold == true) {
-                        hitPartnerGold = false;
-                    } else {
-                        hitPartnerGold = true;
-                    }
-                }
                 if (currentEdit == 0) {
-                    waitTime1 -= 1000;
+                    waitTime1 -= 1;
                 }
                 if (currentEdit == 1) {
                     if (colorIndex == 1) {
@@ -1125,7 +1021,7 @@ public class NoStrafeMode5G extends LinearOpMode {
             } else if (gamepad1.dpad_right == false && dpadPressedRight) {
                 dpadPressedRight = false;
                 if (currentEdit == 0) {
-                    waitTime1 += 1000;
+                    waitTime1 += 1;
                 }
                 if (currentEdit == 1) {
                     if (colorIndex == 1) {
