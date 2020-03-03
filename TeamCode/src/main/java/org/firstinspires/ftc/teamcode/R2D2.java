@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -72,11 +73,15 @@ public class R2D2 extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        blueleds = hardwareMap.get(DcMotor.class, "blueleds");
+        redleds = hardwareMap.get(DcMotor.class, "redleds");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        blueleds.setDirection(DcMotor.Direction.REVERSE);
+        redleds.setDirection(DcMotor.Direction.REVERSE);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -105,8 +110,8 @@ public class R2D2 extends LinearOpMode {
         while (opModeIsActive()) {
 
             // awake or asleep
-            double drive = -gamepad1.left_stick_y;
-            double turn = gamepad1.left_stick_x;
+            double drive = -gamepad1.right_stick_y;
+            double turn = gamepad1.right_stick_x;
             leftPower = Range.clip(drive + turn, -1.0, 1.0);
             rightPower = Range.clip(drive - turn, -1.0, 1.0);
 
@@ -114,13 +119,25 @@ public class R2D2 extends LinearOpMode {
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
 
+            if (gamepad1.x) {
+                blueleds.setPower(1.0);
+
+            } else {
+                blueleds.setPower(0.0);
+            }
+
+            if (gamepad1.b) {
+                redleds.setPower(1.0);
+
+            } else {
+                redleds.setPower(0.0);
+            }
+            /*
+            //if (awake) {
 
 
-            if (awake) {
 
-
-
-            }else {                                     // in sleep mode
+            //}else {                                     // in sleep mode
                 if (gamepad1.left_bumper || gamepad1.right_bumper) {
                     awake = false;
                 }
@@ -153,6 +170,7 @@ public class R2D2 extends LinearOpMode {
                 }
 
             }
+            */
 
 
             // Show the elapsed game time and wheel power.
