@@ -84,9 +84,14 @@ public class R2D2 extends LinearOpMode {
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         blueleds.setDirection(DcMotor.Direction.FORWARD);
-        blueleds.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        blueleds.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         redleds.setDirection(DcMotor.Direction.FORWARD);
-        redleds.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        redleds.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        leftDrive.setPower(0.0);
+        rightDrive.setPower(0.0);
+        blueleds.setPower(0.0);
+        redleds.setPower(0.0);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -104,9 +109,9 @@ public class R2D2 extends LinearOpMode {
                 "qsntnc4",  "qsntnc6",  "qsntnc7",  "qsntnc8",  "qsntnc9",  "qsntnc10",  "qsntnc13",
                 "qsntnc16", "qsntnc18",  "qsntnc20",  "qword1",  "qword4", };
 
-        Context myApp = hardwareMap.appContext;
+       // Context myApp = hardwareMap.appContext;
 
-        //boolean soundPlaying = false;
+
         int     soundIndex      = 0;
         int     soundID         = -1;
         int SoundID   = hardwareMap.appContext.getResources().getIdentifier("r2d2",   "raw", hardwareMap.appContext.getPackageName());
@@ -118,17 +123,68 @@ public class R2D2 extends LinearOpMode {
         SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
 
         double cyclestart = runtime.milliseconds();
+        int lightIndex = 0;
+        int cycletime = 3000;
+        int heartbeat = 400;
+        int blueheartbeat = 300;
+
+        double hpower = 0.0;
+
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            if (runtime.milliseconds()-cyclestart > 2000) {
-                cyclestart = runtime.milliseconds();
+            if (runtime.milliseconds() > 7000) {awake = true;}
 
-                soundIndex = (int) ((Math.random() * sounds.length));
+            if(!awake) {
+                if (runtime.milliseconds() - cyclestart < heartbeat) {
+                    hpower = (runtime.milliseconds() - cyclestart) / (heartbeat / 2);
 
-                SoundID   = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex],   "raw", hardwareMap.appContext.getPackageName());
-                SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
-                //soundIndex +=1 ;
+                    if (runtime.milliseconds() - cyclestart > heartbeat / 2) {
+
+                        hpower = (1.0 - ((runtime.milliseconds() - cyclestart) - (heartbeat / 2)) / (heartbeat / 2));
+
+                    }
+                } else {
+                    hpower = 0.0;
+                }
+                redleds.setPower(hpower);
+            } else {
+                redleds.setPower (0.0);
+                if (runtime.milliseconds() % (2*blueheartbeat) < blueheartbeat)
+                {
+                    blueleds.setPower(1.0);
+                }else
+                {
+                    blueleds.setPower(0.0);
+                }
+
+                if (runtime.milliseconds() - cyclestart > cycletime) {
+                    cyclestart = runtime.milliseconds();
+                    soundIndex = (int) ((Math.random() * sounds.length));
+                    SoundID = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex], "raw", hardwareMap.appContext.getPackageName());
+                    SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
+                    //soundIndex +=1 ;
+
+//                lightIndex = (lightIndex +1) % 4;
+//                if (lightIndex == 0){
+//                    blueleds.setPower(1.0);
+//                    redleds.setPower(0.0);
+//                }
+//                else if (lightIndex == 1){
+//                    blueleds.setPower(0.0);
+//                    redleds.setPower(1.0);
+//                }
+//                else if (lightIndex == 2){
+//                    blueleds.setPower(1.0);
+//                    redleds.setPower(1.0);
+//                } else{
+//                    blueleds.setPower(0.0);
+//                    redleds.setPower(0.0);
+//                }
+
+
+                }
             }
             // awake or asleep
             double drive = -gamepad1.right_stick_y;
@@ -140,29 +196,25 @@ public class R2D2 extends LinearOpMode {
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
 
-            if (gamepad1.x) {
-                blueleds.setPower(1.0);
+//            if (gamepad1.x) {
+//                blueleds.setPower(1.0);
+//
+//            } else {
+//                blueleds.setPower(0.0);
+//            }
+//
+//            if (gamepad1.b) {
+//                redleds.setPower(1.0);
+//
+//            } else {
+//                redleds.setPower(0.0);
+//            }
 
-            } else {
-                blueleds.setPower(0.0);
-            }
-
-            if (gamepad1.b) {
-                redleds.setPower(1.0);
-
-            } else {
-                redleds.setPower(0.0);
-            }
-            /*
-            //if (awake) {
-
-
-
-            //}else {                                     // in sleep mode
+                                   // in sleep mode
                 if (gamepad1.left_bumper || gamepad1.right_bumper) {
-                    awake = false;
+                    awake = true ;
                 }
-
+                /*
                 if (gamepad1.right_stick_y > 0.1) {
                     blueleds.setPower(gamepad1.right_stick_y);
                     // change the background color to match the color detected by the RGB sensor.
@@ -201,7 +253,7 @@ public class R2D2 extends LinearOpMode {
             telemetry.addData("runtime", "runtime (%.2f), cs (%.2f)", runtime.milliseconds(), cyclestart);
             telemetry.addData("soundIndex",soundIndex);
             telemetry.addData("soundname",sounds[soundIndex]);
-            telemetry.addData("soundID",soundID);
+            telemetry.addData("heartpower",hpower);
 
 
             telemetry.update();
