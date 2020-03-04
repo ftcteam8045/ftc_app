@@ -80,8 +80,8 @@ public class R2D2 extends LinearOpMode {
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        blueleds.setDirection(DcMotor.Direction.REVERSE);
-        redleds.setDirection(DcMotor.Direction.REVERSE);
+        blueleds.setDirection(DcMotor.Direction.FORWARD);
+        redleds.setDirection(DcMotor.Direction.FORWARD);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
