@@ -30,9 +30,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -58,7 +60,8 @@ public class R2D2 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-
+    private boolean goldFound;      // Sound file present flags
+    private boolean silverFound;
 
 
 
@@ -94,21 +97,37 @@ public class R2D2 extends LinearOpMode {
 
 // List of available sound resources
 
-        String  sounds[] ={"r2d2.wav","qword8.wav", "qword9.wav", "qword16.wav", "qword22.wav", "qr2d2s1.wav", "qr2d2s2.wav",
-                "qr2d2s3.wav", "qr2d2w1.wav",  "qr2d2w2.wav",  "qr2d2w3.wav",  "qscaning.wav",  "qsntnc1.wav", "qsntnc2.wav",
-                "qsntnc4.wav",  "qsntnc6.wav",  "qsntnc7.wav",  "qsntnc8.wav",  "qsntnc9.wav",  "qsntnc10.wav",  "qsntnc13.wav",
-                "qsntnc16.wav", "qsntnc18.wav",  "qsntnc20.wav",  "qword1.wav",  "qword4.wav", };
+        String  sounds[] ={"qword8", "qword9", "qword16", "qword22", "qr2d2s1", "qr2d2s2", "r2d2",
+                "qr2d2s3", "qr2d2w1",  "qr2d2w2",  "qr2d2w3",  "qscaning",  "qsntnc1", "qsntnc2",
+                "qsntnc4",  "qsntnc6",  "qsntnc7",  "qsntnc8",  "qsntnc9",  "qsntnc10",  "qsntnc13",
+                "qsntnc16", "qsntnc18",  "qsntnc20",  "qword1",  "qword4", };
 
+        Context myApp = hardwareMap.appContext;
 
-            boolean soundPlaying = false;
-
+        //boolean soundPlaying = false;
+        int     soundIndex      = 0;
+        int     soundID         = -1;
+        int SoundID   = hardwareMap.appContext.getResources().getIdentifier("r2d2",   "raw", hardwareMap.appContext.getPackageName());
+        SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
+
+        double cyclestart = runtime.milliseconds();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            if (runtime.milliseconds()-cyclestart > 2000) {
+                cyclestart = runtime.milliseconds();
+
+                soundIndex = (int) ((Math.random() * sounds.length));
+
+                SoundID   = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex],   "raw", hardwareMap.appContext.getPackageName());
+                SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
+                //soundIndex +=1 ;
+            }
             // awake or asleep
             double drive = -gamepad1.right_stick_y;
             double turn = gamepad1.right_stick_x;
@@ -177,7 +196,11 @@ public class R2D2 extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("LEDs", "Blue (%.2f), Red (%.2f)", gamepad1.right_stick_y, -gamepad1.right_stick_y);
-            telemetry.addData("Awake", "Awake", awake);
+            telemetry.addData("runtime", "runtime (%.2f), cs (%.2f)", runtime.milliseconds(), cyclestart);
+            telemetry.addData("soundIndex",soundIndex);
+            telemetry.addData("soundname",sounds[soundIndex]);
+            telemetry.addData("soundID",soundID);
+
 
             telemetry.update();
 
