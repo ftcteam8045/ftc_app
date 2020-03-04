@@ -48,17 +48,14 @@ import com.qualcomm.robotcore.util.Range;
 //@Disabled
 public class R2D2 extends LinearOpMode {
 
+    // Declare OpMode members.
+
     public DcMotor leftDrive = null;
     public DcMotor rightDrive = null;
     public DcMotor redleds = null;
     public DcMotor blueleds = null;
 
 
-    /* local OpMode members. */
-    //HardwareMap hwMap = null;
-
-
-    // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private boolean goldFound;      // Sound file present flags
     private boolean silverFound;
@@ -90,13 +87,9 @@ public class R2D2 extends LinearOpMode {
 
         leftDrive.setPower(0.0);
         rightDrive.setPower(0.0);
-        blueleds.setPower(0.0);
-        redleds.setPower(0.0);
+//        blueleds.setPower(0.0);
+//        redleds.setPower(0.0);
 
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
         boolean awake = false;
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
@@ -109,15 +102,15 @@ public class R2D2 extends LinearOpMode {
                 "qsntnc4",  "qsntnc6",  "qsntnc7",  "qsntnc8",  "qsntnc9",  "qsntnc10",  "qsntnc13",
                 "qsntnc16", "qsntnc18",  "qsntnc20",  "qword1",  "qword4", };
 
-       // Context myApp = hardwareMap.appContext;
-
 
         int     soundIndex      = 0;
-        int     soundID         = -1;
+        //int     soundID         = -1;
         int SoundID   = hardwareMap.appContext.getResources().getIdentifier("r2d2",   "raw", hardwareMap.appContext.getPackageName());
         SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
 
         // Wait for the game to start (driver presses PLAY)
+
+
         waitForStart();
         runtime.reset();
         SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
@@ -136,6 +129,7 @@ public class R2D2 extends LinearOpMode {
 
             if (runtime.milliseconds() > 7000) {awake = true;}
 
+            /** in SLEEP mode, just flash red lights slowly  **/
             if(!awake) {
                 if (runtime.milliseconds() - cyclestart < heartbeat) {
                     hpower = (runtime.milliseconds() - cyclestart) / (heartbeat / 2);
@@ -149,7 +143,8 @@ public class R2D2 extends LinearOpMode {
                     hpower = 0.0;
                 }
                 redleds.setPower(hpower);
-            } else {
+            }
+            else {                                   /** AWAKE MODE  **/
                 redleds.setPower (0.0);
                 if (runtime.milliseconds() % (2*blueheartbeat) < blueheartbeat)
                 {
@@ -166,27 +161,9 @@ public class R2D2 extends LinearOpMode {
                     SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
                     //soundIndex +=1 ;
 
-//                lightIndex = (lightIndex +1) % 4;
-//                if (lightIndex == 0){
-//                    blueleds.setPower(1.0);
-//                    redleds.setPower(0.0);
-//                }
-//                else if (lightIndex == 1){
-//                    blueleds.setPower(0.0);
-//                    redleds.setPower(1.0);
-//                }
-//                else if (lightIndex == 2){
-//                    blueleds.setPower(1.0);
-//                    redleds.setPower(1.0);
-//                } else{
-//                    blueleds.setPower(0.0);
-//                    redleds.setPower(0.0);
-//                }
-
-
                 }
             }
-            // awake or asleep
+           /** ALWAYS executed in SLEEP and AWAKE modes **/
             double drive = -gamepad1.right_stick_y;
             double turn = gamepad1.right_stick_x;
             leftPower = Range.clip(drive + turn, -1.0, 1.0);
@@ -196,54 +173,11 @@ public class R2D2 extends LinearOpMode {
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
 
-//            if (gamepad1.x) {
-//                blueleds.setPower(1.0);
-//
-//            } else {
-//                blueleds.setPower(0.0);
-//            }
-//
-//            if (gamepad1.b) {
-//                redleds.setPower(1.0);
-//
-//            } else {
-//                redleds.setPower(0.0);
-//            }
-
-                                   // in sleep mode
-                if (gamepad1.left_bumper || gamepad1.right_bumper) {
+            /** Toggle AWAKE mode **/
+            if (gamepad1.left_bumper || gamepad1.right_bumper) {
                     awake = true ;
-                }
-                /*
-                if (gamepad1.right_stick_y > 0.1) {
-                    blueleds.setPower(gamepad1.right_stick_y);
-                    // change the background color to match the color detected by the RGB sensor.
-                    // pass a reference to the hue, saturation, and value array as an argument
-                    // to the HSVToColor method.
-                    relativeLayout.post(new Runnable() {
-                        public void run() {
-                            relativeLayout.setBackgroundColor(Color.BLUE);
-                        }
-                    });
-                } else {
-                    blueleds.setPower(0);
-                }
-                if (gamepad1.right_stick_y < -0.1) {
-                    redleds.setPower(-gamepad1.right_stick_y);
-                    // change the background color to match the color detected by the RGB sensor.
-                    // pass a reference to the hue, saturation, and value array as an argument
-                    // to the HSVToColor method.
-                    relativeLayout.post(new Runnable() {
-                        public void run() {
-                            relativeLayout.setBackgroundColor(Color.RED);
-                        }
-                    });
-                } else {
-                    redleds.setPower(0);
-                }
-
             }
-            */
+
 
 
             // Show the elapsed game time and wheel power.
