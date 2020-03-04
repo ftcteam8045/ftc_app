@@ -84,7 +84,9 @@ public class R2D2 extends LinearOpMode {
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         blueleds.setDirection(DcMotor.Direction.FORWARD);
+        blueleds.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         redleds.setDirection(DcMotor.Direction.FORWARD);
+        redleds.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
