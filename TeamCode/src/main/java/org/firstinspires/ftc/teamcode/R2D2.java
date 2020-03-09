@@ -57,11 +57,6 @@ public class R2D2 extends LinearOpMode {
 
 
     private ElapsedTime runtime = new ElapsedTime();
-    private boolean goldFound;      // Sound file present flags
-    private boolean silverFound;
-
-
-
 
     @Override
     public void runOpMode() {
@@ -91,6 +86,8 @@ public class R2D2 extends LinearOpMode {
 //        redleds.setPower(0.0);
 
         boolean awake = false;
+        boolean speaking = false;
+
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
@@ -126,6 +123,8 @@ public class R2D2 extends LinearOpMode {
 // Remember the last state of the dpad to detect changes.
 
         boolean was_dpad_down   = false;
+        boolean was_dpad_up     = false;
+
 
 
         // run until the end of the match (driver presses STOP)
@@ -161,13 +160,14 @@ public class R2D2 extends LinearOpMode {
                     blueleds.setPower(0.0);
                 }
 
-                if (runtime.milliseconds() - cyclestart > cycletime) {
-                    cyclestart = runtime.milliseconds();
-                    soundIndex = (int) ((Math.random() * sounds.length));
-                    SoundID = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex], "raw", hardwareMap.appContext.getPackageName());
-                    SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
-                    //soundIndex +=1 ;
-
+                if (speaking){
+                    if (runtime.milliseconds() - cyclestart > cycletime) {
+                        cyclestart = runtime.milliseconds();
+                        soundIndex = (int) ((Math.random() * sounds.length));
+                        SoundID = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex], "raw", hardwareMap.appContext.getPackageName());
+                        SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
+                        //soundIndex +=1 ;
+                    }
                 }
             }
            /** ALWAYS executed in SLEEP and AWAKE modes **/
@@ -184,6 +184,13 @@ public class R2D2 extends LinearOpMode {
             if (gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.right_stick_button) {
                     awake = true ;
             }
+
+            /** toggle speech mode **/
+            if (gamepad1.dpad_up && !was_dpad_up) {
+                speaking = !speaking;
+            }
+            // Remember the last state of the dpad to detect changes.
+            was_dpad_up   = gamepad1.dpad_up;
 
             /** Play Random Sound **/
             if (gamepad1.dpad_down && !was_dpad_down) {
