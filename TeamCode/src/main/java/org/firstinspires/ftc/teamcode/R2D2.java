@@ -128,7 +128,6 @@ public class R2D2 extends LinearOpMode {
         boolean was_dpad_up     = false;
         boolean was_y     = false;
         boolean was_a     = false;
-        boolean was_left_bumper = false;
         boolean was_right_bumper = false;
         boolean was_right_stick = false;
 
@@ -137,12 +136,12 @@ public class R2D2 extends LinearOpMode {
         while (opModeIsActive()) {
 
             /** Toggle AWAKE mode **/
-            if ((gamepad1.left_bumper && !was_left_bumper) || (gamepad1.right_bumper && was_right_bumper)
+            if ((gamepad1.right_bumper && was_right_bumper)
                     || (gamepad1.right_stick_button && was_right_stick) ) {
                 awake = !awake ;
+               sleep(100);
             }
             was_right_bumper = gamepad1.right_bumper;
-            was_left_bumper  = gamepad1.left_bumper;
             was_right_stick  = gamepad1.right_stick_button;
 
 
@@ -221,7 +220,7 @@ public class R2D2 extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.addData("LEDs", "Blue (%.2f), Red (%.2f)", gamepad1.right_stick_y, -gamepad1.right_stick_y);
+            //telemetry.addData("LEDs", "Blue (%.2f), Red (%.2f)", gamepad1.right_stick_y, -gamepad1.right_stick_y);
             telemetry.addData("runtime", "runtime (%.2f), cstart (%.2f)", runtime.milliseconds(), cyclestart);
 //            telemetry.addData("soundIndex",soundIndex);
 //            telemetry.addData("soundname",sounds[soundIndex]);
