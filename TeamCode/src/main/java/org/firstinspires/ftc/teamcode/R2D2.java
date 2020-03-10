@@ -110,6 +110,8 @@ public class R2D2 extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
+        //soundIndex = (int) ((Math.random() * sounds.length));
+        SoundID = hardwareMap.appContext.getResources().getIdentifier(sounds[1], "raw", hardwareMap.appContext.getPackageName());
         SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
 
         double cyclestart = runtime.milliseconds();
@@ -124,17 +126,30 @@ public class R2D2 extends LinearOpMode {
 
         boolean was_dpad_down   = false;
         boolean was_dpad_up     = false;
-
+        boolean was_y     = false;
+        boolean was_a     = false;
+        boolean was_left_bumper = false;
+        boolean was_right_bumper = false;
+        boolean was_right_stick = false;
 
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-//            if (runtime.milliseconds() > 7000) {awake = true;}
+            /** Toggle AWAKE mode **/
+            if ((gamepad1.left_bumper && !was_left_bumper) || (gamepad1.right_bumper && was_right_bumper)
+                    || (gamepad1.right_stick_button && was_right_stick) ) {
+                awake = !awake ;
+            }
+            was_right_bumper = gamepad1.right_bumper;
+            was_left_bumper  = gamepad1.left_bumper;
+            was_right_stick  = gamepad1.right_stick_button;
+
 
             /** in SLEEP mode, just flash red lights slowly  **/
             if(!awake) {
-                if (runtime.milliseconds() - cyclestart < heartbeat) {
+                blueleds.setPower (0.0);
+                if ( runtime.milliseconds() - cyclestart < heartbeat) {
                     //hpower = (runtime.milliseconds() - cyclestart) / (heartbeat / 2);
                     //hpower = 1.0;
                    redleds.setPower(1.0);
@@ -148,9 +163,8 @@ public class R2D2 extends LinearOpMode {
                     //hpower = 0.0;
                     redleds.setPower(0.0);
                 }
-                //redleds.setPower(hpower);
-            }
-            else {                                   /** AWAKE MODE  **/
+
+            } else {                                   /** AWAKE MODE  **/
                 redleds.setPower (0.0);
                 if (runtime.milliseconds() % (2*blueheartbeat) < blueheartbeat)
                 {
@@ -159,17 +173,12 @@ public class R2D2 extends LinearOpMode {
                 {
                     blueleds.setPower(0.0);
                 }
-
-                if (speaking){
-                    if (runtime.milliseconds() - cyclestart > cycletime) {
-                        cyclestart = runtime.milliseconds();
-                        soundIndex = (int) ((Math.random() * sounds.length));
-                        SoundID = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex], "raw", hardwareMap.appContext.getPackageName());
-                        SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
-                        //soundIndex +=1 ;
-                    }
-                }
             }
+
+            // suppose we could toggle everything off & both Red/blue flashing....
+            // more modes...
+
+
            /** ALWAYS executed in SLEEP and AWAKE modes **/
             double drive = -gamepad1.right_stick_y;
             double turn = gamepad1.right_stick_x;
@@ -180,26 +189,34 @@ public class R2D2 extends LinearOpMode {
             leftDrive.setPower(leftPower * maxpower);
             rightDrive.setPower(rightPower * maxpower);
 
-            /** Toggle AWAKE mode **/
-            if (gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.right_stick_button) {
-                    awake = true ;
-            }
 
-            /** toggle speech mode **/
-            if (gamepad1.dpad_up && !was_dpad_up) {
+            /** toggle speech mode  & play a random sound if active **/
+            if ((gamepad1.dpad_up && !was_dpad_up) || (gamepad1.y && !was_y)) {
                 speaking = !speaking;
             }
             // Remember the last state of the dpad to detect changes.
             was_dpad_up   = gamepad1.dpad_up;
+            was_y   = gamepad1.y;
+            if (speaking){
+                if (runtime.milliseconds() - cyclestart > cycletime) {
+                    cyclestart = runtime.milliseconds();
+                    soundIndex = (int) ((Math.random() * sounds.length));
+                    SoundID = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex], "raw", hardwareMap.appContext.getPackageName());
+                    SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
+                    //soundIndex +=1 ;
+                }
+            }
+
 
             /** Play Random Sound **/
-            if (gamepad1.dpad_down && !was_dpad_down) {
+            if ( (gamepad1.dpad_down && !was_dpad_down) || (gamepad1.a && !was_a)) {
                 soundIndex = (int) ((Math.random() * sounds.length));
                 SoundID = hardwareMap.appContext.getResources().getIdentifier(sounds[soundIndex], "raw", hardwareMap.appContext.getPackageName());
                 SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, SoundID);
             }
             // Remember the last state of the dpad to detect changes.
             was_dpad_down   = gamepad1.dpad_down;
+            was_a   = gamepad1.a;
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -208,7 +225,8 @@ public class R2D2 extends LinearOpMode {
             telemetry.addData("runtime", "runtime (%.2f), cstart (%.2f)", runtime.milliseconds(), cyclestart);
 //            telemetry.addData("soundIndex",soundIndex);
 //            telemetry.addData("soundname",sounds[soundIndex]);
-            telemetry.addData("heartpower",hpower);
+            telemetry.addData("awake",awake);
+            telemetry.addData("speaking",speaking);
 
 
             telemetry.update();
